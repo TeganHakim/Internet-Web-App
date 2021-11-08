@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Sketch from "react-p5";
-import "./styles.css";
+import "./styles/style.css";
 import CodeProfile from "./assets/Images/Code-Profile.jpg";
 import CatTyping from "./assets/Images/Cat_Typing.gif";
 import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Sketch from "react-p5";
-import "./styles.css";
+import "./styles/style.css";
 import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 
 let regularFont;

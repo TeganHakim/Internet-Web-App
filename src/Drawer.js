@@ -7,7 +7,7 @@ import BrowserPage from "./BrowserPage";
 import ChatPage from "./ChatPage";
 import ShoppingPage from "./ShoppingPage";
 import SocialMediaPage from "./SocialMediaPage";
-import "./drawer.css";
+import "./styles/drawer.css";
 
 export default function TemporaryDrawer({
   currentScreen,
