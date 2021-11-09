@@ -2,12 +2,16 @@ import React, { Component } from "react";
 import Sketch from "react-p5";
 import "./styles/style.css";
 import CodeProfile from "./assets/Images/Code-Profile.jpg";
-import CatTyping from "./assets/Images/Cat_Typing.gif";
+import CatTyping from "./assets/Images/Cat-Typing.gif";
 import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
+import HeartFilled from "./assets/Images/Heart-Filled.png";
+import HeartOutline from "./assets/Images/Heart-Outline.png";
 
 let gif;
 let profile;
+let heartFilled;
+let heartOutline;
 let followButton = { stroke: "rgb(50, 170, 255)", fill: "rgb(255, 255, 255)" };
 
 let messageText = [];
@@ -25,6 +29,8 @@ export default class SocialMediaPage extends Component {
     p5.frameRate(this.fr);
     profile = p5.loadImage(CodeProfile);
     gif = p5.loadImage(CatTyping);
+    heartFilled = p5.loadImage(HeartFilled);
+    heartOutline = p5.loadImage(HeartOutline);
     boldFont = p5.loadFont(BoldFont);
   };
   draw = (p5) => {
@@ -163,28 +169,28 @@ export default class SocialMediaPage extends Component {
     if (this.props.playGif) {
       gif.play();
     } else {
-      gif.pause();
+      gif.pause(); 
       p5.fill("rgba(0, 0, 0, 0.5)");
       p5.rect(
         screen.x +
-          screenBezel.horz +
-          (screen.w - screenBezel.horz * 2) / 2 -
-          10,
+        screenBezel.horz +
+        (screen.w - screenBezel.horz * 2) / 2 -
+        10,
         screen.y + screenBezel.vert + 125 + 250 / 2 - 25,
         10,
         50,
         5
-      );
-      p5.rect(
-        screen.x +
+        );
+        p5.rect(
+          screen.x +
           screenBezel.horz +
           (screen.w - screenBezel.horz * 2) / 2 +
           10,
-        screen.y + screenBezel.vert + 125 + 250 / 2 - 25,
-        10,
-        50,
-        5
-      );
+          screen.y + screenBezel.vert + 125 + 250 / 2 - 25,
+          10,
+          50,
+          5
+          );
     }
     if (
       p5.mouseX <=
@@ -212,72 +218,29 @@ export default class SocialMediaPage extends Component {
       screen.y + screen.h - 185
     );
     p5.fill("rgba(0, 0, 0, 1)");
-    p5.textSize(35);
+    p5.textSize(43);
     p5.textFont("Helvetica");
+    
     if (this.props.liked) {
-      p5.fill(255, 0, 0);
-      p5.text(
-        "♡",
-        screen.x + screenBezel.horz,
-        screen.y + screen.h - 180,
-        screen.w - screenBezel.horz * 2
-      );
-      p5.rect(
-        screen.x + screenBezel.horz + 2,
-        screen.y + screen.h - 180 + 6,
-        10,
-        10,
-        11
-      );
-      p5.rect(
-        screen.x + screenBezel.horz + 12,
-        screen.y + screen.h - 180 + 5,
-        10,
-        10,
-        11
-      );
-      p5.rect(
-        screen.x + screenBezel.horz + 7,
-        screen.y + screen.h - 180 + 11,
-        10,
-        10,
-        11
-      );
-      p5.rect(
-        screen.x + screenBezel.horz + 4,
-        screen.y + screen.h - 180 + 13,
-        5,
-        5,
-        11
-      );
-      p5.rect(
-        screen.x + screenBezel.horz + 15,
-        screen.y + screen.h - 180 + 13,
-        5,
-        5,
-        11
-      );
-      p5.rect(
-        screen.x + screenBezel.horz + 10,
-        screen.y + screen.h - 180 + 20,
-        3,
-        3,
-        11
-      );
-      p5.fill(0, 0, 0);
+      p5.image(heartFilled, screen.x + screenBezel.horz,
+        screen.y + screen.h - 180, 24, 27);
     } else {
-      p5.fill(0, 0, 0);
-      p5.text(
-        "♡",
-        screen.x + screenBezel.horz,
-        screen.y + screen.h - 180,
-        screen.w - screenBezel.horz * 2
-      );
+      p5.image(heartOutline, screen.x + screenBezel.horz,
+        screen.y + screen.h - 180, 24, 27);
     }
+    p5.fill(0, 0, 0);
+    p5.stroke(0, 0, 0);
+    p5.text(
+      "♡",
+      screen.x + screenBezel.horz-2,
+      screen.y + screen.h - 185,
+      screen.w - screenBezel.horz * 2
+      );
+    p5.noStroke();
     p5.textFont(regularFont);
     p5.textSize(16);
     p5.text(
-      `${this.props.numLikes.toLocaleString()}`,
+      ` ${this.props.numLikes.toLocaleString()}`,
       screen.x + screenBezel.horz + 27,
       screen.y + screen.h - 160,
       screen.w - screenBezel.horz * 2

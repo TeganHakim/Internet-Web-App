@@ -8,7 +8,7 @@ import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
 let urls = {
   home: { url: "https://en.wikipedia.org/wiki/Vint-Cerf", statusCode: "202" },
   goodLink: {
-    url: "https://howstuffworks.com/the-internet",
+    url: "https://howstuffworks.com/the-web",
     statusCode: "202",
     underline: false
   },
