@@ -14,6 +14,7 @@ export default class HomePage extends Component {
     p5.frameRate(this.fr);
   };
   draw = (p5) => {
+    p5.background('rgba(255, 255, 255, 0)')
     // Regulate Text
     p5.textSize(12);
     p5.textStyle(p5.NORMAL);

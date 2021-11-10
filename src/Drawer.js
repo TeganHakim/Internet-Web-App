@@ -123,22 +123,25 @@ export default function TemporaryDrawer({
 
   return (
     <div>
-      {
-        <React.Fragment key={"left"}>
+      
           <Button className="burger" onClick={toggleDrawer("left", true)}>
             <div></div>
             <div></div>
             <div></div>
           </Button>
+        <React.Fragment key={"left"}>
           <Drawer
             anchor={"left"}
             open={state["left"]}
             onClose={toggleDrawer("left", false)}
-          >
-            {content("left")}
+          >            
+            {             
+            content("left")
+            }
           </Drawer>
+          
         </React.Fragment>
-      }
+      
     </div>
   );
 }
