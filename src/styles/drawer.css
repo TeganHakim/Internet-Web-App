@@ -14,9 +14,6 @@
   box-shadow: none!important;
 }
 
-/* .MuiButton-root {
-  position: fixed !important;
-} */
 .burger {
   min-width: 50px !important;
   display: flex;
@@ -30,4 +27,7 @@
   width: 100%;
   height: 4px;
   background-color: black;
+}
+.hide {
+  visibility: hidden;
 }

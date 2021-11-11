@@ -41,6 +41,14 @@ export default function TemporaryDrawer({
     left: true
   });
 
+  React.useEffect(()=>{
+    if (state["left"] === true){
+      document.getElementById('burger').classList.add('hide')
+    } else {
+      document.getElementById('burger').classList.remove('hide')
+    }
+  }, [state["left"]]);
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -48,7 +56,6 @@ export default function TemporaryDrawer({
     ) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
   const content = (anchor) =>
@@ -122,26 +129,21 @@ export default function TemporaryDrawer({
     );
 
   return (
-    <div>
-      
-          <Button className="burger" onClick={toggleDrawer("left", true)}>
-            <div></div>
-            <div></div>
-            <div></div>
-          </Button>
-        <React.Fragment key={"left"}>
+    <div>      
+        <Button className="burger hide" id="burger" onClick={toggleDrawer("left", true)}>
+          <div></div>
+          <div></div>
+          <div></div>
+        </Button>
+        <React.Fragment>
           <Drawer
             anchor={"left"}
             open={state["left"]}
             onClose={toggleDrawer("left", false)}
           >            
-            {             
-            content("left")
-            }
-          </Drawer>
-          
-        </React.Fragment>
-      
+            {content("left")}
+          </Drawer>          
+        </React.Fragment>      
     </div>
   );
 }

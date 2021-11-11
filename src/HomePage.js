@@ -34,18 +34,6 @@ export default class HomePage extends Component {
       h: height,
       border: { tl: 10, tr: 10, bl: 10, br: 10 }
     };
-    p5.fill(0, 0, 0);
-    p5.noStroke();
-    p5.rect(
-      phone.x,
-      phone.y,
-      phone.w,
-      phone.h,
-      phone.border.tl,
-      phone.border.tr,
-      phone.border.br,
-      phone.border.bl
-    );
     let screenBezel = { vert: 20, horz: 10 };
     let screen = {
       x: phone.x + screenBezel.horz,

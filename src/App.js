@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TemporaryDrawer from "./Drawer";
+import Workspace from "./Workspace";
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState("home");
@@ -246,6 +247,7 @@ function App() {
   return (
     <div className="App">
       <TemporaryDrawer
+        key={currentScreen}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -273,6 +275,7 @@ function App() {
         comment={comment}
         handleCommentSent={handleCommentSent}
       />
+      <Workspace />
     </div>
   );
 }
