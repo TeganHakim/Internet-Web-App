@@ -7,8 +7,10 @@ let regularFont;
 
 
 let path;
-let turtle = {index: 1, x: path[0].x, y: path[0].y, speed: 0.1, stroke: "rgb(255, 0, 0)", strokeWeight: 2};
-
+let turtle; 
+let width = 300;
+let height = 600;
+let phone; 
 
 export default class Workspace extends Component {
   preload = (p5) => {
@@ -17,17 +19,16 @@ export default class Workspace extends Component {
   setup = (p5, canvasParentRef) => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     p5.frameRate(this.fr);
-
-    let width = 300;
-    let height = 600;
-    let phone = {
+    
+    phone = {
       x: 10,
       y: p5.windowHeight - 10 - height,
       w: width - 10 * 2,
       h: height,
       border: { tl: 10, tr: 10, bl: 10, br: 10 }
     };
-    path = [{x: phone.x + phone.w/2, y: phone.y}, {x: phone.x + phone.w/2, y: phone.y - 150}, {x: phone.x + phone.w/2 + 100, y: phone.y - 150}];
+    path = [{x: phone.x + (phone.w/2)/2, y: phone.y - 150}, {x: phone.x + phone.w/2 - 10, y: phone.y - 300}, {x: phone.x + phone.w/2 + 10, y: phone.y - 300}];
+    turtle = {index: 1, x: path[0].x, y: path[0].y, speed: 1, stop: false, fill: "rgba(0, 0, 0, 1)", size: 10};
   };
   draw = (p5) => {
     p5.background('rgba(255, 255, 255, 0)')
@@ -53,49 +54,49 @@ export default class Workspace extends Component {
 
     //Turtle
     
+    p5.fill(turtle.fill);
+    p5.noStroke()
 
-    p5.stroke(turtle.stroke);
-    p5.strokeWeight(turtle.strokeWeight);
-    p5.frameRate(2);
-    // for (let i=1; i < path.length; i++) {
-    //     if (p5.dist(turtle.x, turtle.y, path[i].x, path[i].y) > 5) {
-    //         if (p5.dist(turtle.x, turtle.y, path[i].x, path[i].y) < 5){
-    //             break
-    //         }
-    //         if (turtle.x < path[i].x) {
-    //             turtle.x += turtle.speed;
-    //         } else {
-    //             turtle.x -= turtle.speed;
-    //         }
-    //         if (turtle.y < path[i].y) {
-    //             turtle.y += turtle.speed;
-    //         } else {
-    //             turtle.y -= turtle.speed;
-    //         }
-    //         p5.ellipse(turtle.x, turtle.y, 10);
-    //     }
-    // }  
-
-    if (p5.dist(turtle.x, turtle.y, path[turtle.index].x, path[turtle.index].y) < 1){
-        turtle.index ++;
+    if (turtle.stop === false) {
+      if (p5.dist(turtle.x, turtle.y, path[turtle.index].x, path[turtle.index].y) < 1){
+          if (turtle.index === path.length - 1) {
+            turtle.stop = true;
+          } else {
+            turtle.index += 1;
+          }
+      }
+      if (path[turtle.index].hasOwnProperty("moveTo")){
+        turtle.x = path[turtle.index].moveTo["x"]
+        turtle.x = path[turtle.index].moveTo["y"]
+      } else {
+        if (turtle.x < path[turtle.index].x && turtle.y < path[turtle.index].y) {
+            turtle.x += turtle.speed;
+            turtle.y += turtle.speed;
+        } else if (turtle.x > path[turtle.index].x && turtle.y > path[turtle.index].y) {
+            turtle.x -= turtle.speed;
+            turtle.y -= turtle.speed;
+        } else if (turtle.x > path[turtle.index].x && turtle.y < path[turtle.index].y) {
+            turtle.x -= turtle.speed;
+            turtle.y += turtle.speed;
+        } else if (turtle.x < path[turtle.index].x && turtle.y > path[turtle.index].y) {
+            turtle.x += turtle.speed
+            turtle.y -= turtle.speed
+        } else if (turtle.x < path[turtle.index].x && turtle.y === path[turtle.index].y) {
+            turtle.x += turtle.speed;
+            turtle.y = path[turtle.index].y;
+        } else if (turtle.x > path[turtle.index].x && turtle.y === path[turtle.index].y) {
+            turtle.x -= turtle.speed;
+        } else if (turtle.x === path[turtle.index].x && turtle.y < path[turtle.index].y) {
+            turtle.y += turtle.speed;
+        } else if (turtle.x === path[turtle.index].x && turtle.y > path[turtle.index].y) {
+            turtle.y -= turtle.speed;
+        } 
+      }
+      p5.ellipse(turtle.x, turtle.y, turtle.size);
     }
-    console.log(turtle.x + " " +  turtle.y + " | " + path[turtle.index].x + " " + path[turtle.index].y)
-    if (turtle.x < path[turtle.index].x) {
-        turtle.x += turtle.speed;
-    } else {
-        turtle.x -= turtle.speed;
-    }
-    if (turtle.y < path[turtle.index].y) {
-        turtle.y += turtle.speed;
-    } else {
-        turtle.y -= turtle.speed;
-    }
-    p5.ellipse(turtle.x, turtle.y, 10);
-
 
     // Revert to normal
     p5.fill(0, 0, 0);
-    p5.strokeWeight(1);
   }
   render() {
     return (
