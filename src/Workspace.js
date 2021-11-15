@@ -27,7 +27,24 @@ export default class Workspace extends Component {
       h: height,
       border: { tl: 10, tr: 10, bl: 10, br: 10 }
     };
-    path = [{x: phone.x + (phone.w/2)/2, y: phone.y - 150}, {x: phone.x + phone.w/2 - 10, y: phone.y - 300}, {x: phone.x + phone.w/2 + 10, y: phone.y - 300}];
+    path = [{x: phone.x + (phone.w/2)/2, y: phone.y - 100}, 
+      {x: phone.x + phone.w/2 - 10, y: phone.y - 250}, 
+      {x: phone.x + phone.w/2 + 10, y: phone.y - 250}, 
+      {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100}, 
+      {x: phone.x + (phone.w/2)/2, y: phone.y - 100},
+      {x: phone.x + (phone.w/2) + (phone.w/2)/3.5, y: phone.y - 175}, 
+      {x: phone.x + (phone.w/2.4), y: phone.y - 210},
+      {moveTo: {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100}},
+      {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100},
+      {x: phone.x + (phone.w/2.8), y: phone.y - 175},
+      {x: phone.x + (phone.w/2) + (phone.w/2)/5.4, y: phone.y - 210}, 
+      {moveTo: {x: phone.x + phone.w/2, y: phone.y - 250}}, 
+      {x: phone.x + phone.w/2, y: phone.y - 250}, 
+      {x: phone.x + phone.w/2, y: phone.y - 300},
+      {x: phone.x + phone.w/2, y: phone.y - 300, size: 20},
+      {moveTo: {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100}},
+      {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100},
+      {x: phone.x + phone.w/2 + 300, y: phone.y - 100}];
     turtle = {index: 1, x: path[0].x, y: path[0].y, speed: 1, stop: false, fill: "rgba(0, 0, 0, 1)", size: 10};
   };
   draw = (p5) => {
@@ -37,7 +54,6 @@ export default class Workspace extends Component {
     p5.textStyle(p5.NORMAL);
     p5.textFont(regularFont);
     p5.textAlign(p5.LEFT);
-
     // Cursor
     p5.cursor(p5.ARROW);
 
@@ -55,44 +71,43 @@ export default class Workspace extends Component {
     //Turtle
     
     p5.fill(turtle.fill);
-    p5.noStroke()
+    p5.noStroke();
 
     if (turtle.stop === false) {
-      if (p5.dist(turtle.x, turtle.y, path[turtle.index].x, path[turtle.index].y) < 1){
+      if (p5.dist(turtle.x, turtle.y, path[turtle.index].x, path[turtle.index].y) <= turtle.speed){
           if (turtle.index === path.length - 1) {
             turtle.stop = true;
           } else {
             turtle.index += 1;
           }
       }
-      if (path[turtle.index].hasOwnProperty("moveTo")){
-        turtle.x = path[turtle.index].moveTo["x"]
-        turtle.x = path[turtle.index].moveTo["y"]
+      if (path[turtle.index].hasOwnProperty("moveTo")) {
+        turtle.x = path[turtle.index].moveTo["x"];
+        turtle.y = path[turtle.index].moveTo["y"];
+        turtle.index += 1;
       } else {
-        if (turtle.x < path[turtle.index].x && turtle.y < path[turtle.index].y) {
-            turtle.x += turtle.speed;
-            turtle.y += turtle.speed;
-        } else if (turtle.x > path[turtle.index].x && turtle.y > path[turtle.index].y) {
-            turtle.x -= turtle.speed;
-            turtle.y -= turtle.speed;
-        } else if (turtle.x > path[turtle.index].x && turtle.y < path[turtle.index].y) {
-            turtle.x -= turtle.speed;
-            turtle.y += turtle.speed;
-        } else if (turtle.x < path[turtle.index].x && turtle.y > path[turtle.index].y) {
-            turtle.x += turtle.speed
-            turtle.y -= turtle.speed
-        } else if (turtle.x < path[turtle.index].x && turtle.y === path[turtle.index].y) {
-            turtle.x += turtle.speed;
-            turtle.y = path[turtle.index].y;
-        } else if (turtle.x > path[turtle.index].x && turtle.y === path[turtle.index].y) {
-            turtle.x -= turtle.speed;
-        } else if (turtle.x === path[turtle.index].x && turtle.y < path[turtle.index].y) {
-            turtle.y += turtle.speed;
-        } else if (turtle.x === path[turtle.index].x && turtle.y > path[turtle.index].y) {
-            turtle.y -= turtle.speed;
-        } 
+        if (path[turtle.index].x > turtle.x || path[turtle.index].x < turtle.x) {
+          if (path[turtle.index].x > turtle.x) {
+            turtle.x += turtle.speed;      
+            turtle.y += ((path[turtle.index].y - turtle.y) / (path[turtle.index].x - turtle.x) * turtle.speed);
+          } else {
+            turtle.x -= turtle.speed;     
+            turtle.y -= ((path[turtle.index].y - turtle.y) / (path[turtle.index].x - turtle.x) * turtle.speed);
+          }      
+        } else if (path[turtle.index].x === turtle.x) {
+          if (path[turtle.index].y > turtle.y) {
+            turtle.y += turtle.speed;      
+          } else {
+            turtle.y -= turtle.speed;     
+          }
+          turtle.x = path[turtle.index].x;           
+        }
       }
-      p5.ellipse(turtle.x, turtle.y, turtle.size);
+      if (path[turtle.index].hasOwnProperty("size")) {
+        p5.ellipse(turtle.x, turtle.y, path[turtle.index].size);
+      } else {
+        p5.ellipse(turtle.x, turtle.y, turtle.size);
+      }
     }
 
     // Revert to normal
