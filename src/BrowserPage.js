@@ -229,6 +229,7 @@ export default class BrowserPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleLinkClicked("goodLink");
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "goodLink"});
         }
       }
     } else {
@@ -246,6 +247,7 @@ export default class BrowserPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleLinkClicked("badLink");
+          this.props.httpVisualize({status: 404, request: "GET", endpoint: "badLink"});
         }
       }
     } else {
@@ -308,6 +310,7 @@ export default class BrowserPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleLinkClicked("home");
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
         }
       }
     } else {
@@ -370,6 +373,7 @@ export default class BrowserPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleLinkClicked("home");
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
         }
       }
     } else {
@@ -440,6 +444,7 @@ export default class BrowserPage extends Component {
       p5.cursor(p5.HAND);
       if (p5.mouseIsPressed) {
         this.props.handleAppClicked("home");
+        this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeScreen"});
       }
     }
     // Camera

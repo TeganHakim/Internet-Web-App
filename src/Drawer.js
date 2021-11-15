@@ -35,7 +35,8 @@ export default function TemporaryDrawer({
   numLikes,
   handleLikesChanged,
   comment,
-  handleCommentSent
+  handleCommentSent,
+  httpVisualize
 }) {
   const [state, setState] = React.useState({
     left: true
@@ -65,6 +66,7 @@ export default function TemporaryDrawer({
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
+        httpVisualize={httpVisualize}
       />
     ) : currentScreen === "music" ? (
       <MusicPage
@@ -77,6 +79,7 @@ export default function TemporaryDrawer({
         currentSong={currentSong}
         audioObj={audioObj}
         handleSongChanged={handleSongChanged}
+        httpVisualize={httpVisualize}
       />
     ) : currentScreen === "browser" ? (
       <BrowserPage
@@ -86,6 +89,7 @@ export default function TemporaryDrawer({
         percentage={percentage}
         currentBrowserPage={currentBrowserPage}
         handleLinkClicked={handleLinkClicked}
+        httpVisualize={httpVisualize}
       />
     ) : currentScreen === "chat" ? (
       <ChatPage
@@ -96,6 +100,7 @@ export default function TemporaryDrawer({
         chatHistory={chatHistory}
         clearChatHistory={clearChatHistory}
         handleMessageSent={handleMessageSent}
+        httpVisualize={httpVisualize}
       />
     ) : currentScreen === "shopping" ? (
       <ShoppingPage
@@ -107,6 +112,7 @@ export default function TemporaryDrawer({
         cartQuantity={cartQuantity}
         handleQuantityChange={handleQuantityChange}
         handleCartQuantityChange={handleCartQuantityChange}
+        httpVisualize={httpVisualize}
       />
     ) : currentScreen === "social" ? (
       <SocialMediaPage
@@ -123,6 +129,7 @@ export default function TemporaryDrawer({
         handleLikesChanged={handleLikesChanged}
         comment={comment}
         handleCommentSent={handleCommentSent}
+        httpVisualize={httpVisualize}
       />
     ) : (
       <div />

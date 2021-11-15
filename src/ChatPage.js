@@ -275,6 +275,7 @@ export default class ChatPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleAppClicked("home");
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeScreen"});
         }
       }
     }
@@ -346,6 +347,7 @@ export default class ChatPage extends Component {
                 messageText.join("").charAt(0).toUpperCase() +
                 messageText.join("").slice(1)
             });
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "messageSent"});
             messageText = [];
           } else if (e.key === "Backspace") {
             messageText.pop();

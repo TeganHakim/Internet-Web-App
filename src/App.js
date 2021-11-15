@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TemporaryDrawer from "./Drawer";
-import Workspace from "./Workspace";
+import DrawInfrastructure from "./DrawInfrastructure";
+import VisualizeSignal from "./VisualizeSignal";
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState("home");
@@ -239,6 +240,11 @@ function App() {
     }
   };
 
+  const [httpSignal, sethttpSignal] = useState(null)
+  const httpVisualize = (app) => {
+    sethttpSignal({status: app.status, request: app.request, endpoint: app.endpoint})
+  }
+
   const [percentage, setPercentage] = useState(null);
   useEffect(() => {
     setPercentage(Math.random() * 100);
@@ -274,8 +280,12 @@ function App() {
         handleLikesChanged={handleLikesChanged}
         comment={comment}
         handleCommentSent={handleCommentSent}
+        httpVisualize={httpVisualize}
       />
-      <Workspace />
+      <DrawInfrastructure />
+      <VisualizeSignal 
+        httpSignal={httpSignal}
+      />
     </div>
   );
 }

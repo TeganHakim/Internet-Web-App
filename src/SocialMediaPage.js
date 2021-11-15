@@ -141,6 +141,7 @@ export default class SocialMediaPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleFollowButton(this.props.follow);
+          this.props.httpVisualize({status: 200, request: "POST", endpoint: "follow"});
         }
       }
     }
@@ -203,6 +204,7 @@ export default class SocialMediaPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handlePlayGif(this.props.playGif);
+          this.props.httpVisualize({status: 200, request: "POST", endpoint: "pausePlayGif"});
         }
       }
     }
@@ -255,6 +257,7 @@ export default class SocialMediaPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleLikesChanged(this.props.liked);
+          this.props.httpVisualize({status: 200, request: "POST", endpoint: "like"});
         }
       }
     }
@@ -365,6 +368,7 @@ export default class SocialMediaPage extends Component {
         if (p5.mouseIsPressed) {
           if (p5.mouseButton === p5.LEFT) {
             this.props.handleCommentSent(null, true);
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "deleteComment"});
           }
         }
       }
@@ -479,6 +483,7 @@ export default class SocialMediaPage extends Component {
       p5.cursor(p5.HAND);
       if (p5.mouseIsPressed) {
         this.props.handleAppClicked("home");
+        this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeScreen"});
       }
     }
     // Camera
@@ -548,6 +553,7 @@ export default class SocialMediaPage extends Component {
                 messageText.join("").slice(1),
               false
             );
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "commentSent"});
             messageText = [];
           } else if (e.key === "Backspace") {
             messageText.pop();

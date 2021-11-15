@@ -328,6 +328,7 @@ export default class ChatPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleCartQuantityChange("increase");
+          this.props.httpVisualize({status: 200, request: "POST", endpoint: "cartQuantity"});
         }
       }
     } else {
@@ -391,6 +392,7 @@ export default class ChatPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleCartQuantityChange("zero");
+          this.props.httpVisualize({status: 200, request: "POST", endpoint: "cartQuantity"});
         }
       }
     }
@@ -460,6 +462,7 @@ export default class ChatPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleAppClicked("home");
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeScreen"});
         }
       }
     }

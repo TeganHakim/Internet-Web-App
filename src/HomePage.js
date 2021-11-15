@@ -69,6 +69,7 @@ export default class HomePage extends Component {
         if (p5.mouseIsPressed) {
           if (p5.mouseButton === p5.LEFT) {
             this.props.handleAppClicked(apps[i].icon);
+            this.props.httpVisualize({status: 200, request: "GET", endpoint: apps[i].icon});
           }
         }
       }
@@ -500,6 +501,7 @@ export default class HomePage extends Component {
       p5.cursor(p5.HAND);
       if (p5.mouseIsPressed) {
         this.props.handleAppClicked("home");
+        this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeScreen"});
       }
     }
     // Camera
