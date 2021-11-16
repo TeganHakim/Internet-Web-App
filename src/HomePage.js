@@ -560,7 +560,7 @@ export default class HomePage extends Component {
 
   render() {
     return (
-      <Sketch preload={this.preload} setup={this.setup} draw={this.draw} />
+      <Sketch id={"canvas"} preload={this.preload} setup={this.setup} draw={this.draw} />
     );
   }
 }

@@ -251,7 +251,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="App" id="App">
       <TemporaryDrawer
         key={currentScreen}
         currentScreen={currentScreen}

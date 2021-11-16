@@ -10,6 +10,8 @@ let height = 600;
 let phone; 
 
 let httpSignalPos;
+let previousSignal = null;
+let drawSignal = false;
 
 export default class VisualizeSignal extends Component {
   preload = (p5) => {
@@ -25,10 +27,10 @@ export default class VisualizeSignal extends Component {
         h: height,
         border: { tl: 10, tr: 10, bl: 10, br: 10 }
     };
-    httpSignalPos = {x: phone.x + phone.w/2, y: phone.y, size: 0, stop: false};
+    httpSignalPos = {x: phone.x + phone.w/2, y: phone.y, size: 0, stop: false, speed: 5};
   };
   draw = (p5) => {
-    p5.background('rgba(255, 255, 255, 0)')
+    p5.background('rgba(255, 255, 255, 0.2)');
     // Regulate Text
     p5.textSize(12);
     p5.textStyle(p5.NORMAL);
@@ -47,19 +49,28 @@ export default class VisualizeSignal extends Component {
       h: phone.h - screenBezel.vert * 2,
       border: { tl: 5, tr: 5, bl: 5, br: 5 }
     };
-    
-    if (this.props.httpsSignal !== null) {
+
+    if (this.props.httpSignal !== previousSignal) {
+      drawSignal = true;
+      if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
+        httpSignalPos.y = phone.y;
+        httpSignalPos.size = 0;
+        httpSignalPos.stop = false;
+      }
+    } 
+
+    if (drawSignal) {  
       p5.noFill();
       p5.stroke(80, 190, 255);
       if (httpSignalPos.y <= 80) {
         httpSignalPos.stop = true;
+        previousSignal = this.props.httpSignal;
       }
       if (httpSignalPos.stop === false) {
         p5.arc(httpSignalPos.x, httpSignalPos.y, 50, 50, p5.PI + httpSignalPos.size, p5.PI*2 - httpSignalPos.size);
-        httpSignalPos.y -= 1;
-        httpSignalPos.size += 0.005;
-  
-      }
+        httpSignalPos.y -= httpSignalPos.speed;
+        httpSignalPos.size += 0.005 * httpSignalPos.speed;
+      } 
     }
 
     // Revert to normal
