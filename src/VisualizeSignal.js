@@ -5,6 +5,9 @@ import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 
 let regularFont;
 
+let turtle;
+let path;
+
 let width = 300;
 let height = 600;
 let phone; 
@@ -27,6 +30,26 @@ export default class VisualizeSignal extends Component {
         h: height,
         border: { tl: 10, tr: 10, bl: 10, br: 10 }
     };
+    path = [{x: phone.x + (phone.w/2)/2, y: phone.y - 100}, 
+      {x: phone.x + phone.w/2 - 10, y: phone.y - 250}, 
+      {x: phone.x + phone.w/2 + 10, y: phone.y - 250}, 
+      {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100}, 
+      {x: phone.x + (phone.w/2)/2, y: phone.y - 100},
+      {x: phone.x + (phone.w/2) + (phone.w/2)/3.5, y: phone.y - 175}, 
+      {x: phone.x + (phone.w/2.4), y: phone.y - 210},
+      {moveTo: {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100}},
+      {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100},
+      {x: phone.x + (phone.w/2.8), y: phone.y - 175},
+      {x: phone.x + (phone.w/2) + (phone.w/2)/5.4, y: phone.y - 210}, 
+      {moveTo: {x: phone.x + phone.w/2, y: phone.y - 250}}, 
+      {x: phone.x + phone.w/2, y: phone.y - 250}, 
+      {x: phone.x + phone.w/2, y: phone.y - 300},
+      {x: phone.x + phone.w/2, y: phone.y - 300, size: 20},
+      {moveTo: {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100}},
+      {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100},
+      {x: phone.x + phone.w/2 + 200, y: phone.y - 150}
+    ];
+    turtle = {index: 1, x: path[0].x, y: path[0].y, speed: 1000, stop: false, fill: "rgba(0, 0, 0, 1)", size: 10};
     httpSignalPos = {x: phone.x + phone.w/2, y: phone.y, size: 0, stop: false, speed: 5};
   };
   draw = (p5) => {
@@ -75,6 +98,53 @@ export default class VisualizeSignal extends Component {
 
     // Revert to normal
     p5.fill(0, 0, 0);
+
+    //Draw Infrastructure
+    p5.background('rgba(255, 255, 255, 1)')
+    //Turtle
+    
+    p5.fill(turtle.fill);
+    p5.noStroke();
+
+    if (turtle.stop === false) {
+      for (let i=0; i<turtle.speed; i++) {
+        if (p5.dist(turtle.x, turtle.y, path[turtle.index].x, path[turtle.index].y) <= 1){
+            if (turtle.index === path.length - 1) {
+              turtle.stop = true;
+            } else {
+              turtle.index += 1;
+            }
+        }
+        if (path[turtle.index].hasOwnProperty("moveTo")) {
+          turtle.x = path[turtle.index].moveTo["x"];
+          turtle.y = path[turtle.index].moveTo["y"];
+          turtle.index += 1;
+        } else {
+          if (path[turtle.index].x > turtle.x || path[turtle.index].x < turtle.x) {
+            if (path[turtle.index].x > turtle.x) {
+              turtle.x += 1;      
+              turtle.y += ((path[turtle.index].y - turtle.y) / (path[turtle.index].x - turtle.x));
+            } else {
+              turtle.x -= 1;     
+              turtle.y -= ((path[turtle.index].y - turtle.y) / (path[turtle.index].x - turtle.x));
+            }      
+          } else if (path[turtle.index].x === turtle.x) {
+            if (path[turtle.index].y > turtle.y) {
+              turtle.y += 1;      
+            } else {
+              turtle.y -= 1;     
+            }
+            turtle.x = path[turtle.index].x;           
+          }
+        }
+      
+        if (path[turtle.index].hasOwnProperty("size")) {
+          p5.ellipse(turtle.x, turtle.y, path[turtle.index].size);
+        } else {
+          p5.ellipse(turtle.x, turtle.y, turtle.size);
+        }
+      }
+    }
   }
   render() {
     return (

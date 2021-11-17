@@ -240,7 +240,7 @@ function App() {
     }
   };
 
-  const [httpSignal, sethttpSignal] = useState(null)
+  const [httpSignal, sethttpSignal] = useState({status: "200", request: "GET", endpoint: "homeScreen"})
   const httpVisualize = (app) => {
     sethttpSignal({status: app.status, request: app.request, endpoint: app.endpoint})
   }
