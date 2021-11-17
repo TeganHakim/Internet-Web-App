@@ -282,10 +282,11 @@ function App() {
         handleCommentSent={handleCommentSent}
         httpVisualize={httpVisualize}
       />
-      <DrawInfrastructure />
-      <VisualizeSignal 
+      <DrawInfrastructure
         httpSignal={httpSignal}
       />
+      {/* <VisualizeSignal 
+      /> */}
     </div>
   );
 }

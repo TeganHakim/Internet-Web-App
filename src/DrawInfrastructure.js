@@ -8,6 +8,11 @@ let regularFont;
 
 let path;
 let turtle; 
+
+let httpSignalPos;
+let previousSignal = null;
+let drawSignal = false;
+
 let width = 300;
 let height = 600;
 let phone; 
@@ -48,6 +53,7 @@ export default class DrawInfrastucture extends Component {
       {x: phone.x + phone.w/2 + 200, y: phone.y - 150}
     ];
     turtle = {index: 1, x: path[0].x, y: path[0].y, speed: 10, stop: false, fill: "rgba(0, 0, 0, 1)", size: 10};
+    httpSignalPos = {x: phone.x + phone.w/2, y: phone.y, size: 0, opcaity: 1, stop: false, speed: 5};
   };
   draw = (p5) => {
     p5.background('rgba(255, 255, 255, 0)')
@@ -70,6 +76,10 @@ export default class DrawInfrastucture extends Component {
       border: { tl: 5, tr: 5, bl: 5, br: 5 }
     };
 
+    this.drawInfrastucture(p5);
+    this.visualizeSignal(p5);
+  }
+  drawInfrastucture = (p5) => {
     //Turtle
     
     p5.fill(turtle.fill);
@@ -113,6 +123,33 @@ export default class DrawInfrastucture extends Component {
           p5.ellipse(turtle.x, turtle.y, turtle.size);
         }
       }
+    }
+
+    // Revert to normal
+    p5.fill(0, 0, 0);
+  }
+  visualizeSignal = (p5) => {
+    if (this.props.httpSignal !== previousSignal) {
+      drawSignal = true;
+      if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
+        httpSignalPos.y = phone.y;
+        httpSignalPos.size = 0;
+        httpSignalPos.stop = false;
+      }
+    } 
+
+    if (drawSignal) {  
+      p5.noFill();
+      p5.stroke(`rgba(80, 190, 255, 1)`);
+      if (httpSignalPos.y <= 80) {
+        httpSignalPos.stop = true;
+        previousSignal = this.props.httpSignal;
+      }
+      if (httpSignalPos.stop === false) {
+        p5.arc(httpSignalPos.x, httpSignalPos.y, 50, 50, p5.PI + httpSignalPos.size, p5.PI*2 - httpSignalPos.size);
+        httpSignalPos.y -= httpSignalPos.speed;
+        httpSignalPos.size += 0.005 * httpSignalPos.speed;
+      } 
     }
 
     // Revert to normal
