@@ -14,6 +14,7 @@ let cellTowerPingColor = "rgb(0, 255, 0)";
 let pinged = false;
 
 let turtle;
+let turtleColors = {good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)"}
 let drawTurtle = false;
 let turtlePath;
 
@@ -68,7 +69,7 @@ export default class DrawInfrastucture extends Component {
       {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100},
       {x: phone.x + phone.w/2 + 200, y: phone.y - 150}
     ]
-    turtle = {index: 1, x: turtlePath[0].x, y: turtlePath[0].y, speed: 100, stop: false, fill: "rgba(0, 255, 0, 1)", size: 10};
+    turtle = {index: 1, x: turtlePath[0].x, y: turtlePath[0].y, speed: 100, stop: false, size: 10};
     httpSignalPos = {x: phone.x + phone.w/2, y: phone.y, size: 0, opcaity: 1, stop: false, speed: 5};
   };
   draw = (p5) => {
@@ -213,8 +214,13 @@ export default class DrawInfrastucture extends Component {
               turtle.x = path[turtle.index].x;           
             }
           }
-          
-          p5.fill(turtle.fill);
+          if (this.props.httpSignal.status == 200) {
+            p5.fill(turtleColors.good);
+          } else if (this.props.httpSignal.status == 404) {
+            p5.fill(turtleColors.bad);
+          } else {
+            p5.fill("rgb(200, 200, 0)");
+          }
           if (path[turtle.index].hasOwnProperty("size")) {
             p5.ellipse(turtle.x, turtle.y, path[turtle.index].size);
           } else {
@@ -223,7 +229,11 @@ export default class DrawInfrastucture extends Component {
         }
       }
     } else {
-      turtle = {index: 1, x: path[0].x, y: path[0].y, speed: 10, stop: false, fill: "rgba(0, 255, 0, 1)", size: 10};
+      turtle.index = 1;
+      turtle.x = path[0].x;
+      turtle.y = path[0].y;
+      turtle.stop = false;
+      turtle.size = 10;
     }
   }
   render() {
