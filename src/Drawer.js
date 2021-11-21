@@ -66,6 +66,7 @@ export default function TemporaryDrawer({
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
+        currentBrowserPage={currentBrowserPage}
         httpVisualize={httpVisualize}
       />
     ) : currentScreen === "music" ? (

@@ -9,7 +9,7 @@ let regularFont;
 let boldFont;
 
 
-let path; 
+let infrastructurePath; 
 let cellTowerPingColor = "rgb(0, 255, 0)";
 let pinged = false;
 
@@ -43,7 +43,7 @@ export default class DrawInfrastucture extends Component {
       h: height,
       border: { tl: 10, tr: 10, bl: 10, br: 10 }
     };
-    path = [{x: phone.x + (phone.w/2)/2, y: phone.y - 100}, 
+    infrastructurePath = [{x: phone.x + (phone.w/2)/2, y: phone.y - 100}, 
       {x: phone.x + phone.w/2 - 10, y: phone.y - 250}, 
       {x: phone.x + phone.w/2 + 10, y: phone.y - 250}, 
       {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100}, 
@@ -60,16 +60,28 @@ export default class DrawInfrastucture extends Component {
       {x: phone.x + phone.w/2, y: phone.y - 300},
       {moveTo: {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100}},
       {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100},
-      {x: phone.x + phone.w/2 + 200, y: phone.y - 150}
+      {x: phone.x + phone.w/2 + 200, y: phone.y - 200},
+      {x: phone.x + phone.w/2 + 200, y: phone.y - 275},
+      {x: phone.x + phone.w + 400, y: phone.y - 275},
+      {x: phone.x + phone.w + 400, y: phone.y - 125},
+      {x: phone.x + phone.w/2 + 200, y: phone.y - 125},
+      {x: phone.x + phone.w/2 + 200, y: phone.y - 200},
+      {moveTo: {x: phone.x + phone.w + 400, y: phone.y - (275-100)/2}},
+      {x: phone.x + phone.w + 400, y: phone.y - (275/2 + 125/2)},
+      {x: phone.x + phone.w + 500, y: phone.y - (275/2 + 125/2)}
     ];
     turtlePath = [
       {x: phone.x + phone.w/2, y: phone.y - 300},
       {x: phone.x + phone.w/2, y: phone.y - 250},
       {x: phone.x + phone.w/2 + 10, y: phone.y - 250},
       {x: phone.x + (phone.w/2 + (phone.w/2)/2), y: phone.y - 100},
-      {x: phone.x + phone.w/2 + 200, y: phone.y - 150}
+      {x: phone.x + phone.w/2 + 200, y: phone.y - 200},
+      {x: phone.x + phone.w/2 + 200, y: phone.y - 275},
+      {x: phone.x + phone.w + 400, y: phone.y - 275},
+      {x: phone.x + phone.w + 400, y: phone.y - (275/2 + 125/2)},
+      {x: phone.x + phone.w + 500, y: phone.y - (275/2 + 125/2)}
     ]
-    turtle = {index: 1, x: turtlePath[0].x, y: turtlePath[0].y, speed: 100, stop: false, size: 10};
+    turtle = {index: 1, x: turtlePath[0].x, y: turtlePath[0].y, speed: 50, stop: false, size: 10, distanceCheck: 3};
     httpSignalPos = {x: phone.x + phone.w/2, y: phone.y, size: 0, opcaity: 1, stop: false, speed: 5};
   };
   draw = (p5) => {
@@ -98,7 +110,7 @@ export default class DrawInfrastucture extends Component {
   drawInfrastucture = (p5) => {
     p5.background('rgba(255, 255, 255, 1)');
     p5.stroke(0, 0, 0)
-    for (let i=0; i<path.length; i++) {
+    for (let i=0; i<infrastructurePath.length; i++) {
       p5.strokeWeight(10);
       if (pinged) {
         if (i === 13) {
@@ -107,17 +119,24 @@ export default class DrawInfrastucture extends Component {
           p5.stroke(0, 0, 0);         
         }
       }
-      if (i !== path.length - 1) {
-        if (path[i].hasOwnProperty('size')) {
-          p5.strokeWeight(path[i].size);
+      if (i !== infrastructurePath.length - 1) {
+        if (infrastructurePath[i].hasOwnProperty('size')) {
+          p5.strokeWeight(infrastructurePath[i].size);
         }
-        if (!path[i].hasOwnProperty('moveTo')) {
-          p5.line(path[i].x, path[i].y, path[i+1].x, path[i+1].y);       
+        if (!infrastructurePath[i].hasOwnProperty('moveTo')) {
+          p5.line(infrastructurePath[i].x, infrastructurePath[i].y, infrastructurePath[i+1].x, infrastructurePath[i+1].y);       
         }
       }
     }
     pinged = false;
     p5.strokeWeight(1);
+
+    // Text
+    p5.textSize(20);
+    p5.fill(0, 0, 0);
+    p5.noStroke();
+    p5.text("ISP",  (phone.w + 400 - phone.x + phone.w/2 + 200)/2, phone.y - (275/2 + 125/2)-15);
+    p5.text("Internet Service Provider",  (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 90, phone.y - (275/2 + 125/2)+15);
   }
   
   visualizeSignal = (p5) => {
@@ -180,38 +199,42 @@ export default class DrawInfrastucture extends Component {
       p5.text(this.props.httpSignal.status, phone.x + (phone.w/2)/3 + 155, phone.y - 80 + (25/1.5))
     }
   }
-  turtle = (p5, path) => {
+  turtle = (p5) => {
     if (drawTurtle) {
       if (turtle.stop === false) {
         for (let i=0; i<turtle.speed; i++) {
-          if (p5.dist(turtle.x, turtle.y, path[turtle.index].x, path[turtle.index].y) <= 1){
-              if (turtle.index === path.length - 1) {
-                turtle.stop = true;
-                drawTurtle = false;
-              } else {
-                turtle.index += 1;
-              }
+          if (p5.dist(turtle.x, turtle.y, turtlePath[turtlePath.length-1].x, turtlePath[turtlePath.length-1].y) <= turtle.distanceCheck){
+            drawTurtle = false;
           }
-          if (path[turtle.index].hasOwnProperty("moveTo")) {
-            turtle.x = path[turtle.index].moveTo["x"];
-            turtle.y = path[turtle.index].moveTo["y"];
+          if (p5.dist(turtle.x, turtle.y, turtlePath[turtle.index].x, turtlePath[turtle.index].y) <= turtle.distanceCheck){
+            if (turtle.index === turtlePath.length - 1) {
+              turtle.stop = true;
+            } else {
+              turtle.index += 1;
+            }
+          }
+          if (turtlePath[turtle.index].hasOwnProperty("moveTo")) {
+            turtle.x = turtlePath[turtle.index].moveTo["x"];
+            turtle.y = turtlePath[turtle.index].moveTo["y"];
             turtle.index += 1;
           } else {
-            if (path[turtle.index].x > turtle.x || path[turtle.index].x < turtle.x) {
-              if (path[turtle.index].x > turtle.x) {
+            if (turtlePath[turtle.index].x > turtle.x || turtlePath[turtle.index].x < turtle.x) {
+              if (turtlePath[turtle.index].x > turtle.x) {
                 turtle.x += 1;      
-                turtle.y += ((path[turtle.index].y - turtle.y) / (path[turtle.index].x - turtle.x));
+                turtle.y += ((turtlePath[turtle.index].y - turtle.y) / (turtlePath[turtle.index].x - turtle.x));
               } else {
                 turtle.x -= 1;     
-                turtle.y -= ((path[turtle.index].y - turtle.y) / (path[turtle.index].x - turtle.x));
+                turtle.y -= ((turtlePath[turtle.index].y - turtle.y) / (turtlePath[turtle.index].x - turtle.x));
               }      
-            } else if (path[turtle.index].x === turtle.x) {
-              if (path[turtle.index].y > turtle.y) {
-                turtle.y += 1;      
-              } else {
-                turtle.y -= 1;     
+            } else if (turtlePath[turtle.index].x === turtle.x) {
+              if ((turtlePath[turtle.index].y > turtle.y || turtlePath[turtle.index].y < turtle.y)) {
+                if (turtlePath[turtle.index].y > turtle.y) {
+                  turtle.y += 1;      
+                } else {
+                  turtle.y -= 1;     
+                }
+                turtle.x = turtlePath[turtle.index].x;         
               }
-              turtle.x = path[turtle.index].x;           
             }
           }
           if (this.props.httpSignal.status == 200) {
@@ -221,8 +244,8 @@ export default class DrawInfrastucture extends Component {
           } else {
             p5.fill("rgb(200, 200, 0)");
           }
-          if (path[turtle.index].hasOwnProperty("size")) {
-            p5.ellipse(turtle.x, turtle.y, path[turtle.index].size);
+          if (turtlePath[turtle.index].hasOwnProperty("size")) {
+            p5.ellipse(turtle.x, turtle.y, turtlePath[turtle.index].size);
           } else {
             p5.ellipse(turtle.x, turtle.y, turtle.size);
           }
@@ -230,8 +253,8 @@ export default class DrawInfrastucture extends Component {
       }
     } else {
       turtle.index = 1;
-      turtle.x = path[0].x;
-      turtle.y = path[0].y;
+      turtle.x = turtlePath[0].x;
+      turtle.y = turtlePath[0].y;
       turtle.stop = false;
       turtle.size = 10;
     }

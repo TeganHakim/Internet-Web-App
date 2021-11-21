@@ -282,6 +282,7 @@ export default class BrowserPage extends Component {
   goodPage = (p5, screen, screenBezel) => {
     // Back Button
     p5.fill(51, 102, 187);
+    p5.textSize(16);
     p5.text(
       "Return to Wiki",
       screen.x + screenBezel.horz,
@@ -310,7 +311,7 @@ export default class BrowserPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleLinkClicked("home");
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "browser"});
         }
       }
     } else {
@@ -373,7 +374,7 @@ export default class BrowserPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleLinkClicked("home");
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "browser"});
         }
       }
     } else {

@@ -69,7 +69,17 @@ export default class HomePage extends Component {
         if (p5.mouseIsPressed) {
           if (p5.mouseButton === p5.LEFT) {
             this.props.handleAppClicked(apps[i].icon);
-            this.props.httpVisualize({status: 200, request: "GET", endpoint: apps[i].icon});
+            if (apps[i].icon === "browser"){
+              if (this.props.currentBrowserPage === "badLink") {
+                this.props.httpVisualize({status: 404, request: "GET", endpoint: "badLink"});
+              } else if (this.props.currentBrowserPage === "goodLink") {
+                this.props.httpVisualize({status: 200, request: "GET", endpoint: "goodLink"});                
+              } else {
+                this.props.httpVisualize({status: 200, request: "GET", endpoint: apps[i].icon});
+              }
+            } else {
+              this.props.httpVisualize({status: 200, request: "GET", endpoint: apps[i].icon});
+            }
           }
         }
       }
