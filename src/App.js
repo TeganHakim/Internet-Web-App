@@ -6,7 +6,7 @@ import VisualizeSignal from "./VisualizeSignal";
 function App() {
   const [currentScreen, setCurrentScreen] = useState("home");
   const handleAppClicked = (icon) => {
-    setCurrentScreen(icon);
+    setCurrentScreen(icon);    
   };
 
   const [songs] = useState([
@@ -245,6 +245,11 @@ function App() {
     sethttpSignal({status: app.status, request: app.request, endpoint: app.endpoint})
   }
 
+  const [pinged, setPinged] = useState(false);
+  const setPing = (state) => {
+    setPinged(state);
+  }
+
   const [percentage, setPercentage] = useState(null);
   useEffect(() => {
     setPercentage(Math.random() * 100);
@@ -281,9 +286,12 @@ function App() {
         comment={comment}
         handleCommentSent={handleCommentSent}
         httpVisualize={httpVisualize}
+        pinged={pinged}
       />
       <DrawInfrastructure
         httpSignal={httpSignal}
+        pinged={pinged}
+        setPing={setPing}
       />
       {/* <VisualizeSignal 
       /> */}

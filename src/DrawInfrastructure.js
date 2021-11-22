@@ -8,10 +8,8 @@ import { rgbToHex } from "@mui/material";
 let regularFont;
 let boldFont;
 
-
 let infrastructurePath; 
 let cellTowerPingColor = "rgb(0, 255, 0)";
-let pinged = false;
 
 let turtle;
 let turtleColors = {good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)"}
@@ -21,6 +19,9 @@ let turtlePath;
 let httpSignalPos;
 let previousSignal = null;
 let drawSignal = false;
+
+let createIP = false;
+let clientIP = "";
 
 let width = 300;
 let height = 600;
@@ -112,7 +113,7 @@ export default class DrawInfrastucture extends Component {
     p5.stroke(0, 0, 0)
     for (let i=0; i<infrastructurePath.length; i++) {
       p5.strokeWeight(10);
-      if (pinged) {
+      if (this.props.pinged) {
         if (i === 13) {
           p5.stroke(cellTowerPingColor);
         } else {
@@ -128,15 +129,36 @@ export default class DrawInfrastucture extends Component {
         }
       }
     }
-    pinged = false;
+    this.props.setPing(false);
     p5.strokeWeight(1);
 
     // Text
     p5.textSize(20);
     p5.fill(0, 0, 0);
     p5.noStroke();
-    p5.text("ISP",  (phone.w + 400 - phone.x + phone.w/2 + 200)/2, phone.y - (275/2 + 125/2)-15);
-    p5.text("Internet Service Provider",  (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 90, phone.y - (275/2 + 125/2)+15);
+    p5.text("ISP",  (phone.w + 400 - phone.x + phone.w/2 + 200)/2, phone.y - (275/2 + 125/2)-30);
+    p5.text("Internet Service Provider",  (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 90, phone.y - (275/2 + 125/2));
+    p5.noFill();
+    p5.stroke(0, 0, 0);
+    p5.rect((phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 55, phone.y - (275/2 + 125/2) + 20, phone.w / 1.9, 25);
+    p5.fill(0, 0, 0);
+    p5.noStroke();
+    p5.textFont(boldFont);
+    p5.textSize(12);
+    p5.text("IPv4", (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 55 + 10, phone.y - (275/2 + 125/2) + 20 + 25/1.5);
+    p5.textFont(regularFont);
+    p5.textSize(20);
+    p5.text("|", (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 55 + 40, phone.y - (275/2 + 125/2) + 20 + 25/1.5 + 1.5)
+    p5.textSize(12);  
+    if (createIP) {
+      if (clientIP === "generating...") {
+        clientIP = (Math.floor(Math.random() * 255) + 1)+"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255));   
+      }
+    } else {
+      clientIP = "generating..."
+    }  
+    p5.text(clientIP, (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 55 + 25 + p5.textWidth("IPv4"), phone.y - (275/2 + 125/2) + 20 + 25/1.5);
+
   }
   
   visualizeSignal = (p5) => {
@@ -162,7 +184,8 @@ export default class DrawInfrastucture extends Component {
           let tempY = httpSignalPos.y-(i*10)
           if (tempY < phone.y - 280) {
             tempY = phone.y - 280;
-            pinged = true;
+            this.props.setPing(true);
+            createIP = true;
           } 
           p5.arc(httpSignalPos.x, tempY, 50, 50, p5.PI + httpSignalPos.size + (0.04 * i), p5.PI*2 - httpSignalPos.size - (0.04 * i));
         }
@@ -171,7 +194,7 @@ export default class DrawInfrastucture extends Component {
       } 
     }
     
-    if (pinged) {
+    if (this.props.pinged) {
       cellTowerPingColor = "rgb(0, 255, 0)";
       drawTurtle = true;
     }
