@@ -204,7 +204,6 @@ export default class SocialMediaPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handlePlayGif(this.props.playGif);
-          this.props.httpVisualize({status: 200, request: "POST", endpoint: "pausePlayGif"});
         }
       }
     }
