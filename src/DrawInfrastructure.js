@@ -17,10 +17,11 @@ let drawTurtle = false;
 let turtlePath;
 
 let httpSignalPos;
-let previousSignal = null;
+let previousSignalEndpoint = null;
 let drawSignal = false;
 
 let createIP = false;
+let ipCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "D", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 let clientIP = "";
 
 let width = 300;
@@ -140,29 +141,38 @@ export default class DrawInfrastucture extends Component {
     p5.text("Internet Service Provider",  (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 90, phone.y - (275/2 + 125/2));
     p5.noFill();
     p5.stroke(0, 0, 0);
-    p5.rect((phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 55, phone.y - (275/2 + 125/2) + 20, phone.w / 1.9, 25);
+    p5.rect((phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 145, phone.y - (275/2 + 125/2) + 20, phone.w + 40, 25);
     p5.fill(0, 0, 0);
     p5.noStroke();
     p5.textFont(boldFont);
     p5.textSize(12);
-    p5.text("IPv4", (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 55 + 10, phone.y - (275/2 + 125/2) + 20 + 25/1.5);
+    p5.text("IPv6", (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 145 + 10, phone.y - (275/2 + 125/2) + 20 + 25/1.5);
     p5.textFont(regularFont);
     p5.textSize(20);
-    p5.text("|", (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 55 + 40, phone.y - (275/2 + 125/2) + 20 + 25/1.5 + 1.5)
+    p5.text("|", (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 145 + 40, phone.y - (275/2 + 125/2) + 20 + 25/1.5 + 1.5)
     p5.textSize(12);  
+
+    function generateHexCode() {
+      let code = [];
+      for (let i=0; i<4; i++) {
+        code.push(ipCharacters[Math.floor(Math.random()*ipCharacters.length)])
+      }
+      return code.join("")
+    }
+
     if (createIP) {
       if (clientIP === "generating...") {
-        clientIP = (Math.floor(Math.random() * 255) + 1)+"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255));   
+        clientIP = (generateHexCode() + ":" + generateHexCode() + ":" + generateHexCode() + ":" + generateHexCode() + ":" + generateHexCode() + ":" + generateHexCode() + ":" + generateHexCode() + ":" + generateHexCode());   
       }
     } else {
       clientIP = "generating..."
     }  
-    p5.text(clientIP, (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 55 + 25 + p5.textWidth("IPv4"), phone.y - (275/2 + 125/2) + 20 + 25/1.5);
+    p5.text(clientIP, (phone.w + 400 - phone.x + phone.w/2 + 200)/2 - 145 + 25 + p5.textWidth("IPv4"), phone.y - (275/2 + 125/2) + 20 + 25/1.5);
 
   }
   
   visualizeSignal = (p5) => {
-    if (this.props.httpSignal !== previousSignal) {
+    if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
       drawSignal = true;
       if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
         httpSignalPos.y = phone.y;
@@ -177,7 +187,7 @@ export default class DrawInfrastucture extends Component {
       p5.strokeWeight(5);
       if (httpSignalPos.y <= 80) {
         httpSignalPos.stop = true;
-        previousSignal = this.props.httpSignal;
+        previousSignalEndpoint = this.props.httpSignal.endpoint;
       }
       if (httpSignalPos.stop === false) {
         for (let i=0; i<5; i++) {
