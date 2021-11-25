@@ -32,6 +32,8 @@ export default function TemporaryDrawer({
   follow,
   handleFollowButton,
   liked,
+  like,
+  unlike,
   numLikes,
   handleLikesChanged,
   comment,
@@ -126,6 +128,8 @@ export default function TemporaryDrawer({
         follow={follow}
         handleFollowButton={handleFollowButton}
         liked={liked}
+        like={like}
+        unlike={unlike}
         numLikes={numLikes}
         handleLikesChanged={handleLikesChanged}
         comment={comment}

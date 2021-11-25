@@ -220,6 +220,13 @@ function App() {
     setFollow(!follow);
   };
   const [liked, setLiked] = useState(false);
+  const like = () => {
+    setLiked(true)
+  }
+  const unlike = () => {
+    setLiked(false)
+  }
+
   const [numLikes, setNumLikes] = useState(
     Math.floor(Math.random() * (100000 - 10000 + 1)) + 10000
   );
@@ -281,6 +288,8 @@ function App() {
         follow={follow}
         handleFollowButton={handleFollowButton}
         liked={liked}
+        like={like}
+        unlike={unlike}
         numLikes={numLikes}
         handleLikesChanged={handleLikesChanged}
         comment={comment}

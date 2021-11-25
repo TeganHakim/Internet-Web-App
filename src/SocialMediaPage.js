@@ -255,8 +255,14 @@ export default class SocialMediaPage extends Component {
       p5.cursor(p5.HAND);
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
-          this.props.handleLikesChanged(this.props.liked);
-          this.props.httpVisualize({status: 200, request: "POST", endpoint: "like"});
+          if (this.props.liked) {
+            this.props.unlike();
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "unlike"});
+          } else {
+            this.props.like();
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "like"});
+          }
+          this.props.handleLikesChanged(this.props.liked)
         }
       }
     }
