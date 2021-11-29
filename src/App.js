@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import TemporaryDrawer from "./Drawer";
 import DrawInfrastructure from "./DrawInfrastructure";
-import VisualizeSignal from "./VisualizeSignal";
 
 function App() {
+  const dimensions = {width: 300, height: 600};
+
   const [currentScreen, setCurrentScreen] = useState("home");
   const handleAppClicked = (icon) => {
     setCurrentScreen(icon);    
@@ -266,6 +267,7 @@ function App() {
     <div className="App" id="App">
       <TemporaryDrawer
         key={currentScreen}
+        dimensions={dimensions}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -298,12 +300,11 @@ function App() {
         pinged={pinged}
       />
       <DrawInfrastructure
+        dimensions={dimensions}
         httpSignal={httpSignal}
         pinged={pinged}
         setPing={setPing}
       />
-      {/* <VisualizeSignal 
-      /> */}
     </div>
   );
 }

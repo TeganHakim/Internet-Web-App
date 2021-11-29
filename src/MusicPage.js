@@ -10,7 +10,7 @@ export default class MusicPage extends Component {
     regularFont = p5.loadFont(RegularFont);
   };
   setup = (p5, canvasParentRef) => {
-    p5.createCanvas(300, p5.windowHeight - 10).parent(canvasParentRef);
+    p5.createCanvas(this.props.dimensions.width, p5.windowHeight - 10).parent(canvasParentRef);
     p5.frameRate(this.fr);
   };
   draw = (p5) => {
@@ -23,8 +23,8 @@ export default class MusicPage extends Component {
     p5.cursor(p5.ARROW);
 
     // Screen variables
-    let width = 300;
-    let height = 600;
+    let width = this.props.dimensions.width;
+    let height = this.props.dimensions.height;
     let phone = {
       x: 10,
       y: p5.windowHeight - 10 - height,
@@ -230,8 +230,8 @@ export default class MusicPage extends Component {
 
   drawPhone = (p5) => {
     // Phone
-    let width = 300;
-    let height = 600;
+    let width = this.props.dimensions.width;
+    let height = this.props.dimensions.height;
 
     let phone = {
       x: 10,

@@ -3,10 +3,9 @@ import Sketch from "react-p5";
 import "./styles/style.css";
 import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
-import { rgbToHex } from "@mui/material";
 
-let width = 300;
-let height = 600;
+let width;
+let height;
 let phone;
 
 let regularFont;
@@ -19,6 +18,8 @@ let turtle;
 let turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
 let drawTurtle = false;
 let turtlePath;
+
+let routers;
 
 let httpSignalPos;
 let previousSignalEndpoint = null;
@@ -122,6 +123,9 @@ export default class DrawInfrastucture extends Component {
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     p5.frameRate(this.fr);
 
+    width = this.props.dimensions.width;
+    height = this.props.dimensions.height;
+
     phone = {
       x: 10,
       y: p5.windowHeight - 10 - height,
@@ -207,6 +211,11 @@ export default class DrawInfrastucture extends Component {
         y: phone.y - 25,
       },
     ];
+
+    routers = [
+      // Router class instances
+    ]
+
     turtle = {
       index: 1,
       x: turtlePath[0].x,
@@ -246,6 +255,7 @@ export default class DrawInfrastucture extends Component {
 
     this.drawInfrastucture(p5);
     this.visualizeSignal(p5);
+    this.router(p5);
     this.turtle(p5, turtlePath);
   };
   drawInfrastucture = (p5) => {
@@ -425,6 +435,7 @@ export default class DrawInfrastucture extends Component {
   visualizeSignal = (p5) => {
     if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
       drawSignal = true;
+      console.log("hi")
       if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
         httpSignalPos.y = phone.y;
         httpSignalPos.size = 0;
@@ -504,6 +515,10 @@ export default class DrawInfrastucture extends Component {
       );
     }
   };
+
+  router = (p5) => {
+    // Draw Routers
+  }
 
   turtle = (p5) => {
     if (drawTurtle) {

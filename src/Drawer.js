@@ -10,6 +10,7 @@ import SocialMediaPage from "./SocialMediaPage";
 import "./styles/drawer.css";
 
 export default function TemporaryDrawer({
+  dimensions,
   currentScreen,
   handleAppClicked,
   percentage,
@@ -65,6 +66,7 @@ export default function TemporaryDrawer({
     currentScreen === "home" ? (
       <HomePage
         key={"home"}
+        dimensions={dimensions}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -74,6 +76,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "music" ? (
       <MusicPage
         key={playMusic && currentSong.title}
+        dimensions={dimensions}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -87,6 +90,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "browser" ? (
       <BrowserPage
         key={currentBrowserPage}
+        dimensions={dimensions}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -97,6 +101,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "chat" ? (
       <ChatPage
         key={chatHistory}
+        dimensions={dimensions}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -108,6 +113,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "shopping" ? (
       <ShoppingPage
         key={quantity + cartQuantity}
+        dimensions={dimensions}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -120,6 +126,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "social" ? (
       <SocialMediaPage
         key={playGif + follow + liked}
+        dimensions={dimensions}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
