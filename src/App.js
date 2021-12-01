@@ -3,7 +3,10 @@ import TemporaryDrawer from "./Drawer";
 import DrawInfrastructure from "./DrawInfrastructure";
 
 function App() {
-  const dimensions = {width: 300, height: 600};
+  const dimensions = {width: 300, height: 400};
+  if (window.innerHeight > 850) {
+    dimensions.height = 600
+  }
 
   const [currentScreen, setCurrentScreen] = useState("home");
   const handleAppClicked = (icon) => {

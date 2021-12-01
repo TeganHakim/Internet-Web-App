@@ -3,7 +3,8 @@ import Sketch from "react-p5";
 import "./styles/style.css";
 import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
-
+import {Router} from "./Router"
+ 
 let width;
 let height;
 let phone;
@@ -211,9 +212,16 @@ export default class DrawInfrastucture extends Component {
         y: phone.y - 25,
       },
     ];
-
+  
     routers = [
-      // Router class instances
+      new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y - 25, 50, 50),
+      new Router(phone.x + phone.w + 500, phone.y - 50, 50, 50),
+      new Router(phone.x + phone.w + 325, phone.y, 50, 50),
+      new Router(phone.x + phone.w + 200, phone.y + 150, 50, 50),
+      new Router(phone.x + phone.w + 350, phone.y + 150, 50, 50),
+      new Router(phone.x + phone.w + 450, phone.y + 50, 50, 50),
+      new Router(phone.x + phone.w + 575, phone.y + 50, 50, 50),
+      new Router(phone.x + phone.w + 500, phone.y + 150, 50, 50),
     ]
 
     turtle = {
@@ -435,7 +443,6 @@ export default class DrawInfrastucture extends Component {
   visualizeSignal = (p5) => {
     if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
       drawSignal = true;
-      console.log("hi")
       if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
         httpSignalPos.y = phone.y;
         httpSignalPos.size = 0;
@@ -517,9 +524,38 @@ export default class DrawInfrastucture extends Component {
   };
 
   router = (p5) => {
-    // Draw Routers
-  }
+    // Draw Lines  
+    p5.stroke(0, 0, 0);
+    p5.strokeWeight(8);  
+    p5.line(routers[0].entrancePoint.x, routers[0].entrancePoint.y, routers[1].entrancePoint.x, routers[1].entrancePoint.y);
+    p5.line(routers[0].entrancePoint.x, routers[0].entrancePoint.y, routers[6].entrancePoint.x, routers[6].entrancePoint.y);
 
+    p5.line(routers[1].entrancePoint.x, routers[1].entrancePoint.y, routers[2].entrancePoint.x, routers[2].entrancePoint.y);
+    p5.line(routers[1].entrancePoint.x, routers[1].entrancePoint.y, routers[5].entrancePoint.x, routers[5].entrancePoint.y);
+    p5.line(routers[1].entrancePoint.x, routers[1].entrancePoint.y, routers[6].entrancePoint.x, routers[6].entrancePoint.y);
+    
+    p5.line(routers[2].entrancePoint.x, routers[2].entrancePoint.y, routers[3].entrancePoint.x, routers[3].entrancePoint.y);
+    p5.line(routers[2].entrancePoint.x, routers[2].entrancePoint.y, routers[4].entrancePoint.x, routers[4].entrancePoint.y);
+    p5.line(routers[2].entrancePoint.x, routers[2].entrancePoint.y, routers[5].entrancePoint.x, routers[5].entrancePoint.y);
+    
+    p5.line(routers[3].entrancePoint.x, routers[3].entrancePoint.y, routers[4].entrancePoint.x, routers[4].entrancePoint.y);
+
+    p5.line(routers[4].entrancePoint.x, routers[4].entrancePoint.y, routers[5].entrancePoint.x, routers[5].entrancePoint.y);
+    p5.line(routers[4].entrancePoint.x, routers[4].entrancePoint.y, routers[7].entrancePoint.x, routers[7].entrancePoint.y);
+    
+    p5.line(routers[5].entrancePoint.x, routers[5].entrancePoint.y, routers[6].entrancePoint.x, routers[6].entrancePoint.y);
+    p5.line(routers[5].entrancePoint.x, routers[5].entrancePoint.y, routers[7].entrancePoint.x, routers[7].entrancePoint.y);
+
+    p5.line(routers[6].entrancePoint.x, routers[6].entrancePoint.y, routers[7].entrancePoint.x, routers[7].entrancePoint.y);
+    // Boxes
+    for (let i=0; i<routers.length; i++) {
+      p5.fill(255, 255, 255);
+      p5.stroke(0, 0, 0);
+      p5.rect(routers[i].x, routers[i].y, routers[i].w, routers[i].h, 5);
+    }
+    p5.strokeWeight(1);      
+  }
+  
   turtle = (p5) => {
     if (drawTurtle) {
       if (turtle.stop === false) {
