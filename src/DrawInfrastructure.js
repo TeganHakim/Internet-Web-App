@@ -4,6 +4,7 @@ import "./styles/style.css";
 import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
 import {Router} from "./Router"
+import drawRouters from "./DrawRouters"
  
 let width;
 let height;
@@ -21,7 +22,6 @@ let drawTurtle = false;
 let turtlePath;
 
 let routers;
-let routerRoute = false;
 
 let httpSignalPos;
 let previousSignalEndpoint = null;
@@ -215,7 +215,7 @@ export default class DrawInfrastucture extends Component {
     ];
   
     routers = [
-      new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y - 25, 50, 50),
+      new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y - 25, 50, 50, {closestRouters: [{x: phone.x + phone.w + 500, y: phone.y - 50}]}),
       new Router(phone.x + phone.w + 500, phone.y - 50, 50, 50),
       new Router(phone.x + phone.w + 325, phone.y, 50, 50),
       new Router(phone.x + phone.w + 200, phone.y + 75, 100, 150),
@@ -235,6 +235,18 @@ export default class DrawInfrastucture extends Component {
       new Router(phone.x + phone.w + 650, phone.y + 400, 50, 50),
       new Router(phone.x + phone.w + 600, phone.y + 315, 50, 50),
       new Router(phone.x + phone.w + 750, phone.y + 250, 50, 50),
+      new Router(phone.x + phone.w + 750, phone.y + 50, 50, 50),
+      new Router(phone.x + phone.w + 800, phone.y + 150, 50, 50),
+      new Router(phone.x + phone.w + 600, phone.y + 515, 50, 50),
+      new Router(phone.x + phone.w + 775, phone.y + 400, 100, 150),
+      new Router(phone.x + phone.w + 850, phone.y - 25, 50, 50),
+      new Router(phone.x + phone.w + 900, phone.y + 75, 50, 50),
+      new Router(phone.x + phone.w + 900, phone.y + 250, 150, 100),
+      new Router(phone.x + phone.w + 900, phone.y + 400, 50, 50),
+      new Router(phone.x + phone.w + 1000, phone.y + 450, 50, 50),
+      new Router(phone.x + phone.w + 1100, phone.y + 350, 50, 50),
+      new Router(phone.x + phone.w + 1050, phone.y + 200, 50, 50),
+      new Router(phone.x + phone.w + 1050, phone.y , 100, 150),
     ]
 
     turtle = {
@@ -537,74 +549,7 @@ export default class DrawInfrastucture extends Component {
   };
 
   router = (p5) => {
-    // Draw Lines  
-    p5.stroke(0, 0, 0);
-    p5.strokeWeight(10);  
-    p5.line(routers[0].entrancePoint.x, routers[0].entrancePoint.y, routers[1].entrancePoint.x, routers[1].entrancePoint.y);
-    p5.line(routers[0].entrancePoint.x, routers[0].entrancePoint.y, routers[6].entrancePoint.x, routers[6].entrancePoint.y);
-    p5.line(routers[0].entrancePoint.x, routers[0].entrancePoint.y, routers[8].entrancePoint.x, routers[8].entrancePoint.y);
-
-    p5.line(routers[1].entrancePoint.x, routers[1].entrancePoint.y, routers[2].entrancePoint.x, routers[2].entrancePoint.y);
-    p5.line(routers[1].entrancePoint.x, routers[1].entrancePoint.y, routers[5].entrancePoint.x, routers[5].entrancePoint.y);
-    p5.line(routers[1].entrancePoint.x, routers[1].entrancePoint.y, routers[6].entrancePoint.x, routers[6].entrancePoint.y);
-    
-    p5.line(routers[2].entrancePoint.x, routers[2].entrancePoint.y, routers[3].entrancePoint.x, routers[3].entrancePoint.y);
-    p5.line(routers[2].entrancePoint.x, routers[2].entrancePoint.y, routers[4].entrancePoint.x, routers[4].entrancePoint.y);
-    p5.line(routers[2].entrancePoint.x, routers[2].entrancePoint.y, routers[5].entrancePoint.x, routers[5].entrancePoint.y);
-    
-    p5.line(routers[3].entrancePoint.x, routers[3].entrancePoint.y, routers[4].entrancePoint.x, routers[4].entrancePoint.y);
-    p5.line(routers[3].entrancePoint.x, routers[3].entrancePoint.y, routers[11].entrancePoint.x, routers[11].entrancePoint.y);
-    p5.line(routers[3].entrancePoint.x, routers[3].entrancePoint.y, routers[13].entrancePoint.x, routers[13].entrancePoint.y);
-
-    p5.line(routers[4].entrancePoint.x, routers[4].entrancePoint.y, routers[5].entrancePoint.x, routers[5].entrancePoint.y);
-    p5.line(routers[4].entrancePoint.x, routers[4].entrancePoint.y, routers[7].entrancePoint.x, routers[7].entrancePoint.y);
-    p5.line(routers[4].entrancePoint.x, routers[4].entrancePoint.y, routers[10].entrancePoint.x, routers[10].entrancePoint.y);
-    p5.line(routers[4].entrancePoint.x, routers[4].entrancePoint.y, routers[11].entrancePoint.x, routers[11].entrancePoint.y);
-    
-    p5.line(routers[5].entrancePoint.x, routers[5].entrancePoint.y, routers[6].entrancePoint.x, routers[6].entrancePoint.y);
-    p5.line(routers[5].entrancePoint.x, routers[5].entrancePoint.y, routers[7].entrancePoint.x, routers[7].entrancePoint.y);
-
-    p5.line(routers[6].entrancePoint.x, routers[6].entrancePoint.y, routers[7].entrancePoint.x, routers[7].entrancePoint.y);
-    p5.line(routers[6].entrancePoint.x, routers[6].entrancePoint.y, routers[8].entrancePoint.x, routers[8].entrancePoint.y);
-
-    p5.line(routers[7].entrancePoint.x, routers[7].entrancePoint.y, routers[8].entrancePoint.x, routers[8].entrancePoint.y);
-    p5.line(routers[7].entrancePoint.x, routers[7].entrancePoint.y, routers[9].entrancePoint.x, routers[9].entrancePoint.y);
-    p5.line(routers[7].entrancePoint.x, routers[7].entrancePoint.y, routers[10].entrancePoint.x, routers[10].entrancePoint.y);
-
-    p5.line(routers[8].entrancePoint.x, routers[8].entrancePoint.y, routers[9].entrancePoint.x, routers[9].entrancePoint.y);
-    p5.line(routers[8].entrancePoint.x, routers[8].entrancePoint.y, routers[19].entrancePoint.x, routers[19].entrancePoint.y);
-
-    p5.line(routers[9].entrancePoint.x, routers[9].entrancePoint.y, routers[10].entrancePoint.x, routers[10].entrancePoint.y);
-    p5.line(routers[9].entrancePoint.x, routers[9].entrancePoint.y, routers[12].entrancePoint.x, routers[12].entrancePoint.y);
-    p5.line(routers[9].entrancePoint.x, routers[9].entrancePoint.y, routers[18].entrancePoint.x, routers[18].entrancePoint.y);
-    p5.line(routers[9].entrancePoint.x, routers[9].entrancePoint.y, routers[19].entrancePoint.x, routers[19].entrancePoint.y);
-
-    p5.line(routers[10].entrancePoint.x, routers[10].entrancePoint.y, routers[11].entrancePoint.x, routers[11].entrancePoint.y);
-    p5.line(routers[10].entrancePoint.x, routers[10].entrancePoint.y, routers[12].entrancePoint.x, routers[12].entrancePoint.y);
-    
-    p5.line(routers[11].entrancePoint.x, routers[11].entrancePoint.y, routers[12].entrancePoint.x, routers[12].entrancePoint.y);
-    p5.line(routers[11].entrancePoint.x, routers[11].entrancePoint.y, routers[13].entrancePoint.x, routers[13].entrancePoint.y);
-    p5.line(routers[11].entrancePoint.x, routers[11].entrancePoint.y, routers[14].entrancePoint.x, routers[14].entrancePoint.y);
-
-    p5.line(routers[12].entrancePoint.x, routers[12].entrancePoint.y, routers[14].entrancePoint.x, routers[14].entrancePoint.y);
-    p5.line(routers[12].entrancePoint.x, routers[12].entrancePoint.y, routers[16].entrancePoint.x, routers[16].entrancePoint.y);
-    p5.line(routers[12].entrancePoint.x, routers[12].entrancePoint.y, routers[18].entrancePoint.x, routers[18].entrancePoint.y);
-
-    p5.line(routers[13].entrancePoint.x, routers[13].entrancePoint.y, routers[15].entrancePoint.x, routers[15].entrancePoint.y);
-    p5.line(routers[13].entrancePoint.x, routers[13].entrancePoint.y, routers[14].entrancePoint.x, routers[14].entrancePoint.y);
-
-    p5.line(routers[14].entrancePoint.x, routers[14].entrancePoint.y, routers[15].entrancePoint.x, routers[15].entrancePoint.y);
-    p5.line(routers[14].entrancePoint.x, routers[14].entrancePoint.y, routers[16].entrancePoint.x, routers[16].entrancePoint.y);
-    
-    p5.line(routers[15].entrancePoint.x, routers[15].entrancePoint.y, routers[16].entrancePoint.x, routers[16].entrancePoint.y);
-
-    p5.line(routers[16].entrancePoint.x, routers[16].entrancePoint.y, routers[17].entrancePoint.x, routers[17].entrancePoint.y);
-    
-    p5.line(routers[17].entrancePoint.x, routers[17].entrancePoint.y, routers[18].entrancePoint.x, routers[18].entrancePoint.y);
-    p5.line(routers[17].entrancePoint.x, routers[17].entrancePoint.y, routers[19].entrancePoint.x, routers[19].entrancePoint.y);
-
-    p5.line(routers[18].entrancePoint.x, routers[18].entrancePoint.y, routers[19].entrancePoint.x, routers[19].entrancePoint.y);
-
+    drawRouters(p5, routers);
     // Boxes
     for (let i=0; i<routers.length; i++) {
       p5.fill(255, 255, 255);
@@ -613,19 +558,11 @@ export default class DrawInfrastucture extends Component {
     }
     p5.strokeWeight(1);  
     p5.noStroke();    
-
-    // Turtle
-    if (routerRoute) {
-      // Do smth
-    }
   }
   
   turtle = (p5) => {
     if (drawTurtle) {
       if (turtle.stop === false) {
-        if (routerRoute) {
-          turtle.stop = true
-        }
         for (let i = 0; i < turtle.speed; i++) {
           if (
             p5.dist(
@@ -703,7 +640,7 @@ export default class DrawInfrastucture extends Component {
 
           // Routers Reached
           if (Math.abs(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2) - turtle.x) + Math.abs((phone.y - 25) - turtle.y) <= turtle.distanceCheck*2) {
-            routerRoute = true;
+            //Routers reached
           }
         }
       }
