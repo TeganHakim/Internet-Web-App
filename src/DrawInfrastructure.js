@@ -17,18 +17,20 @@ let infrastructurePath;
 let cellTowerPingColor = "rgb(0, 255, 0)";
 
 let turtle;
-let turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
+const turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
 let drawTurtle = false;
 let turtlePath;
 
 let routers;
+let routersReached = false;
+let targetServer;
 
 let httpSignalPos;
 let previousSignalEndpoint = null;
 let drawSignal = false;
 
 let createIP = false;
-let ipCharacters = [
+const ipCharacters = [
   "0",
   "1",
   "2",
@@ -215,16 +217,26 @@ export default class DrawInfrastucture extends Component {
     ];
   
     routers = [
-      new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y - 25, 50, 50, {closestRouters: [{x: phone.x + phone.w + 500, y: phone.y - 50}]}),
+      new Router(
+        phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2),
+        phone.y - 25,
+        50,
+        50, 
+        [
+          {x: phone.x + phone.w + 500, y: phone.y - 50 + 25},
+          {x: phone.x + phone.w + 575, y: phone.y + 50 + 25},
+          {x: phone.x + phone.w + 750, y: phone.y + 50 + 25},
+          {x: phone.x + phone.w + 850, y: phone.y - 25 + 25}
+        ]),
       new Router(phone.x + phone.w + 500, phone.y - 50, 50, 50),
       new Router(phone.x + phone.w + 325, phone.y, 50, 50),
       new Router(phone.x + phone.w + 200, phone.y + 75, 100, 150),
       new Router(phone.x + phone.w + 350, phone.y + 100, 50, 50),
       new Router(phone.x + phone.w + 450, phone.y + 50, 50, 50),
-      new Router(phone.x + phone.w + 575, phone.y + 50, 50, 50),
+      new Router(phone.x + phone.w + 575, phone.y + 40, 50, 50),
       new Router(phone.x + phone.w + 515, phone.y + 135, 50, 50),
-      new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y + 150, 50, 50),
-      new Router(phone.x + phone.w + 575, phone.y + 225, 50, 50),
+      new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), phone.y + 115, 125, 100),
+      new Router(phone.x + phone.w + 550, phone.y + 225, 50, 50),
       new Router(phone.x + phone.w + 400, phone.y + 185, 50, 50),
       new Router(phone.x + phone.w + 300, phone.y + 250, 50, 50),
       new Router(phone.x + phone.w + 450, phone.y + 300, 150, 100),
@@ -233,10 +245,37 @@ export default class DrawInfrastucture extends Component {
       new Router(phone.x + phone.w + 200, phone.y + 475, 50, 50),
       new Router(phone.x + phone.w + 450, phone.y + 450, 50, 50),
       new Router(phone.x + phone.w + 650, phone.y + 400, 50, 50),
-      new Router(phone.x + phone.w + 600, phone.y + 315, 50, 50),
-      new Router(phone.x + phone.w + 750, phone.y + 250, 50, 50),
-      new Router(phone.x + phone.w + 750, phone.y + 50, 50, 50),
-      new Router(phone.x + phone.w + 800, phone.y + 150, 50, 50),
+      new Router(phone.x + phone.w + 590, phone.y + 315, 50, 50),
+      new Router(
+        phone.x + phone.w + 750, 
+        phone.y + 250, 
+        50, 
+        50,
+        [
+          {x: phone.x + phone.w + 550, y: phone.y + 225 + 25},
+          {x: phone.x + phone.w + 650, y: phone.y + 400 + 25},
+          {x: phone.x + phone.w + 590, y: phone.y + 315 + 25},
+          {x: phone.x + phone.w + 775, y: phone.y + 400 + 150/2}
+        ]),
+      new Router(
+        phone.x + phone.w + 750, 
+        phone.y + 50, 
+        50, 
+        50,
+        [
+          {x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), y: phone.y - 25 + 25},
+          {x: phone.x + phone.w + 850, y: phone.y - 25 + 25},
+          {x: phone.x + phone.w + 800, y: phone.y + 150 + 25}
+        ]),
+      new Router(
+        phone.x + phone.w + 800, 
+        phone.y + 150, 
+        50, 
+        50,
+        [
+          {x: phone.x + phone.w + 750, y: phone.y + 250 + 25},
+          {x: phone.x + phone.w + 900, y: phone.y + 75 + 25}
+        ]),
       new Router(phone.x + phone.w + 600, phone.y + 515, 50, 50),
       new Router(phone.x + phone.w + 775, phone.y + 400, 100, 150),
       new Router(phone.x + phone.w + 850, phone.y - 25, 50, 50),
@@ -558,6 +597,22 @@ export default class DrawInfrastucture extends Component {
     }
     p5.strokeWeight(1);  
     p5.noStroke();    
+
+    // Turtle
+    if (routersReached) {
+      for (let i=0; i<routers.length; i++) {
+        let nearestRouter = {x: turtle.x, y: turtle.y};
+        for (let j=0; j<routers[i].closestRouters.length; j++) { 
+          if (p5.dist(routers[i].closestRouters[j].x, routers[i].closestRouters[j].y, targetServer.x, targetServer.y) < p5.dist(nearestRouter.x, nearestRouter.y, targetServer.x, targetServer.y)) {
+            nearestRouter = routers[i].closestRouters[j];
+          }
+        }
+        p5.fill(255, 0, 0);
+        if (nearestRouter.x !== turtlePath[0].x && nearestRouter.y !== turtlePath[0].y) {
+          p5.ellipse(nearestRouter.x, nearestRouter.y, 100);
+        }
+      }
+    }
   }
   
   turtle = (p5) => {
@@ -641,6 +696,8 @@ export default class DrawInfrastucture extends Component {
           // Routers Reached
           if (Math.abs(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2) - turtle.x) + Math.abs((phone.y - 25) - turtle.y) <= turtle.distanceCheck*2) {
             //Routers reached
+            routersReached = true;
+            targetServer = routers[23].entrancePoint;
           }
         }
       }
