@@ -276,7 +276,18 @@ export default class DrawInfrastucture extends Component {
           {x: phone.x + phone.w + 400, y: phone.y + 185 + 25, type: "router"},
           {x: phone.x + phone.w + 300, y: phone.y + 250 + 25, type: "router"}
         ]),
-      new Router(phone.x + phone.w + 450, phone.y + 50, 50, 50),
+      new Router(
+        phone.x + phone.w + 450, 
+        phone.y + 50, 
+        50, 
+        50,
+        [
+          {x: phone.x + phone.w + 350, y: phone.y + 100 + 25, type: "router"},
+          {x: phone.x + phone.w + 575, y: phone.y + 30 + 25, type: "router"},
+          {x: phone.x + phone.w + 500, y: phone.y - 50 + 25, type: "router"},
+          {x: phone.x + phone.w + 325, y: phone.y + 25, type: "router"},
+          {x: phone.x + phone.w + 515, y: phone.y + 135 + 25, type: "router"}
+        ]),
       new Router(phone.x + phone.w + 575, phone.y + 30, 50, 50),
       new Router(phone.x + phone.w + 515, phone.y + 135, 50, 50),
       new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), phone.y + 115, 125, 100),
@@ -643,10 +654,12 @@ export default class DrawInfrastucture extends Component {
     p5.noStroke();    
 
     // Turtle
+   
     if (routersReached) {
       for (let i=0; i<routers.length; i++) {
         let nearestRouter = {x: routers[0].entrancePoint.x, y: routers[0].entrancePoint.y};
         for (let j=0; j<routers[i].closestRouters.length; j++) {
+        
           if (p5.dist(routers[i].closestRouters[j].x, routers[i].closestRouters[j].y, targetServer.x, targetServer.y) < p5.dist(nearestRouter.x, nearestRouter.y, targetServer.x, targetServer.y)) {
             if (routers[i].closestRouters[j].type === "server") {
               if (p5.dist(routers[i].closestRouters[j].x, routers[i].closestRouters[j].y, targetServer.x, targetServer.y) > 0) {
@@ -661,6 +674,33 @@ export default class DrawInfrastucture extends Component {
         p5.ellipse(nearestRouter.x, nearestRouter.y, 100);
       
       }
+     
+      // Second Attempt
+
+      // let nearestRouter = {x: routers[0].entrancePoint.x, y: routers[0].entrancePoint.y};
+      // let possibleRouterDists = [];
+      // let routerIndex = 0;
+      // let routerPath = [nearestRouter];
+    
+      // for (let j=0; j<routers[routerIndex].closestRouters.length; j++) {
+      //   if (routers[routerIndex].closestRouters[j].type === "server") {
+      //     if (p5.dist(routers[routerIndex].closestRouters[j].x, routers[routerIndex].closestRouters[j].y, targetServer.x, targetServer.y) > 0) {
+      //       possibleRouterDists.push(Infinity);
+      //     } else {
+      //       possibleRouterDists.push(p5.dist(routers[routerIndex].closestRouters[j].x, routers[routerIndex].closestRouters[j].y, targetServer.x, targetServer.y))
+      //     }
+      //   } else {
+      //     possibleRouterDists.push(p5.dist(routers[routerIndex].closestRouters[j].x, routers[routerIndex].closestRouters[j].y, targetServer.x, targetServer.y))
+      //   }
+      // }
+      // nearestRouter = routers[routerIndex].closestRouters[possibleRouterDists.indexOf(Math.min(...possibleRouterDists))]
+      // routerPath.push(nearestRouter)
+      // routerIndex = routers.map((e)=>e.entrancePoint.x+e.entrancePoint.y).indexOf(nearestRouter.x+nearestRouter.y);
+
+      // p5.fill(255, 0, 0);
+      // for (let point of routerPath) {
+      //   p5.ellipse(point.x, point.y, 100);
+      // }
     }
   }
   
