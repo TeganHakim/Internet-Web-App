@@ -23,6 +23,7 @@ let drawTurtle = false;
 let turtlePath;
 
 let routers;
+let possibleTargets;
 let routersReached = false;
 let targetServer;
 
@@ -225,54 +226,29 @@ export default class DrawInfrastucture extends Component {
 
     routers = [
       new Router(
-        phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2),
-        phone.y - 25,
-        50,
-        50,
-        [
+        phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y - 25, 50, 50, [
           { x: phone.x + phone.w + 500, y: phone.y - 50 + 25, type: "router" },
           { x: phone.x + phone.w + 575, y: phone.y + 30 + 25, type: "router" },
-          {
-            x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2),
-            y: phone.y + 115 + 100 / 2,
-            type: "server",
-          },
+          { x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), y: phone.y + 115 + 100 / 2, type: "server" },
           { x: phone.x + phone.w + 750, y: phone.y + 50 + 25, type: "router" },
           { x: phone.x + phone.w + 850, y: phone.y - 25 + 25, type: "router" },
         ]
       ),
       new Router(phone.x + phone.w + 500, phone.y - 50, 50, 50, [
-        {
-          x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2),
-          y: phone.y - 25 + 25,
-          type: "router",
-        },
+        { x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), y: phone.y - 25 + 25, type: "router" },
         { x: phone.x + phone.w + 325, y: phone.y + 25, type: "router" },
         { x: phone.x + phone.w + 450, y: phone.y + 50 + 25, type: "router" },
         { x: phone.x + phone.w + 575, y: phone.y + 30 + 25, type: "router" },
       ]),
       new Router(phone.x + phone.w + 325, phone.y, 50, 50, [
         { x: phone.x + phone.w + 500, y: phone.y - 50 + 25, type: "router" },
-        {
-          x: phone.x + phone.w + 200,
-          y: phone.y + 75 + 150 / 2,
-          type: "server",
-        },
+        { x: phone.x + phone.w + 200, y: phone.y + 75 + 150 / 2, type: "server" },
         { x: phone.x + phone.w + 350, y: phone.y + 100 + 25, type: "router" },
         { x: phone.x + phone.w + 450, y: phone.y + 50 + 25, type: "router" },
       ]),
-      new Router(phone.x + phone.w + 200, phone.y + 75, 100, 150, [
-        { x: phone.x + phone.w + 325, y: phone.y + 25, type: "router" },
-        { x: phone.x + phone.w + 350, y: phone.y + 100 + 25, type: "router" },
-        { x: phone.x + phone.w + 300, y: phone.y + 250 + 25, type: "router" },
-        { x: phone.x + phone.w + 150, y: phone.y + 300 + 25, type: "router" },
-      ]),
+      new Router(phone.x + phone.w + 200, phone.y + 75, 100, 150),
       new Router(phone.x + phone.w + 350, phone.y + 100, 50, 50, [
-        {
-          x: phone.x + phone.w + 200,
-          y: phone.y + 75 + 150 / 2,
-          type: "server",
-        },
+        { x: phone.x + phone.w + 200, y: phone.y + 75 + 150 / 2, type: "server" },
         { x: phone.x + phone.w + 325, y: phone.y, type: "router" },
         { x: phone.x + phone.w + 450, y: phone.y + 50 + 25, type: "router" },
         { x: phone.x + phone.w + 515, y: phone.y + 135 + 25, type: "router" },
@@ -286,59 +262,147 @@ export default class DrawInfrastucture extends Component {
         { x: phone.x + phone.w + 325, y: phone.y + 25, type: "router" },
         { x: phone.x + phone.w + 515, y: phone.y + 135 + 25, type: "router" },
       ]),
-      new Router(phone.x + phone.w + 575, phone.y + 30, 50, 50),
-      new Router(phone.x + phone.w + 515, phone.y + 135, 50, 50),
-      new Router(
-        phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2),
-        phone.y + 115,
-        125,
-        100
-      ),
-      new Router(phone.x + phone.w + 550, phone.y + 225, 50, 50),
-      new Router(phone.x + phone.w + 400, phone.y + 185, 50, 50),
-      new Router(phone.x + phone.w + 300, phone.y + 250, 50, 50),
+      new Router(phone.x + phone.w + 575, phone.y + 30, 50, 50, [
+        {x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), y: phone.y - 25 + 25, type: "router"},
+        {x: phone.x + phone.w + 500, y: phone.y - 50 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 50 + 25, type: "router"},
+        {x: phone.x + phone.w + 515, y: phone.y + 135 + 25, type: "router"},
+        {x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), y: phone.y + 115 + (100/2), type: "server"}
+      ]),
+      new Router(phone.x + phone.w + 515, phone.y + 135, 50, 50, [
+        {x: phone.x + phone.w + 575, y: phone.y + 30 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 50 + 25, type: "router"},
+        {x: phone.x + phone.w + 350, y: phone.y + 100 + 25, type: "router"},
+        {x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), y: phone.y + 115 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 400, y: phone.y + 185 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), phone.y + 115, 125, 100),
+      new Router(phone.x + phone.w + 550, phone.y + 225, 50, 50, [
+        {x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), y: phone.y + 115 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 515, y: phone.y + 135 + 25, type: "router"},
+        {x: phone.x + phone.w + 400, y: phone.y + 185 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 300, type: "server"},
+        {x: phone.x + phone.w + 590, y: phone.y + 315 + 25, type: "router"},
+        {x: phone.x + phone.w + 750, y: phone.y + 250 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 400, phone.y + 185, 50, 50, [
+        {x: phone.x + phone.w + 515, y: phone.y + 135 + 25, router: "router"},
+        {x: phone.x + phone.w + 350, y: phone.y + 100 + 25, type: "router"},
+        {x: phone.x + phone.w + 300, y: phone.y + 250 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 300, type: "server"},
+        {x: phone.x + phone.w + 550, y: phone.y + 225 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 300, phone.y + 250, 50, 50, [
+        {x: phone.x + phone.w + 400, y: phone.y + 185 + 25, type: "router"},
+        {x: phone.x + phone.w + 350, y: phone.y + 100 + 25, type: "router"},
+        {x: phone.x + phone.w + 200, y: phone.y + 75 + (150/2), type: "server"},
+        {x: phone.x + phone.w + 450, y: phone.y + 300 + (100/2), type: "server"}
+      ]),
       new Router(phone.x + phone.w + 450, phone.y + 300, 150, 100),
-      new Router(phone.x + phone.w + 150, phone.y + 300, 50, 50),
-      new Router(phone.x + phone.w + 300, phone.y + 400, 50, 50),
-      new Router(phone.x + phone.w + 200, phone.y + 475, 50, 50),
-      new Router(phone.x + phone.w + 450, phone.y + 450, 50, 50),
-      new Router(phone.x + phone.w + 650, phone.y + 400, 50, 50),
-      new Router(phone.x + phone.w + 590, phone.y + 315, 50, 50),
+      new Router(phone.x + phone.w + 150, phone.y + 300, 50, 50, [
+        {x: phone.x + phone.w + 200, y: phone.y + 75 + (150/2), type: "server"},
+        {x: phone.x + phone.w + 300, y: phone.y + 250 + 25, type: "router"},
+        {x: phone.x + phone.w + 300, y: phone.y + 400 + 25, type: "router"},
+        {x: phone.x + phone.w + 200, y: phone.y + 475 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 300, phone.y + 400, 50, 50, [
+        {x: phone.x + phone.w + 150, y: phone.y + 300 + 25, type: "router"},
+        {x: phone.x + phone.w + 300, y: phone.y + 250 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 300 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 200, y: phone.y + 475 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 450 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 200, phone.y + 475, 50, 50, [
+        {x: phone.x + phone.w + 300, y: phone.y + 400 + 25, type: "router"},
+        {x: phone.x + phone.w + 150, y: phone.y + 300 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 450 + 25, type: "router"},
+        {x: phone.x + phone.w + 600, y: phone.y + 515 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 450, phone.y + 450, 50, 50, [
+        {x: phone.x + phone.w + 200, y: phone.y + 475 + 25, type: "router"},
+        {x: phone.x + phone.w + 300, y: phone.y + 400 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 300 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 600, y: phone.y + 515 + 25, type: "router"},
+        {x: phone.x + phone.w + 650, y: phone.y + 400 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 650, phone.y + 400, 50, 50, [
+        {x: phone.x + phone.w + 450, y: phone.y + 450 + 25, type: "router"},
+        {x: phone.x + phone.w + 590, y: phone.y + 315 + 25, type: "router"},
+        {x: phone.x + phone.w + 750, y: phone.y + 250 + 25, type: "router"},
+        {x: phone.x + phone.w + 775, y: phone.y + 400 + (150/2), type: "server"}
+      ]),
+      new Router(phone.x + phone.w + 590, phone.y + 315, 50, 50, [
+        {x: phone.x + phone.w + 650, y: phone.y + 400 + 25, type: "router"},
+        {x: phone.x + phone.w + 750, y: phone.y + 250 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 300, type: "server"},
+        {x: phone.x + phone.w + 550, y: phone.y + 225 + 25, type: "router"}
+      ]),
       new Router(phone.x + phone.w + 750, phone.y + 250, 50, 50, [
-        { x: phone.x + phone.w + 550, y: phone.y + 225 + 25, type: "router" },
-        { x: phone.x + phone.w + 650, y: phone.y + 400 + 25, type: "router" },
-        { x: phone.x + phone.w + 590, y: phone.y + 315 + 25, type: "router" },
-        {
-          x: phone.x + phone.w + 775,
-          y: phone.y + 400 + 150 / 2,
-          type: "server",
-        },
+        {x: phone.x + phone.w + 750, y: phone.y + 50 + 25, type: "router"},
+        {x: phone.x + phone.w + 800, y: phone.y + 150 + 25, type: "router"},
+        {x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), y: phone.y + 115 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 650, y: phone.y + 400 + 25, type: "router"},
+        {x: phone.x + phone.w + 590, y: phone.y + 315 + 25, type: "router"},
+        {x: phone.x + phone.w + 775, y: phone.y + 400 + (150/2), type: "server"},
+        {x: phone.x + phone.w + 900, y: phone.y + 250 + (100/2), type: "server"}
       ]),
       new Router(phone.x + phone.w + 750, phone.y + 50, 50, 50, [
-        {
-          x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2),
-          y: phone.y - 25 + 25,
-          type: "router",
-        },
+        { x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), y: phone.y - 25 + 25, type: "router" },
         { x: phone.x + phone.w + 850, y: phone.y - 25 + 25, type: "router" },
         { x: phone.x + phone.w + 800, y: phone.y + 150 + 25, type: "router" },
+        { x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 675) / 2), y: phone.y + 115 + (100/2), type: "server"}
       ]),
       new Router(phone.x + phone.w + 800, phone.y + 150, 50, 50, [
-        { x: phone.x + phone.w + 750, y: phone.y + 250 + 25, type: "router" },
-        { x: phone.x + phone.w + 900, y: phone.y + 75 + 25, type: "router" },
+        {x: phone.x + phone.w + 750, y: phone.y + 50 + 25, type: "router"},
+        {x: phone.x + phone.w + 900, y: phone.y + 75 + 25, type: "router"},
+        {x: phone.x + phone.w + 900, y: phone.y + 250 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 750, y: phone.y + 250 + 25, type: "router"}
       ]),
-      new Router(phone.x + phone.w + 600, phone.y + 515, 50, 50),
+      new Router(phone.x + phone.w + 600, phone.y + 515, 50, 50, [
+        {x: phone.x + phone.w + 200, y: phone.y + 475 + 25, type: "router"},
+        {x: phone.x + phone.w + 450, y: phone.y + 450 + 25, type: "router"},
+        {x: phone.x + phone.w + 650, y: phone.y + 400 + 25, type: "router"},
+        {x: phone.x + phone.w + 775, y: phone.y + 400 + (150/2), type: "server"}
+      ]),
       new Router(phone.x + phone.w + 775, phone.y + 400, 100, 150),
-      new Router(phone.x + phone.w + 850, phone.y - 25, 50, 50),
-      new Router(phone.x + phone.w + 900, phone.y + 75, 50, 50),
+      new Router(phone.x + phone.w + 850, phone.y - 25, 50, 50, [
+        {x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), y: phone.y - 25 + 25, type: "router"},
+        {x: phone.x + phone.w + 1050, y: phone.y + (150/2), type: "server"},
+        {x: phone.x + phone.w + 900, y: phone.y + 75 + 25, type: "router"},
+        {x: phone.x + phone.w + 750, y: phone.y + 50 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 900, phone.y + 75, 50, 50, [
+        {x: phone.x + phone.w + 850, y: phone.y - 25 + 25, type: "router"},
+        {x: phone.x + phone.w + 750, y: phone.y + 50 + 25, type: "router"},
+        {x: phone.x + phone.w + 800, y: phone.y + 150 + 25, type: "router"},
+        {x: phone.x + phone.w + 1050, y: phone.y + (150/2), type: "server"},
+        {x: phone.x + phone.w + 1050, y: phone.y + 200 + 25, type: "router"}
+      ]),
       new Router(phone.x + phone.w + 900, phone.y + 250, 150, 100),
-      new Router(phone.x + phone.w + 900, phone.y + 400, 50, 50),
-      new Router(phone.x + phone.w + 1000, phone.y + 450, 50, 50),
-      new Router(phone.x + phone.w + 1100, phone.y + 350, 50, 50),
-      new Router(phone.x + phone.w + 1050, phone.y + 200, 50, 50),
+      new Router(phone.x + phone.w + 900, phone.y + 400, 50, 50, [
+        {x: phone.x + phone.w + 900, y: phone.y + 250 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 775, y: phone.y + 400 + (150/2), type: "server"},
+        {x: phone.x + phone.w + 1000, y: phone.y + 450 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 1000, phone.y + 500, 50, 50, [
+        {x: phone.x + phone.w + 900, y: phone.y + 250 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 775, y: phone.y + 400 + (150/2), type: "server"},
+        {x: phone.x + phone.w + 900, y: phone.y + 400 + 25, type: "router"},
+        {x: phone.x + phone.w + 1100, y: phone.y + 350, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 1100, phone.y + 350, 50, 50, [
+        {x: phone.x + phone.w + 900, y: phone.y + 250 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 1000, y: phone.y + 450 + 25, type: "router"},
+        {x: phone.x + phone.w + 1050, y: phone.y + 200 + 25, type: "router"}
+      ]),
+      new Router(phone.x + phone.w + 1050, phone.y + 200, 50, 50, [
+        {x: phone.x + phone.w + 900, y: phone.y + 250 + (100/2), type: "server"},
+        {x: phone.x + phone.w + 1050, y: phone.y + (150/2), type: "server"},
+        {x: phone.x + phone.w + 900, y: phone.y + 75 + 25, type: "router"}
+      ]),
       new Router(phone.x + phone.w + 1050, phone.y, 100, 150),
     ];
-
+    possibleTargets = [routers[3], routers[8], routers[12], routers[23], routers[26], routers[31]]
     turtle = {
       index: 1,
       x: turtlePath[0].x,
@@ -639,22 +703,31 @@ export default class DrawInfrastucture extends Component {
   };
 
   findAdjacentNearestTarget = (p5, currentRouter, allRouters, target) => {
-    let adjacents = allRouters.filter(
-      (router) =>
-        p5.dist(
-          router.entrancePoint.x,
-          router.entrancePoint.y,
-          currentRouter.entrancePoint.x,
-          currentRouter.entrancePoint.y
-        ) < 200
-    );
+    // let adjacents = allRouters.filter(
+    //   (router) =>
+    //     p5.dist(
+    //       router.entrancePoint.x,
+    //       router.entrancePoint.y,
+    //       currentRouter.entrancePoint.x,
+    //       currentRouter.entrancePoint.y
+    //     ) < 200
+    // );
+    
+    let adjacents;
+    if (currentRouter.closestRouters !== []) {
+      adjacents = currentRouter.closestRouters.filter(
+        (router) => router.type === "router" || p5.dist(router.x,
+          router.y,
+          target.x,
+          target.y) === 0)
+    }
 
     let nearestToTarget = currentRouter;
     adjacents.forEach((adjacent) => {
       if (
         p5.dist(
-          adjacent.entrancePoint.x,
-          adjacent.entrancePoint.y,
+          adjacent.x,
+          adjacent.y,
           target.x,
           target.y
         ) <
@@ -665,7 +738,7 @@ export default class DrawInfrastucture extends Component {
           target.y
         )
       )
-        nearestToTarget = adjacent;
+        nearestToTarget = routers[routers.map((e)=>e.entrancePoint.x+e.entrancePoint.y).indexOf(adjacent.x+adjacent.y)];
     });
     p5.fill(255, 0, 0);
     p5.ellipse(
@@ -674,7 +747,6 @@ export default class DrawInfrastucture extends Component {
       40,
       40
     );
-    console.log(nearestToTarget, target);
     if (
       nearestToTarget.entrancePoint.x === target.x &&
       nearestToTarget.entrancePoint.y === target.y
@@ -822,7 +894,7 @@ export default class DrawInfrastucture extends Component {
           ) {
             //Routers reached
             routersReached = true;
-            targetServer = routers[23].entrancePoint;
+            targetServer = possibleTargets[3].entrancePoint;
           } else {
             routersReached = false;
           }
