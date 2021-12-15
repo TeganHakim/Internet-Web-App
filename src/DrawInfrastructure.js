@@ -729,16 +729,17 @@ export default class DrawInfrastucture extends Component {
     let adjacents;
     if (currentRouter.closestRouters !== []) {
       adjacents = currentRouter.closestRouters.filter(
-        (router) => router.type === "router" || p5.dist(router.x,
+        (router) => (router.type === "router" || p5.dist(router.x,
           router.y,
           target.x,
-          target.y) === 0)
+          target.y) === 0))
     }
 
     let nearestToTarget = currentRouter;
-    if (Math.random() <= 0.2) {
+    
+    if (Math.random() <= 0.5) {
       let randomIndex = Math.floor(Math.random()*adjacents.length)
-      nearestToTarget = routers[routers.map((e)=>e.entrancePoint.x+e.entrancePoint.y).indexOf(adjacents[randomIndex].x+adjacents[randomIndex].y)];
+      nearestToTarget = routers.find((e)=> e.entrancePoint.x === adjacents[randomIndex].x && e.entrancePoint.y === adjacents[randomIndex].y);
     } else {
       adjacents.forEach((adjacent) => {
         if (
@@ -755,7 +756,7 @@ export default class DrawInfrastucture extends Component {
             target.y
           )
         ) 
-          nearestToTarget = routers[routers.map((e)=>e.entrancePoint.x+e.entrancePoint.y).indexOf(adjacent.x+adjacent.y)];
+          nearestToTarget = routers.find((e)=> e.entrancePoint.x === adjacent.x && e.entrancePoint.y === adjacent.y);
       });
     }
     if (routerMovements.includes(routers[0]) === false) {
@@ -763,7 +764,7 @@ export default class DrawInfrastucture extends Component {
     }
     if (routerMovements.includes(nearestToTarget) === false) {
       routerMovements.push(nearestToTarget);
-    } 
+    }
     if (
       nearestToTarget.entrancePoint.x === target.x &&
       nearestToTarget.entrancePoint.y === target.y
@@ -795,7 +796,6 @@ export default class DrawInfrastucture extends Component {
       );
     }
     if (routerMovements !== []) {
-      console.log(routerMovements)
       for (let router of routerMovements) {
         p5.fill(255, 0, 0);
         p5.ellipse (
@@ -804,11 +804,11 @@ export default class DrawInfrastucture extends Component {
           40,
           40
         );
-        currentTurtlePath = []
-        currentTurtlePath.push({x: router.entrancePoint.x, y: router.entrancePoint.y})
+        currentTurtlePath = [];
+        currentTurtlePath.push({x: router.entrancePoint.x, y: router.entrancePoint.y});
       }
     } else {
-      currentTurtlePath = turtlePath
+      currentTurtlePath = turtlePath;
     }
     
     // Server Text
@@ -913,6 +913,7 @@ export default class DrawInfrastucture extends Component {
             routersReached = true;
             targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;
             pathMade = false;
+            routerMovements = [];
           } else {
             routersReached = false;
           }

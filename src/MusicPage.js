@@ -110,7 +110,7 @@ export default class MusicPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleSongChanged(this.props.currentSong.index, "left");
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "switchSong"});
+          // this.props.httpVisualize({status: 200, request: "GET", endpoint: "switchSong"});
         }
       }
     }
@@ -139,7 +139,7 @@ export default class MusicPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleSongChanged(this.props.currentSong.index, "right");
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "switchSong"});
+          // this.props.httpVisualize({status: 200, request: "GET", endpoint: "switchSong"});
         }
       }
     }
@@ -197,7 +197,7 @@ export default class MusicPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           this.props.handleMusicPlayer(this.props.playMusic);
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "playPauseSong"});
+          // this.props.httpVisualize({status: 200, request: "GET", endpoint: "playPauseSong"});
         }
       }
     }
