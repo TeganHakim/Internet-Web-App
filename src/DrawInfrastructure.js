@@ -21,9 +21,12 @@ let turtle;
 const turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
 let drawTurtle = false;
 let turtlePath;
+let currentTurtlePath;
 
 let routers;
 let possibleTargets;
+let pathMade = false;
+let routerMovements = [];
 let routersReached = false;
 let targetServer;
 
@@ -223,6 +226,7 @@ export default class DrawInfrastucture extends Component {
         y: phone.y - 25,
       },
     ];
+    currentTurtlePath = turtlePath;
 
     routers = [
       new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y - 25, 50, 50, [
@@ -401,6 +405,7 @@ export default class DrawInfrastucture extends Component {
       ]),
       new Router(phone.x + phone.w + 1050, phone.y, 100, 150),
     ];
+
     let targetLocations = {shopping: routers[3], phone: routers[8], music: routers[12], chat: routers[23], browser: routers[26], social: routers[31]}
     possibleTargets = {
       homeScreen: targetLocations.phone,
@@ -423,7 +428,7 @@ export default class DrawInfrastucture extends Component {
       index: 1,
       x: turtlePath[0].x,
       y: turtlePath[0].y,
-      speed: 10,
+      speed: 20,
       stop: false,
       size: 10,
       distanceCheck: 3,
@@ -639,6 +644,7 @@ export default class DrawInfrastucture extends Component {
   visualizeSignal = (p5) => {
     if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
       drawSignal = true;
+      routerMovements = [];
       if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
         httpSignalPos.y = phone.y;
         httpSignalPos.size = 0;
@@ -728,34 +734,36 @@ export default class DrawInfrastucture extends Component {
           target.x,
           target.y) === 0)
     }
-    // let randomIndex = Math.floor(Math.random()*adjacents.length)
-    // adjacents.splice(randomIndex);
 
     let nearestToTarget = currentRouter;
-    adjacents.forEach((adjacent) => {
-      if (
-        p5.dist(
-          adjacent.x,
-          adjacent.y,
-          target.x,
-          target.y
-        ) <
-        p5.dist(
-          nearestToTarget.entrancePoint.x,
-          nearestToTarget.entrancePoint.y,
-          target.x,
-          target.y
-        )
-      ) 
-        nearestToTarget = routers[routers.map((e)=>e.entrancePoint.x+e.entrancePoint.y).indexOf(adjacent.x+adjacent.y)];
-    });
-    p5.fill(255, 0, 0);
-    p5.ellipse(
-      nearestToTarget.entrancePoint.x,
-      nearestToTarget.entrancePoint.y,
-      40,
-      40
-    );
+    if (Math.random() <= 0.2) {
+      let randomIndex = Math.floor(Math.random()*adjacents.length)
+      nearestToTarget = routers[routers.map((e)=>e.entrancePoint.x+e.entrancePoint.y).indexOf(adjacents[randomIndex].x+adjacents[randomIndex].y)];
+    } else {
+      adjacents.forEach((adjacent) => {
+        if (
+          p5.dist(
+            adjacent.x,
+            adjacent.y,
+            target.x,
+            target.y
+          ) <
+          p5.dist(
+            nearestToTarget.entrancePoint.x,
+            nearestToTarget.entrancePoint.y,
+            target.x,
+            target.y
+          )
+        ) 
+          nearestToTarget = routers[routers.map((e)=>e.entrancePoint.x+e.entrancePoint.y).indexOf(adjacent.x+adjacent.y)];
+      });
+    }
+    if (routerMovements.includes(routers[0]) === false) {
+      routerMovements.push(routers[0]);
+    }
+    if (routerMovements.includes(nearestToTarget) === false) {
+      routerMovements.push(nearestToTarget);
+    } 
     if (
       nearestToTarget.entrancePoint.x === target.x &&
       nearestToTarget.entrancePoint.y === target.y
@@ -778,14 +786,29 @@ export default class DrawInfrastucture extends Component {
     p5.noStroke();
 
     // Turtle
-    let pathMade = false;
-    if (routersReached && !pathMade) {
+    if (routersReached && pathMade === false) {
       pathMade = this.findAdjacentNearestTarget(
         p5,
         routers[0],
         routers,
         targetServer
       );
+    }
+    if (routerMovements !== []) {
+      console.log(routerMovements)
+      for (let router of routerMovements) {
+        p5.fill(255, 0, 0);
+        p5.ellipse (
+          router.entrancePoint.x,
+          router.entrancePoint.y,
+          40,
+          40
+        );
+        currentTurtlePath = []
+        currentTurtlePath.push({x: router.entrancePoint.x, y: router.entrancePoint.y})
+      }
+    } else {
+      currentTurtlePath = turtlePath
     }
     
     // Server Text
@@ -797,7 +820,7 @@ export default class DrawInfrastucture extends Component {
     p5.text("Chat", possibleTargets["chat"].entrancePoint.x, possibleTargets["chat"].entrancePoint.y); 
     p5.text("Browser", possibleTargets["browser"].entrancePoint.x, possibleTargets["browser"].entrancePoint.y); 
     p5.text("Social", possibleTargets["social"].entrancePoint.x, possibleTargets["social"].entrancePoint.y); 
-    p5.text("Phone", possibleTargets["homeScreen"].entrancePoint.x, possibleTargets["homeScreen"].entrancePoint.y); 
+    p5.text("Phone Cloud", possibleTargets["homeScreen"].entrancePoint.x, possibleTargets["homeScreen"].entrancePoint.y); 
   };
 
   turtle = (p5) => {
@@ -889,6 +912,7 @@ export default class DrawInfrastucture extends Component {
             //Routers reached
             routersReached = true;
             targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;
+            pathMade = false;
           } else {
             routersReached = false;
           }
