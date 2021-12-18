@@ -744,9 +744,9 @@ export default class DrawInfrastucture extends Component {
           target.y) === 0))
     }
     // console.log(adjacents.length, currentRouter);
-    for (let router of routers){
-      console.log(router.closestRouters.length, router)
-    }
+    // for (let router of routers){
+    //   console.log(router.closestRouters.length, router)
+    // }
     let nearestToTarget = currentRouter;
     
     if (Math.random() <= 0.5) {
