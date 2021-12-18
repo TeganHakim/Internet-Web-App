@@ -11,7 +11,7 @@ let width;
 let height;
 let phone;
 
-let drawData = true;
+let drawData = false;
 
 let regularFont;
 let boldFont;
