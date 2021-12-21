@@ -23,7 +23,6 @@ let turtle;
 const turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
 let drawTurtle = false;
 let turtlePath;
-let currentTurtlePath;
 
 let routers;
 let possibleTargets;
@@ -228,7 +227,6 @@ export default class DrawInfrastucture extends Component {
         y: phone.y - 25,
       },
     ];
-    currentTurtlePath = turtlePath;
 
     routers = [
       new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y - 25, 50, 50, [ // Router 0
@@ -649,10 +647,10 @@ export default class DrawInfrastucture extends Component {
   visualizeSignal = (p5) => {
     if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
       drawSignal = true;
-      routerMovements = [];
-      for (let router of routers) {
-        router.visited = false;
-      }
+      //routerMovements = [];
+      // for (let router of routers) {
+      //   router.visited = false;
+      // }
       if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
         httpSignalPos.y = phone.y;
         httpSignalPos.size = 0;
@@ -832,8 +830,6 @@ export default class DrawInfrastucture extends Component {
           40,
           40
         );        
-        currentTurtlePath = [];
-        currentTurtlePath.push({x: router.entrancePoint.x, y: router.entrancePoint.y});
         if (drawData) {
           p5.beginShape();
           p5.stroke(255, 0, 0);
@@ -845,9 +841,7 @@ export default class DrawInfrastucture extends Component {
           p5.noStroke();
         }
       }
-    } else {
-      currentTurtlePath = turtlePath;
-    }    
+    }  
     
     // Server Text
     p5.fill(255, 0, 0);
@@ -947,7 +941,11 @@ export default class DrawInfrastucture extends Component {
               Math.abs(phone.y - 25 - turtle.y) <=
             turtle.distanceCheck * 2
           ) {
-            //Routers reached
+            //Routers reached 
+            routerMovements = [];           
+            for (let router of routers) {
+              router.visited = false;
+            }
             routersReached = true;
             targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;
             pathMade = false;
