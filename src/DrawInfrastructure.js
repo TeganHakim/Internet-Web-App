@@ -11,7 +11,7 @@ let width;
 let height;
 let phone;
 
-let drawData = false;
+let drawData = true;
 
 let regularFont;
 let boldFont;
@@ -743,8 +743,7 @@ export default class DrawInfrastucture extends Component {
           target.x,
           target.y) === 0))
     }
-    // console.log(adjacents.length, currentRouter);
-    // for (let router of routers){
+    // for (let router of routers) {
     //   console.log(router.closestRouters.length, router)
     // }
     let nearestToTarget = currentRouter;
@@ -952,7 +951,6 @@ export default class DrawInfrastucture extends Component {
             routersReached = true;
             targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;
             pathMade = false;
-            routerMovements = [];
           } else {
             routersReached = false;
           }
