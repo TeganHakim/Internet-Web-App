@@ -11,7 +11,7 @@ let width;
 let height;
 let phone;
 
-let drawData = true;
+let drawData = false;
 
 let regularFont;
 let boldFont;
@@ -647,7 +647,7 @@ export default class DrawInfrastucture extends Component {
   visualizeSignal = (p5) => {
     if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
       drawSignal = true;
-      //routerMovements = [];
+      // routerMovements = [];
       // for (let router of routers) {
       //   router.visited = false;
       // }
@@ -691,6 +691,7 @@ export default class DrawInfrastucture extends Component {
     if (this.props.pinged) {
       cellTowerPingColor = "rgb(0, 255, 0)";
       drawTurtle = true;
+      turtle.stop = false;
     }
 
     // Revert to normal
@@ -821,33 +822,34 @@ export default class DrawInfrastucture extends Component {
         targetServer
       );
     }
-    if (routerMovements !== []) {
+    if (routerMovements !== []) {      
       for (let router of routerMovements) {
-        p5.fill(255, 0, 0);
-        p5.ellipse (
-          router.entrancePoint.x,
-          router.entrancePoint.y,
-          40,
-          40
-        );        
+        turtlePath.push({x: router.entrancePoint.x, y: router.entrancePoint.y});
         if (drawData) {
-          p5.beginShape();
-          p5.stroke(255, 0, 0);
-          p5.noFill();
-          for (let i=0; i<routerMovements.length; i++) {
-            p5.vertex(routerMovements[i].entrancePoint.x, routerMovements[i].entrancePoint.y);
+          p5.fill(255, 0, 0);
+          p5.ellipse (
+            router.entrancePoint.x,
+            router.entrancePoint.y,
+            40,
+            40
+            );        
+            p5.beginShape();
+            p5.stroke(255, 0, 0);
+            p5.noFill();
+            for (let i=0; i<routerMovements.length; i++) {
+              p5.vertex(routerMovements[i].entrancePoint.x, routerMovements[i].entrancePoint.y);
+            }
+            p5.endShape();
+            p5.noStroke();
           }
-          p5.endShape();
-          p5.noStroke();
         }
-      }
-    }  
-    
-    // Server Text
-    p5.fill(255, 0, 0);
-    p5.textAlign(p5.CENTER);
-    p5.textSize(18)
-    p5.text("Shopping", possibleTargets["shopping"].entrancePoint.x, possibleTargets["shopping"].entrancePoint.y); 
+      }  
+      
+      // Server Text
+      p5.fill(255, 0, 0);
+      p5.textAlign(p5.CENTER);
+      p5.textSize(18)
+      p5.text("Shopping", possibleTargets["shopping"].entrancePoint.x, possibleTargets["shopping"].entrancePoint.y); 
     p5.text("Music", possibleTargets["music"].entrancePoint.x, possibleTargets["music"].entrancePoint.y); 
     p5.text("Chat", possibleTargets["chat"].entrancePoint.x, possibleTargets["chat"].entrancePoint.y); 
     p5.text("Browser", possibleTargets["browser"].entrancePoint.x, possibleTargets["browser"].entrancePoint.y); 
@@ -942,15 +944,23 @@ export default class DrawInfrastucture extends Component {
             turtle.distanceCheck * 2
           ) {
             //Routers reached 
-            routerMovements = [];           
+            turtle.stop = false;           
+            routerMovements = [];
             for (let router of routers) {
               router.visited = false;
             }
+            pathMade = false;
             routersReached = true;
             targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;
-            pathMade = false;
           } else {
             routersReached = false;
+          }
+
+          // Target Reached
+          if (targetServer) {
+            if (p5.dist(turtle.x, turtle.y, targetServer.x, targetServer.y) < 1) {
+              turtle.stop = true;
+            }
           }
         }
       }
