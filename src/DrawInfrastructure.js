@@ -11,7 +11,7 @@ let width;
 let height;
 let phone;
 
-let drawData = false;
+let drawData = true;
 
 let regularFont;
 let boldFont;
@@ -23,6 +23,8 @@ let turtle;
 const turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
 let drawTurtle = false;
 let turtlePath;
+let originalTurtlePath;
+let turtlePathMade = false;
 
 let routers;
 let possibleTargets;
@@ -205,7 +207,7 @@ export default class DrawInfrastucture extends Component {
         y: phone.y - 25,
       },
     ];
-    turtlePath = [
+    originalTurtlePath = [
       { x: phone.x + phone.w / 2, y: phone.y - 300 },
       { x: phone.x + phone.w / 2, y: phone.y - 250 },
       { x: phone.x + phone.w / 2 + 10, y: phone.y - 250 },
@@ -227,6 +229,7 @@ export default class DrawInfrastucture extends Component {
         y: phone.y - 25,
       },
     ];
+    turtlePath = originalTurtlePath;
 
     routers = [
       new Router(phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), phone.y - 25, 50, 50, [ // Router 0
@@ -647,7 +650,7 @@ export default class DrawInfrastucture extends Component {
   visualizeSignal = (p5) => {
     if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
       drawSignal = true;
-      // routerMovements = [];
+      routerMovements = [];
       // for (let router of routers) {
       //   router.visited = false;
       // }
@@ -749,7 +752,10 @@ export default class DrawInfrastucture extends Component {
     
     if (Math.random() <= 0.5) {
       let randomIndex = Math.floor(Math.random()*adjacents.length);
-      nearestToTarget = routers.find((e)=> e.entrancePoint.x === adjacents[randomIndex].x && e.entrancePoint.y === adjacents[randomIndex].y);
+      nearestToTarget = routers.find((e)=> {
+        console.log(e.entrancePoint.x, adjacents[randomIndex].x)
+        return e.entrancePoint.x === adjacents[randomIndex].x && e.entrancePoint.y === adjacents[randomIndex].y
+      });
     } else {
       adjacents.forEach((adjacent) => {
         if (
@@ -802,12 +808,12 @@ export default class DrawInfrastucture extends Component {
       for (let i=0; i<routers.length; i++) {
         p5.fill(255, 255, 255);
         p5.stroke(1);
-        p5.rect(routers[i].entrancePoint.x - 50, routers[i].y - 23, 100, 20);
+        p5.rect(routers[i].entrancePoint.x - 52, routers[i].y - 23, 105, 20);
         p5.fill(255, 0, 0);
         p5.textAlign(p5.CENTER);
         p5.textFont(boldFont);
         p5.noStroke();
-        p5.text(`${i}; x: ${routers[i].entrancePoint.x}; y:${routers[i].entrancePoint.y}`, routers[i].entrancePoint.x, routers[i].y - 10);
+        p5.text(`${i}; x: ${routers[i].entrancePoint.x}; y: ${routers[i].entrancePoint.y}`, routers[i].entrancePoint.x, routers[i].y - 10);
       }
     }
     p5.strokeWeight(1);
@@ -822,9 +828,13 @@ export default class DrawInfrastucture extends Component {
         targetServer
       );
     }
-    if (routerMovements !== []) {      
+    if (routerMovements.length !== 0) {
+      if (!turtlePathMade) {
+        let newTurtlePath = routerMovements.map(function(e) {return {x: e.entrancePoint.x, y: e.entrancePoint.y}});
+        turtlePath = [...originalTurtlePath, ...newTurtlePath];
+        turtlePathMade = true;
+      }      
       for (let router of routerMovements) {
-        turtlePath.push({x: router.entrancePoint.x, y: router.entrancePoint.y});
         if (drawData) {
           p5.fill(255, 0, 0);
           p5.ellipse (
@@ -850,11 +860,11 @@ export default class DrawInfrastucture extends Component {
       p5.textAlign(p5.CENTER);
       p5.textSize(18)
       p5.text("Shopping", possibleTargets["shopping"].entrancePoint.x, possibleTargets["shopping"].entrancePoint.y); 
-    p5.text("Music", possibleTargets["music"].entrancePoint.x, possibleTargets["music"].entrancePoint.y); 
-    p5.text("Chat", possibleTargets["chat"].entrancePoint.x, possibleTargets["chat"].entrancePoint.y); 
-    p5.text("Browser", possibleTargets["browser"].entrancePoint.x, possibleTargets["browser"].entrancePoint.y); 
-    p5.text("Social", possibleTargets["social"].entrancePoint.x, possibleTargets["social"].entrancePoint.y); 
-    p5.text("Phone Cloud", possibleTargets["homeScreen"].entrancePoint.x, possibleTargets["homeScreen"].entrancePoint.y); 
+      p5.text("Music", possibleTargets["music"].entrancePoint.x, possibleTargets["music"].entrancePoint.y); 
+      p5.text("Chat", possibleTargets["chat"].entrancePoint.x, possibleTargets["chat"].entrancePoint.y); 
+      p5.text("Browser", possibleTargets["browser"].entrancePoint.x, possibleTargets["browser"].entrancePoint.y); 
+      p5.text("Social", possibleTargets["social"].entrancePoint.x, possibleTargets["social"].entrancePoint.y); 
+      p5.text("Phone Cloud", possibleTargets["homeScreen"].entrancePoint.x, possibleTargets["homeScreen"].entrancePoint.y); 
   };
 
   turtle = (p5) => {
@@ -862,22 +872,22 @@ export default class DrawInfrastucture extends Component {
       if (turtle.stop === false) {
         for (let i = 0; i < turtle.speed; i++) {
           if (
-            p5.dist(
+            Math.abs(p5.dist(
               turtlePath[turtlePath.length - 1].x,
               turtlePath[turtlePath.length - 1].y,
               turtle.x,
               turtle.y
-            ) <= turtle.distanceCheck
+            )) <= turtle.distanceCheck
           ) {
             drawTurtle = false;
           }
           if (
-            p5.dist(
+            Math.abs(p5.dist(
               turtlePath[turtle.index].x,
               turtlePath[turtle.index].y,
               turtle.x,
               turtle.y
-            ) <= turtle.distanceCheck
+            )) <= turtle.distanceCheck
           ) {
             if (turtle.index === turtlePath.length - 1) {
               turtle.stop = true;
@@ -945,7 +955,7 @@ export default class DrawInfrastucture extends Component {
           ) {
             //Routers reached 
             turtle.stop = false;           
-            routerMovements = [];
+            // routerMovements = [];
             for (let router of routers) {
               router.visited = false;
             }
@@ -958,7 +968,9 @@ export default class DrawInfrastucture extends Component {
 
           // Target Reached
           if (targetServer) {
-            if (p5.dist(turtle.x, turtle.y, targetServer.x, targetServer.y) < 1) {
+            if (p5.dist(turtle.x, turtle.y, targetServer.x, targetServer.y) < turtle.distanceCheck) {
+              console.log("hi")
+              turtlePath = originalTurtlePath;
               turtle.stop = true;
             }
           }
