@@ -75,6 +75,7 @@ export default function drawRouters(p5, routers) {
     p5.line(routers[19].entrancePoint.x, routers[19].entrancePoint.y, routers[20].entrancePoint.x, routers[20].entrancePoint.y);
     p5.line(routers[19].entrancePoint.x, routers[19].entrancePoint.y, routers[21].entrancePoint.x, routers[21].entrancePoint.y);
     p5.line(routers[19].entrancePoint.x, routers[19].entrancePoint.y, routers[23].entrancePoint.x, routers[23].entrancePoint.y);
+    p5.line(routers[19].entrancePoint.x, routers[19].entrancePoint.y, routers[27].entrancePoint.x, routers[27].entrancePoint.y);
 
     p5.line(routers[20].entrancePoint.x, routers[20].entrancePoint.y, routers[0].entrancePoint.x, routers[0].entrancePoint.y);
     p5.line(routers[20].entrancePoint.x, routers[20].entrancePoint.y, routers[8].entrancePoint.x, routers[8].entrancePoint.y);
@@ -86,7 +87,6 @@ export default function drawRouters(p5, routers) {
 
     p5.line(routers[22].entrancePoint.x, routers[22].entrancePoint.y, routers[23].entrancePoint.x, routers[23].entrancePoint.y);
     
-    p5.line(routers[23].entrancePoint.x, routers[23].entrancePoint.y, routers[26].entrancePoint.x, routers[26].entrancePoint.y);
     p5.line(routers[23].entrancePoint.x, routers[23].entrancePoint.y, routers[27].entrancePoint.x, routers[27].entrancePoint.y);
     p5.line(routers[23].entrancePoint.x, routers[23].entrancePoint.y, routers[28].entrancePoint.x, routers[28].entrancePoint.y);
 

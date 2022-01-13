@@ -263,7 +263,11 @@ function App() {
 
   const [percentage, setPercentage] = useState(null);
   useEffect(() => {
-    setPercentage(Math.random() * 100);
+    let percent = Math.random() * 100;
+    if (percent === 0) {
+      percent = Math.random() * 100;
+    }
+    setPercentage(percent);
   }, []);
 
   return (
