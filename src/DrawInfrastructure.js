@@ -20,6 +20,7 @@ let infrastructurePath;
 let cellTowerPingColor = "rgb(0, 255, 0)";
 
 let turtle;
+let routerTurtle;
 const turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
 let drawTurtle = false;
 let turtlePath;
@@ -29,7 +30,9 @@ let turtlePathMade = false;
 let routers;
 let possibleTargets;
 let pathMade = false;
+let routerPathMade = false;
 let routerMovements = [];
+let turtleMovements = [];
 let routersReached = false;
 let targetServer;
 
@@ -442,6 +445,15 @@ export default class DrawInfrastucture extends Component {
       size: 10,
       distanceCheck: 3,
     };
+    routerTurtle = {
+      index: 0, 
+      x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), 
+      y: phone.y - 25, 
+      speed: 10,
+      stop: false,
+      distanceCheck: 3,
+    };
+
     httpSignalPos = {
       x: phone.x + phone.w / 2,
       y: phone.y,
@@ -762,7 +774,7 @@ export default class DrawInfrastucture extends Component {
     // }
     let nearestToTarget = currentRouter;
     
-    if (Math.random() <= 0.5) {
+    if (Math.random() <= 0.1) {
       let randomIndex = Math.floor(Math.random()*adjacents.length);
       nearestToTarget = routers.find((e)=> {        
         return e.entrancePoint.x === adjacents[randomIndex].x && e.entrancePoint.y === adjacents[randomIndex].y
@@ -810,6 +822,7 @@ export default class DrawInfrastucture extends Component {
     for (let i = 0; i < routers.length; i++) {
       p5.fill(255, 255, 255);
       p5.stroke(0, 0, 0);
+      p5.fill(routers[i].color);
       p5.rect(routers[i].x, routers[i].y, routers[i].w, routers[i].h, 5);
       p5.noStroke();
     }
@@ -840,12 +853,20 @@ export default class DrawInfrastucture extends Component {
       );
     }
     if (routerMovements.length !== 0) {
-      if (!turtlePathMade) {
-        let newTurtlePath = routerMovements.map(function(e) {return {x: e.entrancePoint.x, y: e.entrancePoint.y}});
-        turtlePath = [...originalTurtlePath, ...newTurtlePath];
-        // console.log(routerMovements);
-        turtlePathMade = true;
-      }      
+      // if (!turtlePathMade) {
+      //   let newTurtlePath = routerMovements.map(function(e) {return {x: e.entrancePoint.x, y: e.entrancePoint.y}});
+      //   turtlePath = [...originalTurtlePath, ...newTurtlePath];
+      //   // console.log(routerMovements);
+      //   turtlePathMade = true;
+      // }    
+      turtlePathMade = true;
+      routerTurtle.stop = false;
+      routerPathMade = false;
+      turtleMovements  = [...routerMovements, ...routerMovements.splice(0, 1).reverse()];
+      for (let router of routers) {
+        router.color = "rgba(255, 255, 255, 1)";
+      }
+
       for (let router of routerMovements) {
         if (drawData) {
           p5.fill(255, 0, 0);
@@ -966,11 +987,11 @@ export default class DrawInfrastucture extends Component {
             turtle.distanceCheck * 2
           ) {
             //Routers reached 
-            turtle.stop = false;           
+            turtle.stop = true; 
+            drawTurtle = false;          
             routersReached = true;
-
+            
             pathMade = false;
-            turtlePathMade = false
             targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;
           } else {
             routersReached = false;
@@ -993,6 +1014,66 @@ export default class DrawInfrastucture extends Component {
       turtle.stop = false;
       turtle.size = 10;
     }
+
+    if (turtlePathMade) {
+      // console.log(routerMovements);
+      if (routerTurtle.stop === false && !routerPathMade) {        
+
+        for (let i = 0; i < routerTurtle.speed; i++) {
+          if (
+            Math.abs(p5.dist(
+              turtleMovements[routerTurtle.index].entrancePoint.x,
+              turtleMovements[routerTurtle.index].entrancePoint.y,
+              routerTurtle.x,
+              routerTurtle.y
+            )) <= routerTurtle.distanceCheck
+          ) {
+            if (routerTurtle.index === turtleMovements.length - 1) {
+              routerTurtle.stop = true;
+            } else {
+              routerTurtle.index += 1;
+            }
+          }
+         
+          if (
+            Math.abs(turtleMovements[routerTurtle.index].entrancePoint.x - routerTurtle.x) >=
+            routerTurtle.distanceCheck
+          ) {
+            if (turtleMovements[routerTurtle.index].entrancePoint.x > routerTurtle.x) {
+              routerTurtle.x += 1;
+              routerTurtle.y +=
+                (turtleMovements[routerTurtle.index].entrancePoint.y - routerTurtle.y) /
+                (turtleMovements[routerTurtle.index].entrancePoint.x - routerTurtle.x);
+            } else {
+              routerTurtle.x -= 1;
+              routerTurtle.y -=
+                (turtleMovements[routerTurtle.index].entrancePoint.y - routerTurtle.y) /
+                (turtleMovements[routerTurtle.index].entrancePoint.x - routerTurtle.x);
+            }
+          } else {
+            if (turtleMovements[routerTurtle.index].entrancePoint.y > routerTurtle.y) {
+              routerTurtle.y += 1;
+            } else {
+              routerTurtle.y -= 1;
+            }
+            routerTurtle.x = turtleMovements[routerTurtle.index].entrancePoint.x;
+          }
+          }
+          p5.fill(0, 255, 0);
+          p5.ellipse(routerTurtle.x, routerTurtle.y, 20); 
+
+          if (targetServer) {
+            if (p5.dist(routerTurtle.x, routerTurtle.y, targetServer.x, targetServer.y) < routerTurtle.distanceCheck) {
+              possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].color = "rgba(255, 215, 0, 1)";
+            }
+          }
+
+      }
+      } else {
+        routerTurtle.index = 0;
+        routerTurtle.x = phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2);
+        routerTurtle.y = phone.y - 25;
+      } 
   };
   render() {
     return (

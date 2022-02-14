@@ -7,5 +7,6 @@ export class Router {
     this.entrancePoint = { x: x, y: y + (h / 2) };
     this.closestRouters = closestRouters;
     this.visited = visited;
+    this.color = "rgba(255, 255, 255, 1)";
   }
 }
