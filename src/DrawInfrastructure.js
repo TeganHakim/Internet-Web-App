@@ -667,7 +667,7 @@ export default class DrawInfrastucture extends Component {
   visualizeSignal = (p5) => {
     if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
       drawSignal = true;
-
+   
       routerMovements = [];
       for (let router of routers) {
         router.visited = false;
@@ -677,6 +677,9 @@ export default class DrawInfrastucture extends Component {
       routerTurtle.x = phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2);
       routerTurtle.y = phone.y - 25;
       routerTurtle.draw = true;
+
+      turtleReverse = false;
+      
 
       if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
         httpSignalPos.y = phone.y;
@@ -718,6 +721,11 @@ export default class DrawInfrastucture extends Component {
     if (this.props.pinged) {
       drawTurtle = true;
       turtle.stop = false;
+      turtlePath = originalTurtlePath;
+      turtle.index = 1;
+      turtle.x = turtlePath[0].x;
+      turtle.y = turtlePath[0].y;
+
       cellTowerPingColor = "rgb(0, 255, 0)";
     }
 
@@ -852,6 +860,7 @@ export default class DrawInfrastucture extends Component {
 
     // Turtle
     if (routersReached && pathMade === false) {
+      turtlePath = turtlePath.map((item,idx) => turtlePath[turtlePath.length-1-idx]);
       pathMade = this.findAdjacentNearestTarget(
         p5,
         routers[0],
@@ -860,12 +869,7 @@ export default class DrawInfrastucture extends Component {
       );
     }
     if (routerMovements.length !== 0) {
-      // if (!turtlePathMade) {
-      //   let newTurtlePath = routerMovements.map(function(e) {return {x: e.entrancePoint.x, y: e.entrancePoint.y}});
-      //   turtlePath = [...originalTurtlePath, ...newTurtlePath];
-      //   // console.log(routerMovements);
-      //   turtlePathMade = true;
-      // }    
+
       for (let router of routers) {
         router.visited = false;
       }
@@ -873,7 +877,6 @@ export default class DrawInfrastucture extends Component {
       routerTurtle.stop = false;
       routerPathMade = false;
       
-      // turtleMovements  = [...routerMovements, ...routerMovements.splice(0, 1).reverse()];
       turtleMovements = routerMovements;
 
       for (let router of routerMovements) {
@@ -997,14 +1000,22 @@ export default class DrawInfrastucture extends Component {
           ) {
             //Routers reached 
             turtle.stop = true; 
-            drawTurtle = false;  
-
+            drawTurtle = false;              
+            
             routersReached = true;
             
             pathMade = false;
-            targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;
+            targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;  
           } else {
             routersReached = false;
+          }
+
+          if (turtleReverse) {
+            if (p5.dist(turtle.x, turtle.y, phone.x + phone.w / 2, phone.y - 300) < turtle.distanceCheck) {
+              drawTurtle = false;
+              turtle.stop = true;
+              turtleReverse = false;
+            }
           }
         }
       }
@@ -1082,13 +1093,10 @@ export default class DrawInfrastucture extends Component {
           if (turtleReverse) {
             if (p5.dist(routerTurtle.x, routerTurtle.y, routers[0].entrancePoint.x, routers[0].entrancePoint.y) < routerTurtle.distanceCheck) {
               routerTurtle.stop = true;
-              routerTurtle.draw = false;
-              // turtle.stop = false;
-              // drawTurtle = true;
-              // turtlePath = turtlePath.reverse();
-              // turtle.x = turtlePath[0].x;
-              // turtle.y = turtlePath[0].y;
-              // turtle.index = 0;
+              routerTurtle.draw = false;      
+              
+              turtle.stop = false;
+              drawTurtle = true;           
             }
           }
 
