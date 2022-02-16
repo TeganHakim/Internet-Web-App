@@ -11,7 +11,7 @@ let width;
 let height;
 let phone;
 
-let drawData = true;
+let drawData = false;
 
 let regularFont;
 let boldFont;
@@ -31,6 +31,7 @@ let routers;
 let possibleTargets;
 let pathMade = false;
 let routerPathMade = false;
+let turtleReverse = false;
 let routerMovements = [];
 let turtleMovements = [];
 let routersReached = false;
@@ -449,8 +450,9 @@ export default class DrawInfrastucture extends Component {
       index: 0, 
       x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), 
       y: phone.y - 25, 
-      speed: 10,
+      speed: 8,
       stop: false,
+      draw: true,
       distanceCheck: 3,
     };
 
@@ -669,7 +671,12 @@ export default class DrawInfrastucture extends Component {
       routerMovements = [];
       for (let router of routers) {
         router.visited = false;
+        router.color = "rgba(255, 255, 255, 1)";
       }
+      routerTurtle.index = 0;
+      routerTurtle.x = phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2);
+      routerTurtle.y = phone.y - 25;
+      routerTurtle.draw = true;
 
       if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
         httpSignalPos.y = phone.y;
@@ -859,13 +866,15 @@ export default class DrawInfrastucture extends Component {
       //   // console.log(routerMovements);
       //   turtlePathMade = true;
       // }    
+      for (let router of routers) {
+        router.visited = false;
+      }
       turtlePathMade = true;
       routerTurtle.stop = false;
       routerPathMade = false;
-      turtleMovements  = [...routerMovements, ...routerMovements.splice(0, 1).reverse()];
-      for (let router of routers) {
-        router.color = "rgba(255, 255, 255, 1)";
-      }
+      
+      // turtleMovements  = [...routerMovements, ...routerMovements.splice(0, 1).reverse()];
+      turtleMovements = routerMovements;
 
       for (let router of routerMovements) {
         if (drawData) {
@@ -988,22 +997,14 @@ export default class DrawInfrastucture extends Component {
           ) {
             //Routers reached 
             turtle.stop = true; 
-            drawTurtle = false;          
+            drawTurtle = false;  
+
             routersReached = true;
             
             pathMade = false;
             targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;
           } else {
             routersReached = false;
-          }
-
-          // Target Reached
-          if (targetServer) {
-            if (p5.dist(turtle.x, turtle.y, targetServer.x, targetServer.y) < turtle.distanceCheck) {
-              turtlePath = originalTurtlePath;
-              drawTurtle = false;
-              turtle.stop = true;
-            }
           }
         }
       }
@@ -1016,9 +1017,7 @@ export default class DrawInfrastucture extends Component {
     }
 
     if (turtlePathMade) {
-      // console.log(routerMovements);
       if (routerTurtle.stop === false && !routerPathMade) {        
-
         for (let i = 0; i < routerTurtle.speed; i++) {
           if (
             Math.abs(p5.dist(
@@ -1052,19 +1051,44 @@ export default class DrawInfrastucture extends Component {
             }
           } else {
             if (turtleMovements[routerTurtle.index].entrancePoint.y > routerTurtle.y) {
-              routerTurtle.y += 1;
+              routerTurtle.y += 0.5;
             } else {
-              routerTurtle.y -= 1;
+              routerTurtle.y -= 0.5;
             }
             routerTurtle.x = turtleMovements[routerTurtle.index].entrancePoint.x;
           }
           }
-          p5.fill(0, 255, 0);
-          p5.ellipse(routerTurtle.x, routerTurtle.y, 20); 
+          if (routerTurtle.draw) {
+            p5.fill(0, 0, 0);
+            p5.ellipse(routerTurtle.x, routerTurtle.y, 30); 
+            p5.fill(255, 255, 255);
+            p5.ellipse(routerTurtle.x, routerTurtle.y, 25); 
+            if (this.props.httpSignal.status == 200) {
+              p5.fill(turtleColors.good);
+            } else if (this.props.httpSignal.status == 404) {
+              p5.fill(turtleColors.bad);
+            }
+            p5.ellipse(routerTurtle.x, routerTurtle.y, 20); 
+          }
 
           if (targetServer) {
             if (p5.dist(routerTurtle.x, routerTurtle.y, targetServer.x, targetServer.y) < routerTurtle.distanceCheck) {
+              turtleReverse = true;
               possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].color = "rgba(255, 215, 0, 1)";
+              routerTurtle.index = 0;
+              turtleMovements = turtleMovements.reverse();
+            }
+          }
+          if (turtleReverse) {
+            if (p5.dist(routerTurtle.x, routerTurtle.y, routers[0].entrancePoint.x, routers[0].entrancePoint.y) < routerTurtle.distanceCheck) {
+              routerTurtle.stop = true;
+              routerTurtle.draw = false;
+              // turtle.stop = false;
+              // drawTurtle = true;
+              // turtlePath = turtlePath.reverse();
+              // turtle.x = turtlePath[0].x;
+              // turtle.y = turtlePath[0].y;
+              // turtle.index = 0;
             }
           }
 
@@ -1073,6 +1097,7 @@ export default class DrawInfrastucture extends Component {
         routerTurtle.index = 0;
         routerTurtle.x = phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2);
         routerTurtle.y = phone.y - 25;
+        routerTurtle.draw = true;
       } 
   };
   render() {
