@@ -901,9 +901,9 @@ export default class DrawInfrastucture extends Component {
       }  
       
       // Server Text
-      p5.fill(255, 0, 0);
+      p5.fill(0, 0, 0);
       p5.textAlign(p5.CENTER);
-      p5.textSize(18)
+      p5.textSize(18);
       p5.text("Shopping", possibleTargets["shopping"].entrancePoint.x, possibleTargets["shopping"].entrancePoint.y); 
       p5.text("Music", possibleTargets["music"].entrancePoint.x, possibleTargets["music"].entrancePoint.y); 
       p5.text("Chat", possibleTargets["chat"].entrancePoint.x, possibleTargets["chat"].entrancePoint.y); 
@@ -1070,6 +1070,20 @@ export default class DrawInfrastucture extends Component {
           }
           }
           if (routerTurtle.draw) {
+            if (!turtleReverse) {
+              for (let movement of routerMovements) {
+                if (p5.dist(routerTurtle.x, routerTurtle.y, movement.entrancePoint.x, movement.entrancePoint.y) < routerTurtle.distanceCheck * routerTurtle.speed) {
+                  let router = routers.find((e)=> e.entrancePoint.x === movement.entrancePoint.x && e.entrancePoint.y === movement.entrancePoint.y);
+                  if (this.props.httpSignal.status == 200) {
+                    router.color = "rgba(0, 255, 0, 1)";
+                  } else if (this.props.httpSignal.status == 404) {
+                    router.color = "rgba(255, 0, 0, 1)";
+                  }
+                  
+                }  
+              }
+            }
+
             p5.fill(0, 0, 0);
             p5.ellipse(routerTurtle.x, routerTurtle.y, 30); 
             p5.fill(255, 255, 255);
@@ -1081,11 +1095,11 @@ export default class DrawInfrastucture extends Component {
             }
             p5.ellipse(routerTurtle.x, routerTurtle.y, 20); 
           }
-
+          
           if (targetServer) {
             if (p5.dist(routerTurtle.x, routerTurtle.y, targetServer.x, targetServer.y) < routerTurtle.distanceCheck) {
               turtleReverse = true;
-              possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].color = "rgba(255, 215, 0, 1)";
+              possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].color = this.props.httpSignal.status == 200 ? "rgba(0, 255, 0, 1)" : "rgba(255, 0, 0, 1)";
               routerTurtle.index = 0;
               turtleMovements = turtleMovements.reverse();
             }

@@ -441,8 +441,8 @@ export default class HomePage extends Component {
       p5.fill("rgba(0, 0, 0, 0.2)");
       p5.noStroke();
       p5.text(
-        "Developers: Tegan Hakim & Bradley Wray",
-        screen.x + 38,
+        "Developer: Tegan Hakim",
+        screen.x + 125,
         screen.y + screen.h - 5
       );
     }
