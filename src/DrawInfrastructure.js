@@ -22,6 +22,7 @@ let cellTowerPingColor = "rgb(0, 255, 0)";
 let turtle;
 let routerTurtle;
 const turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
+let turtleColor;
 let drawTurtle = false;
 let turtlePath;
 let originalTurtlePath;
@@ -32,6 +33,7 @@ let possibleTargets;
 let pathMade = false;
 let routerPathMade = false;
 let turtleReverse = false;
+let reverseSignal = false;
 let routerMovements = [];
 let turtleMovements = [];
 let routersReached = false;
@@ -673,6 +675,8 @@ export default class DrawInfrastucture extends Component {
         router.visited = false;
         router.color = "rgba(255, 255, 255, 1)";
       }
+      turtleColor = turtleColors.good;
+
       routerTurtle.index = 0;
       routerTurtle.x = phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2);
       routerTurtle.y = phone.y - 25;
@@ -680,41 +684,62 @@ export default class DrawInfrastucture extends Component {
 
       turtleReverse = false;
       
-
-      if (httpSignalPos.y <= 80 && httpSignalPos.stop === true) {
+      if (httpSignalPos.y >= phone.y) {
         httpSignalPos.y = phone.y;
         httpSignalPos.size = 0;
         httpSignalPos.stop = false;
-      }
+        reverseSignal = false;
+      }      
     }
-
+    
     if (drawSignal) {
       p5.noFill();
       p5.stroke(80, 190, 255);
       p5.strokeWeight(5);
-      if (httpSignalPos.y <= 80) {
+      if (httpSignalPos.y <= 80 && reverseSignal === false) {
         httpSignalPos.stop = true;
         previousSignalEndpoint = this.props.httpSignal.endpoint;
       }
       if (httpSignalPos.stop === false) {
-        for (let i = 0; i < 5; i++) {
-          let tempY = httpSignalPos.y - i * 10;
-          if (tempY < phone.y - 280) {
-            tempY = phone.y - 280;
-            this.props.setPing(true);
-            createIP = true;
+        if (reverseSignal === false) {
+          for (let i = 0; i < 5; i++) {
+            let tempY = httpSignalPos.y - i * 10;
+            if (tempY < phone.y - 280) {
+              tempY = phone.y - 280;
+              this.props.setPing(true);
+              createIP = true;
+            }
+            p5.arc(
+              httpSignalPos.x,
+              tempY,
+              50,
+              50,
+              p5.PI + httpSignalPos.size + 0.04 * i,
+              p5.PI * 2 - httpSignalPos.size - 0.04 * i
+            );
           }
-          p5.arc(
-            httpSignalPos.x,
-            tempY,
-            50,
-            50,
-            p5.PI + httpSignalPos.size + 0.04 * i,
-            p5.PI * 2 - httpSignalPos.size - 0.04 * i
-          );
+          httpSignalPos.y -= httpSignalPos.speed;
+          httpSignalPos.size += 0.005 * httpSignalPos.speed;
+        } else {
+          for (let i = 0; i < 5; i++) {
+            let tempY = httpSignalPos.y + i * 10;
+            if (tempY >= phone.y + 25) {
+              tempY = phone.y;
+              break
+            }
+            p5.arc(
+              httpSignalPos.x,
+              tempY,
+              50,
+              50,
+              p5.PI + httpSignalPos.size + 0.04 * i,
+              p5.PI * 2 - httpSignalPos.size - 0.04 * i
+            );
+          }
+          httpSignalPos.y += httpSignalPos.speed;
+          httpSignalPos.size += 0.005 * httpSignalPos.speed;
         }
-        httpSignalPos.y -= httpSignalPos.speed;
-        httpSignalPos.size += 0.005 * httpSignalPos.speed;
+        
       }
     }
 
@@ -968,14 +993,8 @@ export default class DrawInfrastucture extends Component {
               }
               turtle.x = turtlePath[turtle.index].x;
             }
-          }
-          if (this.props.httpSignal.status == 200) {
-            p5.fill(turtleColors.good);
-          } else if (this.props.httpSignal.status == 404) {
-            p5.fill(turtleColors.bad);
-          } else {
-            p5.fill("rgb(200, 200, 0)");
-          }
+          }          
+          p5.fill(turtleColor);
           if (turtlePath[turtle.index].hasOwnProperty("size")) {
             p5.ellipse(turtle.x, turtle.y, turtlePath[turtle.index].size);
           } else {
@@ -1015,6 +1034,10 @@ export default class DrawInfrastucture extends Component {
               drawTurtle = false;
               turtle.stop = true;
               turtleReverse = false;
+              reverseSignal = true;
+              drawSignal = true;
+              httpSignalPos.stop = false;
+              httpSignalPos.size = 0;
             }
           }
         }
@@ -1074,12 +1097,7 @@ export default class DrawInfrastucture extends Component {
               for (let movement of routerMovements) {
                 if (p5.dist(routerTurtle.x, routerTurtle.y, movement.entrancePoint.x, movement.entrancePoint.y) < routerTurtle.distanceCheck * routerTurtle.speed) {
                   let router = routers.find((e)=> e.entrancePoint.x === movement.entrancePoint.x && e.entrancePoint.y === movement.entrancePoint.y);
-                  if (this.props.httpSignal.status == 200) {
-                    router.color = "rgba(0, 255, 0, 1)";
-                  } else if (this.props.httpSignal.status == 404) {
-                    router.color = "rgba(255, 0, 0, 1)";
-                  }
-                  
+                  router.color = "rgba(0, 255, 0, 1)";                  
                 }  
               }
             }
@@ -1088,11 +1106,7 @@ export default class DrawInfrastucture extends Component {
             p5.ellipse(routerTurtle.x, routerTurtle.y, 30); 
             p5.fill(255, 255, 255);
             p5.ellipse(routerTurtle.x, routerTurtle.y, 25); 
-            if (this.props.httpSignal.status == 200) {
-              p5.fill(turtleColors.good);
-            } else if (this.props.httpSignal.status == 404) {
-              p5.fill(turtleColors.bad);
-            }
+            p5.fill(turtleColor);
             p5.ellipse(routerTurtle.x, routerTurtle.y, 20); 
           }
           
@@ -1102,6 +1116,11 @@ export default class DrawInfrastucture extends Component {
               possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].color = this.props.httpSignal.status == 200 ? "rgba(0, 255, 0, 1)" : "rgba(255, 0, 0, 1)";
               routerTurtle.index = 0;
               turtleMovements = turtleMovements.reverse();
+              if (this.props.httpSignal.status == 200) {
+                turtleColor = turtleColors.good;
+              } else if (this.props.httpSignal.status == 404) {
+                turtleColor = turtleColors.bad;
+              } 
             }
           }
           if (turtleReverse) {

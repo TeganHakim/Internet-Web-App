@@ -263,10 +263,7 @@ function App() {
 
   const [percentage, setPercentage] = useState(null);
   useEffect(() => {
-    let percent = Math.random() * 100;
-    if (percent === 0) {
-      percent = Math.random() * 100;
-    }
+    let percent = (Math.random() * (80 - 20 + 1) + 20)
     setPercentage(percent);
   }, []);
 
@@ -308,6 +305,7 @@ function App() {
       />
       <DrawInfrastructure
         dimensions={dimensions}
+        handleAppClicked={handleAppClicked}
         httpSignal={httpSignal}
         pinged={pinged}
         setPing={setPing}
