@@ -7,6 +7,7 @@ import BrowserPage from "./BrowserPage";
 import ChatPage from "./ChatPage";
 import ShoppingPage from "./ShoppingPage";
 import SocialMediaPage from "./SocialMediaPage";
+import LoadingPage from "./LoadingPage";
 import "./styles/drawer.css";
 
 export default function TemporaryDrawer({
@@ -142,6 +143,13 @@ export default function TemporaryDrawer({
         comment={comment}
         handleCommentSent={handleCommentSent}
         httpVisualize={httpVisualize}
+      />
+    ) : currentScreen === "Loading" ? (
+      <LoadingPage 
+        key={"loading"}
+        dimensions={dimensions}
+        currentScreen={currentScreen}
+        percentage={percentage}
       />
     ) : (
       <div />

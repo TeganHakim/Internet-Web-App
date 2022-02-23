@@ -38,6 +38,7 @@ let routerMovements = [];
 let turtleMovements = [];
 let routersReached = false;
 let targetServer;
+let pathFullyCompleted = false;
 
 let httpSignalPos;
 let previousSignalEndpoint = null;
@@ -91,6 +92,7 @@ let requestsIP = {
   homeScreen: generateIP(),
   music: generateIP(),
   browser: generateIP(),
+  homeBrowser: generateIP(),
   goodLink: generateIP(),
   badLink: generateIP(),
   chat: generateIP(),
@@ -426,6 +428,7 @@ export default class DrawInfrastucture extends Component {
       homeScreen: targetLocations.phone,
       music: targetLocations.music,
       browser: targetLocations.browser,
+      homeBrowser: targetLocations.browser,
       goodLink: targetLocations.browser,
       badLink: targetLocations.browser,
       chat: targetLocations.chat,
@@ -452,7 +455,7 @@ export default class DrawInfrastucture extends Component {
       index: 0, 
       x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), 
       y: phone.y - 25, 
-      speed: 8,
+      speed: 12,
       stop: false,
       draw: true,
       distanceCheck: 3,
@@ -490,6 +493,30 @@ export default class DrawInfrastucture extends Component {
     this.visualizeSignal(p5);
     this.router(p5);
     this.turtle(p5, turtlePath);
+    
+    let endpoints = {homeScreen: "home", music: "music", browser: "browser",
+    chat: "chat",
+    messageSent: "chat",
+    shopping: "shopping",
+    cartQuantity: "shopping",
+    social: "social",
+    follow: "social",
+    like: "social",
+    unlike: "social",
+    commentSent: "social",
+    deleteComment: "social"}
+  
+
+    if (pathFullyCompleted) {
+      for (let endpoint of Object.keys(endpoints)) {
+        if (this.props.httpSignal.endpoint.split("?")[0] == endpoint) {
+          this.props.setPhoneScreen(endpoints[endpoint]);
+        } else if (["goodLink", "badLink", "homeBrowser"].includes(this.props.httpSignal.endpoint)) {
+          this.props.setBrowserScreen(this.props.httpSignal.endpoint)
+        }
+      }
+      pathFullyCompleted = false;  
+    } 
   };
 
   drawInfrastucture = (p5) => {
@@ -725,7 +752,8 @@ export default class DrawInfrastucture extends Component {
             let tempY = httpSignalPos.y + i * 10;
             if (tempY >= phone.y + 25) {
               tempY = phone.y;
-              break
+              pathFullyCompleted = true;
+              break;
             }
             p5.arc(
               httpSignalPos.x,
@@ -784,11 +812,13 @@ export default class DrawInfrastucture extends Component {
       p5.textSize(20);
       p5.text("|", phone.x + phone.w / 2 / 3 + 140, phone.y - 78.5 + 25 / 1.5);
       p5.textSize(12);
+      p5.textFont(boldFont);
       p5.text(
         this.props.httpSignal.status,
         phone.x + phone.w / 2 / 3 + 155,
         phone.y - 80 + 25 / 1.5
       );
+      p5.textFont(regularFont);
     }
   };
 

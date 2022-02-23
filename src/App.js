@@ -10,8 +10,11 @@ function App() {
 
   const [currentScreen, setCurrentScreen] = useState("home");
   const handleAppClicked = (icon) => {
-    setCurrentScreen(icon);    
+    setCurrentScreen("Loading");    
   };
+  const setPhoneScreen = (screen) => {
+    setCurrentScreen(screen);
+  }
 
   const [songs] = useState([
     {
@@ -57,10 +60,15 @@ function App() {
     setAudio(new Audio(songs[currentSong].url));
   }, [currentSong]);
 
-  const [currentBrowserPage, setCurrentBrowserPage] = useState("home");
+  const [currentBrowserPage, setCurrentBrowserPage] = useState("homeBrowser");
   const handleLinkClicked = (link) => {
-    setCurrentBrowserPage(link);
+    setCurrentScreen("loading");
   };
+
+  const setBrowserScreen = (link) => {
+    setCurrentScreen("browser");
+    setCurrentBrowserPage(link);
+  }
 
   const [chatHistory, setChatHistory] = useState([]);
   const clearChatHistory = () => {
@@ -253,6 +261,7 @@ function App() {
 
   const [httpSignal, sethttpSignal] = useState({status: "200", request: "GET", endpoint: "homeScreen"})
   const httpVisualize = (app) => {
+    setCurrentScreen("Loading"); 
     sethttpSignal({status: app.status, request: app.request, endpoint: app.endpoint})
   }
 
@@ -309,6 +318,8 @@ function App() {
         httpSignal={httpSignal}
         pinged={pinged}
         setPing={setPing}
+        setPhoneScreen={setPhoneScreen}
+        setBrowserScreen={setBrowserScreen}
       />
     </div>
   );

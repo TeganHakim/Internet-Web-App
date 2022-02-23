@@ -6,7 +6,7 @@ import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
 
 let urls = {
-  home: { url: "https://en.wikipedia.org/wiki/Vint-Cerf", statusCode: "202" },
+  homeBrowser: { url: "https://en.wikipedia.org/wiki/Vint-Cerf", statusCode: "202" },
   goodLink: {
     url: "https://howstuffworks.com/the-web",
     statusCode: "202",
@@ -99,7 +99,7 @@ export default class BrowserPage extends Component {
       screen.y + screenBezel.vert + 30
     );
     // Wiki Page
-    if (this.props.currentBrowserPage === "home") {
+    if (this.props.currentBrowserPage === "homeBrowser") {
       this.homePage(p5, screen, screenBezel);
     } else if (this.props.currentBrowserPage === "goodLink") {
       this.goodPage(p5, screen, screenBezel);
@@ -310,8 +310,8 @@ export default class BrowserPage extends Component {
       returnLinkUnderline = true;
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
-          this.props.handleLinkClicked("home");
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "browser"});
+          this.props.handleLinkClicked("homeBrowser");
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
         }
       }
     } else {
@@ -373,8 +373,8 @@ export default class BrowserPage extends Component {
       returnLinkUnderline = true;
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
-          this.props.handleLinkClicked("home");
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "browser"});
+          this.props.handleLinkClicked("homeBrowser");
+          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
         }
       }
     } else {

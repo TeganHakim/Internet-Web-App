@@ -558,7 +558,9 @@ export default class SocialMediaPage extends Component {
                 messageText.join("").slice(1),
               false
             );
-            this.props.httpVisualize({status: 200, request: "POST", endpoint: "commentSent"});
+            if (this.props.currentScreen === "social") {
+              this.props.httpVisualize({status: 200, request: "POST", endpoint: "commentSent"});
+            }
             messageText = [];
           } else if (e.key === "Backspace") {
             messageText.pop();
