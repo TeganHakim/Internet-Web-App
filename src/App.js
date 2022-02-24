@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import TemporaryDrawer from "./Drawer";
 import DrawInfrastructure from "./DrawInfrastructure";
@@ -7,15 +8,15 @@ function App() {
   if (window.innerHeight > 850) {
     dimensions.height = 600
   }
-
-  const [currentScreen, setCurrentScreen] = useState("home");
+  
+  const [currentScreen, setCurrentScreen] = useState("Loading");
   const handleAppClicked = (icon) => {
     setCurrentScreen("Loading");    
   };
   const setPhoneScreen = (screen) => {
     setCurrentScreen(screen);
   }
-
+  
   const [songs] = useState([
     {
       author: "Bradley Wray",
@@ -64,12 +65,12 @@ function App() {
   const handleLinkClicked = (link) => {
     setCurrentScreen("loading");
   };
-
+  
   const setBrowserScreen = (link) => {
     setCurrentScreen("browser");
     setCurrentBrowserPage(link);
   }
-
+  
   const [chatHistory, setChatHistory] = useState([]);
   const clearChatHistory = () => {
     setChatHistory([]);
@@ -85,27 +86,27 @@ function App() {
   };
   const computerResponse = (message) => {
     let response = "";
-
+    
     let Inputmessage = message
       .toLowerCase()
       .replace(/[^\w\s\d]/gi, "")
       .replace(/whats/g, "what is");
-
-    let messageUnderstood = false;
-
-    const greetings = {
-      utterances: [
-        "Hello",
-        "Hi",
-        "Hey",
-        "Good morning",
-        "Good evening",
+      
+      let messageUnderstood = false;
+      
+      const greetings = {
+        utterances: [
+          "Hello",
+          "Hi",
+          "Hey",
+          "Good morning",
+          "Good evening",
         "What is up",
         "what is going on"
       ],
       answers: ["Hello!", "Hi there!", "Howdy!", "Good day!"]
     };
-
+    
     const greetingQuestions = {
       utterances: [
         "How are you",
@@ -119,7 +120,7 @@ function App() {
         "Great, whats going on?"
       ]
     };
-
+    
     const lifeQuestions = {
       utterances: [
         "What is up",
@@ -133,32 +134,32 @@ function App() {
         "Im not doing anything really."
       ]
     };
-
+    
     const personalInputs = {
       utterances: ["Im", "I am"],
       answers: ["Good to hear that!", "What makes you feel that way?"]
     };
-
+    
     const fallBackResponses = [
       "What do you mean by that?",
       "What are you saying?",
       "Huh?"
     ];
-
+    
     greetings.utterances.forEach((greeting) => {
       if (Inputmessage.includes(greeting.toLowerCase())) {
         response =
-          greetings.answers[
-            Math.floor(Math.random() * greetings.answers.length)
-          ];
+        greetings.answers[
+          Math.floor(Math.random() * greetings.answers.length)
+        ];
         messageUnderstood = true;
       }
     });
-
+    
     greetingQuestions.utterances.forEach((question) => {
       if (Inputmessage.includes(question.toLowerCase())) {
         response =
-          greetingQuestions.answers[
+        greetingQuestions.answers[
             Math.floor(Math.random() * greetingQuestions.answers.length)
           ];
         messageUnderstood = true;
@@ -168,19 +169,19 @@ function App() {
     lifeQuestions.utterances.forEach((question) => {
       if (Inputmessage.includes(question.toLowerCase())) {
         response =
-          lifeQuestions.answers[
-            Math.floor(Math.random() * lifeQuestions.answers.length)
-          ];
+        lifeQuestions.answers[
+          Math.floor(Math.random() * lifeQuestions.answers.length)
+        ];
         messageUnderstood = true;
       }
     });
-
+    
     personalInputs.utterances.forEach((input) => {
       if (Inputmessage.includes(input.toLowerCase())) {
         response =
-          personalInputs.answers[
-            Math.floor(Math.random() * personalInputs.answers.length)
-          ];
+        personalInputs.answers[
+          Math.floor(Math.random() * personalInputs.answers.length)
+        ];
         messageUnderstood = true;
       }
     });
@@ -191,13 +192,13 @@ function App() {
       return {
         id: "computer",
         message:
-          fallBackResponses[
-            Math.floor(Math.random() * fallBackResponses.length)
-          ]
+        fallBackResponses[
+          Math.floor(Math.random() * fallBackResponses.length)
+        ]
       };
     }
   };
-
+  
   const [quantity, setQuantity] = useState(1);
   const [cartQuantity, setCartQuantity] = useState(0);
   const handleQuantityChange = (dir) => {
@@ -222,7 +223,7 @@ function App() {
       }
     }
   };
-
+  
   const [playGif, setPlayGif] = useState(true);
   const handlePlayGif = (playGif) => {
     setPlayGif(!playGif);

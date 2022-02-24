@@ -63,7 +63,7 @@ export default function TemporaryDrawer({
     }
     setState({ ...state, [anchor]: open });
   };
-  const content = (anchor) =>
+  const content = () =>
     currentScreen === "home" ? (
       <HomePage
         key={"home"}
@@ -168,7 +168,7 @@ export default function TemporaryDrawer({
             open={state["left"]}
             onClose={toggleDrawer("left", false)}
           >            
-            {content("left")}
+            {content()}
           </Drawer>          
         </React.Fragment>      
     </div>

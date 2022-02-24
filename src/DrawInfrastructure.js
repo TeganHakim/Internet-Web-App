@@ -455,7 +455,7 @@ export default class DrawInfrastucture extends Component {
       index: 0, 
       x: phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2), 
       y: phone.y - 25, 
-      speed: 12,
+      speed: 15,
       stop: false,
       draw: true,
       distanceCheck: 3,
