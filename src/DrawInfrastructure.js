@@ -494,7 +494,10 @@ export default class DrawInfrastucture extends Component {
     this.router(p5);
     this.turtle(p5, turtlePath);
     
-    let endpoints = {homeScreen: "home", music: "music", browser: "browser",
+    let endpoints = {
+    homeScreen: "home",
+    music: "music",
+    browser: "browser",
     chat: "chat",
     messageSent: "chat",
     shopping: "shopping",
@@ -504,12 +507,13 @@ export default class DrawInfrastucture extends Component {
     like: "social",
     unlike: "social",
     commentSent: "social",
-    deleteComment: "social"}
+    deleteComment: "social"
+    }
   
 
     if (pathFullyCompleted) {
       for (let endpoint of Object.keys(endpoints)) {
-        if (this.props.httpSignal.endpoint.split("?")[0] == endpoint) {
+        if (this.props.httpSignal.endpoint.split("?")[0] === endpoint) {
           this.props.setPhoneScreen(endpoints[endpoint]);
         } else if (["goodLink", "badLink", "homeBrowser"].includes(this.props.httpSignal.endpoint)) {
           this.props.setBrowserScreen(this.props.httpSignal.endpoint)
