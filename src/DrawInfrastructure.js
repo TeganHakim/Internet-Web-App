@@ -5,7 +5,6 @@ import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
 import { Router } from "./Router";
 import drawRouters from "./DrawRouters";
-import { touchRippleClasses } from "@mui/material";
 
 let width;
 let height;
@@ -18,6 +17,14 @@ let boldFont;
 
 let infrastructurePath;
 let cellTowerPingColor = "rgb(0, 255, 0)";
+
+let canChangeSpeed = true;
+let internetSpeed = "medium";
+let speeds = {
+  slow: -6,
+  medium: 0,
+  fast: 10
+}
 
 let turtle;
 let routerTurtle;
@@ -101,6 +108,7 @@ let requestsIP = {
   cartQuantity: generateIP(),
   social: generateIP(),
   follow: generateIP(),
+  unfollow: generateIP(),
   like: generateIP(),
   unlike: generateIP(),
   commentSent: generateIP(),
@@ -133,6 +141,8 @@ function generateIP() {
     generateHexCode()
   );
 }
+
+let hoverState = "none";
 
 export default class DrawInfrastucture extends Component {
   preload = (p5) => {
@@ -437,6 +447,7 @@ export default class DrawInfrastucture extends Component {
       cartQuantity: targetLocations.shopping,
       social: targetLocations.social,
       follow: targetLocations.social,
+      unfollow: targetLocations.social,
       like: targetLocations.social,
       unlike: targetLocations.social,
       commentSent: targetLocations.social,
@@ -493,6 +504,7 @@ export default class DrawInfrastucture extends Component {
     this.visualizeSignal(p5);
     this.router(p5);
     this.turtle(p5, turtlePath);
+    this.internetSpeed(p5);
     
     let endpoints = {
     homeScreen: "home",
@@ -504,12 +516,12 @@ export default class DrawInfrastucture extends Component {
     cartQuantity: "shopping",
     social: "social",
     follow: "social",
+    unfollow: "social",
     like: "social",
     unlike: "social",
     commentSent: "social",
     deleteComment: "social"
     }
-  
 
     if (pathFullyCompleted) {
       for (let endpoint of Object.keys(endpoints)) {
@@ -609,7 +621,7 @@ export default class DrawInfrastucture extends Component {
       (phone.w + 400 - phone.x + phone.w / 2 + 200) / 2 -
         145 +
         25 +
-        p5.textWidth("IPv4"),
+        p5.textWidth("IPv6"),
       phone.y - (275 / 2 + 125 / 2) + 20 + 25 / 1.5
     );
   };
@@ -1175,9 +1187,60 @@ export default class DrawInfrastucture extends Component {
         routerTurtle.draw = true;
       } 
   };
+
+  internetSpeed = (p5) => {
+    let internetSpeedText = internetSpeed[0].toUpperCase() + internetSpeed.slice(1);
+    p5.textSize(16);
+    p5.textFont(regularFont);
+    p5.fill(0, 0, 0);
+    p5.text("Internet Speed: ", 60, 20);
+    p5.textFont(boldFont);
+    if (internetSpeed === "slow") {
+      p5.fill(255, 0, 0);
+    } else if (internetSpeed === "medium") {
+      p5.fill(230, 180, 0);
+    } else {
+      p5.fill(0, 200, 0);
+    }
+    p5.textAlign(p5.LEFT);
+    p5.text(internetSpeedText, p5.textWidth("Internet Speed:  "), 20);
+    turtle.speed = 20 + speeds[internetSpeed];
+    routerTurtle.speed = 15 + speeds[internetSpeed];
+    httpSignalPos.speed = 5 + speeds[internetSpeed];
+    if (httpSignalPos.speed < 0) {
+      httpSignalPos.speed = 1;
+    }
+
+    if (p5.mouseX <= p5.textWidth("Internet Speed:  ") + p5.textWidth(internetSpeedText) &&
+    p5.mouseX >= p5.textWidth("Internet Speed:  ") &&
+    p5.mouseY <= 27 &&
+    p5.mouseY >= 5
+    ) {
+      p5.cursor(p5.HAND);
+      if (p5.mouseIsPressed) {
+        if (canChangeSpeed){
+          let possibleSpeeds = ["slow", "medium", "fast"];
+          let index = possibleSpeeds.indexOf(internetSpeed);
+          console.log(index);
+          if (index < possibleSpeeds.length - 1) {
+            index += 1;
+          } else if (index === possibleSpeeds.length - 1) {
+            index = 0;
+          }
+          internetSpeed = possibleSpeeds[index]; 
+          canChangeSpeed = false;        
+        }
+      } else {
+        canChangeSpeed = true;
+      }
+    }
+  }
+
   render() {
     return (
-      <Sketch preload={this.preload} setup={this.setup} draw={this.draw} />
+      <div>
+        <Sketch preload={this.preload} setup={this.setup} draw={this.draw} />
+      </div>
     );
   }
 }

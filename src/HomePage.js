@@ -441,8 +441,8 @@ export default class HomePage extends Component {
       p5.fill("rgba(0, 0, 0, 0.2)");
       p5.noStroke();
       p5.text(
-        "Developer: Tegan Hakim",
-        screen.x + 125,
+        "©Tegan Hakim " + new Date().getFullYear(),
+        screen.x + 145,
         screen.y + screen.h - 5
       );
     }

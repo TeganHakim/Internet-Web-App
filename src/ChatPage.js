@@ -343,15 +343,14 @@ export default class ChatPage extends Component {
         keyPressed={(e) => {
           if (e.key === "Enter") {
             chatId += 1;
+            this.props.setPhoneScreen("Loading");
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "messageSent"+ "?" + chatId});
             this.props.handleMessageSent({
               id: "user",
               message:
                 messageText.join("").charAt(0).toUpperCase() +
                 messageText.join("").slice(1)
             });
-            if (this.props.currentScreen === "chat") {
-              this.props.httpVisualize({status: 200, request: "POST", endpoint: "messageSent"+ "?" + chatId});
-            }
             messageText = [];
           } else if (e.key === "Backspace") {
             messageText.pop();

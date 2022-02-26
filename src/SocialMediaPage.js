@@ -92,7 +92,7 @@ export default class SocialMediaPage extends Component {
       screen.x + screenBezel.horz + 45,
       screen.y + screenBezel.vert + 50
     );
-    if (this.props.follow) {
+    if (this.props.followed) {
       p5.fill(followButton.stroke);
       p5.stroke(followButton.stroke);
     } else {
@@ -109,7 +109,7 @@ export default class SocialMediaPage extends Component {
     );
     p5.strokeWeight(1);
     p5.textFont(boldFont);
-    if (this.props.follow) {
+    if (this.props.followed) {
       p5.fill(followButton.fill);
       p5.noStroke();
     } else {
@@ -118,7 +118,7 @@ export default class SocialMediaPage extends Component {
     }
     p5.textAlign(p5.CENTER);
     p5.textFont(boldFont);
-    if (this.props.follow) {
+    if (this.props.followed) {
       p5.text(
         "Following",
         screen.x + screen.w - 85 + 35,
@@ -140,8 +140,15 @@ export default class SocialMediaPage extends Component {
       p5.cursor(p5.HAND);
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
-          this.props.handleFollowButton(this.props.follow);
-          this.props.httpVisualize({status: 200, request: "POST", endpoint: "follow"});
+          if (this.props.followed) {
+            this.props.setPhoneScreen("Loading");
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "unfollow"});
+            this.props.unfollow();
+          } else {
+            this.props.setPhoneScreen("Loading");
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "follow"});
+            this.props.follow();
+          }
         }
       }
     }
@@ -256,11 +263,13 @@ export default class SocialMediaPage extends Component {
       if (p5.mouseIsPressed) {
         if (p5.mouseButton === p5.LEFT) {
           if (this.props.liked) {
-            this.props.unlike();
+            this.props.setPhoneScreen("Loading");
             this.props.httpVisualize({status: 200, request: "POST", endpoint: "unlike"});
+            this.props.unlike();
           } else {
-            this.props.like();
+            this.props.setPhoneScreen("Loading");
             this.props.httpVisualize({status: 200, request: "POST", endpoint: "like"});
+            this.props.like();
           }
           this.props.handleLikesChanged(this.props.liked)
         }
@@ -372,8 +381,9 @@ export default class SocialMediaPage extends Component {
         p5.strokeWeight(1);
         if (p5.mouseIsPressed) {
           if (p5.mouseButton === p5.LEFT) {
+            this.props.setPhoneScreen("Loading");
+            this.props.httpVisualize({status: 200, request: "DEL", endpoint: "deleteComment"});
             this.props.handleCommentSent(null, true);
-            this.props.httpVisualize({status: 200, request: "POST", endpoint: "deleteComment"});
           }
         }
       }
@@ -553,14 +563,13 @@ export default class SocialMediaPage extends Component {
         draw={this.draw}
         keyPressed={(e) => {
           if (e.key === "Enter") {
+            this.props.setPhoneScreen("Loading");
+            this.props.httpVisualize({status: 200, request: "POST", endpoint: "commentSent"});
             this.props.handleCommentSent(
               messageText.join("").charAt(0).toUpperCase() +
                 messageText.join("").slice(1),
               false
             );
-            if (this.props.currentScreen === "social") {
-              this.props.httpVisualize({status: 200, request: "POST", endpoint: "commentSent"});
-            }
             messageText = [];
           } else if (e.key === "Backspace") {
             messageText.pop();

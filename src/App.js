@@ -228,10 +228,14 @@ function App() {
   const handlePlayGif = (playGif) => {
     setPlayGif(!playGif);
   };
-  const [follow, setFollow] = useState(false);
-  const handleFollowButton = (follow) => {
-    setFollow(!follow);
+  const [followed, setFollowed] = useState(false);
+  const follow = () => {
+    setFollowed(true);
   };
+  const unfollow = () => {
+    setFollowed(false);
+  }
+
   const [liked, setLiked] = useState(false);
   const like = () => {
     setLiked(true)
@@ -262,7 +266,6 @@ function App() {
 
   const [httpSignal, sethttpSignal] = useState({status: "200", request: "GET", endpoint: "homeScreen"})
   const httpVisualize = (app) => {
-    setCurrentScreen("Loading"); 
     sethttpSignal({status: app.status, request: app.request, endpoint: app.endpoint})
   }
 
@@ -301,8 +304,9 @@ function App() {
         handleCartQuantityChange={handleCartQuantityChange}
         playGif={playGif}
         handlePlayGif={handlePlayGif}
+        followed={followed}
         follow={follow}
-        handleFollowButton={handleFollowButton}
+        unfollow={unfollow}
         liked={liked}
         like={like}
         unlike={unlike}
@@ -312,6 +316,7 @@ function App() {
         handleCommentSent={handleCommentSent}
         httpVisualize={httpVisualize}
         pinged={pinged}
+        setPhoneScreen={setPhoneScreen}
       />
       <DrawInfrastructure
         dimensions={dimensions}

@@ -31,8 +31,9 @@ export default function TemporaryDrawer({
   handleCartQuantityChange,
   playGif,
   handlePlayGif,
+  followed,
   follow,
-  handleFollowButton,
+  unfollow,
   liked,
   like,
   unlike,
@@ -40,7 +41,8 @@ export default function TemporaryDrawer({
   handleLikesChanged,
   comment,
   handleCommentSent,
-  httpVisualize
+  httpVisualize,
+  setPhoneScreen
 }) {
   const [state, setState] = React.useState({
     left: true
@@ -110,6 +112,7 @@ export default function TemporaryDrawer({
         clearChatHistory={clearChatHistory}
         handleMessageSent={handleMessageSent}
         httpVisualize={httpVisualize}
+        setPhoneScreen={setPhoneScreen}
       />
     ) : currentScreen === "shopping" ? (
       <ShoppingPage
@@ -133,8 +136,9 @@ export default function TemporaryDrawer({
         percentage={percentage}
         playGif={playGif}
         handlePlayGif={handlePlayGif}
+        followed={followed}
         follow={follow}
-        handleFollowButton={handleFollowButton}
+        unfollow={unfollow}
         liked={liked}
         like={like}
         unlike={unlike}
@@ -143,6 +147,7 @@ export default function TemporaryDrawer({
         comment={comment}
         handleCommentSent={handleCommentSent}
         httpVisualize={httpVisualize}
+        setPhoneScreen={setPhoneScreen}
       />
     ) : currentScreen === "Loading" ? (
       <LoadingPage 
@@ -164,9 +169,9 @@ export default function TemporaryDrawer({
         </Button>
         <React.Fragment>
           <Drawer
-            anchor={"left"}
+            // anchor={"left"}
             open={state["left"]}
-            onClose={toggleDrawer("left", false)}
+            // onClose={toggleDrawer("left", false)}
           >            
             {content()}
           </Drawer>          
