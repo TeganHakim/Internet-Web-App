@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.info {
+    background-color: transparent !important;
+}
+.MuiBackdrop-root {
+    background-color: transparent!important;
+}
+.MuiDrawer-paper {
+    background-color: transparent!important;
+    box-shadow: none!important;
+}
+.info .container {
+    width: 20vw;
+    height: 100vh;
+    border-left: 2px solid black;
+    text-align: center;
+    font-family: regularFont; 
+}
+.info .container .title {
+    font-family: boldFont; 
+    margin-bottom: 30px;  
+}
+.info .container .description { 
+    padding: 0 15px 0 15px;  
+}
+
+@font-face {
+    font-family: regularFont;
+    src: url(../assets/Fonts/Roboto-Regular.ttf);
+}
+@font-face {
+    font-family: boldFont;
+    src: url(../assets/Fonts/Roboto-Bold.ttf);
+}

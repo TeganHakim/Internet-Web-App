@@ -1,6 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import TemporaryDrawer from "./Drawer";
+import InfoWindow from "./InfoWindow";
 import DrawInfrastructure from "./DrawInfrastructure";
 
 function App() {
@@ -280,6 +280,11 @@ function App() {
     setPercentage(percent);
   }, []);
 
+  const [hoverState, setHoverState] = useState(null);
+  const hoverElement = (element) => {
+    setHoverState(element);
+  }
+
   return (
     <div className="App" id="App">
       <TemporaryDrawer
@@ -326,7 +331,9 @@ function App() {
         setPing={setPing}
         setPhoneScreen={setPhoneScreen}
         setBrowserScreen={setBrowserScreen}
+        hoverElement={hoverElement}
       />
+      <InfoWindow hoverState={hoverState}/>
     </div>
   );
 }

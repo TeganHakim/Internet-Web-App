@@ -142,7 +142,8 @@ function generateIP() {
   );
 }
 
-let hoverState = "none";
+let hovering = null;
+const possibleHovers = ["ISP", "DNS", "router", "server", "cable"];
 
 export default class DrawInfrastucture extends Component {
   preload = (p5) => {
@@ -533,6 +534,10 @@ export default class DrawInfrastucture extends Component {
       }
       pathFullyCompleted = false;  
     } 
+    
+    if (hovering === null) {
+      this.props.hoverElement(null);
+    }
   };
 
   drawInfrastucture = (p5) => {
@@ -608,6 +613,18 @@ export default class DrawInfrastucture extends Component {
       phone.y - (275 / 2 + 125 / 2) + 20 + 25 / 1.5 + 1.5
     );
     p5.textSize(12);
+
+    if (p5.mouseX >= phone.x + phone.w / 2 + 200 &&
+    p5.mouseX <= phone.x + phone.w + 400 &&
+    p5.mouseY >= phone.y - 275 &&
+    p5.mouseY <= phone.y - 125
+    ) {
+      hovering = "ISP";
+      p5.cursor(p5.HAND);
+      this.props.hoverElement("ISP");
+    } else if (!possibleHovers.remove("ISP").includes(hovering)){
+      hovering = null;
+    }
 
     if (createIP) {
       if (clientIP === "generating...") {
@@ -707,6 +724,18 @@ export default class DrawInfrastucture extends Component {
         p5.textWidth("FRO"),
       phone.y - (275 / 2 + 125 / 2) + 35 + 25 / 1.5
     );
+    
+    if (p5.mouseX >= phone.x + phone.w + 500 &&
+      p5.mouseX <= phone.x + phone.w + phone.w / 2 + 700 &&
+      p5.mouseY >= phone.y - 275 &&
+      p5.mouseY <= phone.y - 125
+      ) {
+        hovering = "DNS";
+        p5.cursor(p5.HAND);
+        this.props.hoverElement("DNS");
+      } else if (!possibleHovers.remove("DNS").includes(hovering)) {
+        hovering = null;
+      }
   };
 
   visualizeSignal = (p5) => {
@@ -855,9 +884,7 @@ export default class DrawInfrastucture extends Component {
         return counter >= 2
       })
     }
-    // for (let router of routers) {
-    //   console.log(router.closestRouters.length, router)
-    // }
+    
     let nearestToTarget = currentRouter;
     
     if (Math.random() <= 0.1) {

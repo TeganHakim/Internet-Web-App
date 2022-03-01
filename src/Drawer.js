@@ -47,24 +47,7 @@ export default function TemporaryDrawer({
   const [state, setState] = React.useState({
     left: true
   });
-
-  React.useEffect(()=>{
-    if (state["left"] === true){
-      document.getElementById('burger').classList.add('hide')
-    } else {
-      document.getElementById('burger').classList.remove('hide')
-    }
-  }, [state["left"]]);
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-    setState({ ...state, [anchor]: open });
-  };
+  
   const content = () =>
     currentScreen === "home" ? (
       <HomePage
@@ -162,18 +145,12 @@ export default function TemporaryDrawer({
 
   return (
     <div>      
-        <Button className="burger hide" id="burger" onClick={toggleDrawer("left", true)}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </Button>
         <React.Fragment>
           <Drawer
-            // anchor={"left"}
+            anchor={"left"}
             open={state["left"]}
-            // onClose={toggleDrawer("left", false)}
           >            
-            {content()}
+          {content()}
           </Drawer>          
         </React.Fragment>      
     </div>
