@@ -143,7 +143,7 @@ function generateIP() {
 }
 
 let hovering = null;
-const possibleHovers = ["ISP", "DNS", "router", "server", "cable"];
+let possibleHovers = ["ISP", "DNS", "tower", "cable", "httpRequest"];
 
 export default class DrawInfrastucture extends Component {
   preload = (p5) => {
@@ -572,6 +572,18 @@ export default class DrawInfrastucture extends Component {
     // Text
     this.ispComponent(p5);
     this.dnsComponent(p5);
+
+    if (p5.mouseX >= phone.x + phone.w / 2 / 2 - 5 &&
+      p5.mouseX <= phone.x + phone.w / 2 / 2 - 5 + 150 &&
+      p5.mouseY >= phone.y - 310 &&
+      p5.mouseY <= phone.y - 310 + 225
+      ) {
+        p5.cursor(p5.HAND);
+        hovering = "tower";
+        this.props.hoverElement("tower");
+      } else if (!possibleHovers.filter(function(e) {return e != "tower"}).includes(hovering)){
+        hovering = null;
+      }
   };
 
   ispComponent = (p5) => {
@@ -622,7 +634,7 @@ export default class DrawInfrastucture extends Component {
       hovering = "ISP";
       p5.cursor(p5.HAND);
       this.props.hoverElement("ISP");
-    } else if (!possibleHovers.remove("ISP").includes(hovering)){
+    } else if (!possibleHovers.filter(function(e) {return e != "ISP"}).includes(hovering)){
       hovering = null;
     }
 
@@ -733,7 +745,7 @@ export default class DrawInfrastucture extends Component {
         hovering = "DNS";
         p5.cursor(p5.HAND);
         this.props.hoverElement("DNS");
-      } else if (!possibleHovers.remove("DNS").includes(hovering)) {
+      } else if (!possibleHovers.filter(function(e) {return e != "DNS"}).includes(hovering)){
         hovering = null;
       }
   };
@@ -865,6 +877,19 @@ export default class DrawInfrastucture extends Component {
       );
       p5.textFont(regularFont);
     }
+
+    if (p5.mouseX >= phone.x + phone.w / 2 / 3 &&
+      p5.mouseX <= phone.x + phone.w / 2 / 3 + phone.w / 1.5 &&
+      p5.mouseY >= phone.y - 80 &&
+      p5.mouseY <= phone.y - 80 + 25
+      ) {
+        hovering = "httpRequest";
+        p5.cursor(p5.HAND);
+        this.props.hoverElement("httpRequest");
+      } else if (!possibleHovers.filter(function(e) {return e != "httpRequest"}).includes(hovering)){
+        hovering = null;
+      }
+
   };
 
   findAdjacentNearestTarget = (p5, currentRouter, allRouters, target) => {
@@ -931,6 +956,31 @@ export default class DrawInfrastucture extends Component {
 
   router = (p5) => {
     drawRouters(p5, routers);
+    
+    for (let i = 0; i < routers.length; i++) {
+      if (routers[i].w === 50 && routers[i].h === 50) {
+        if (p5.mouseX >= routers[i].x &&
+          p5.mouseX <= routers[i].x + routers[i].w &&
+          p5.mouseY >= routers[i].y &&
+          p5.mouseY <= routers[i].y + routers[i].h
+        ) {
+          hovering = "router"+i;
+          p5.cursor(p5.HAND);
+          this.props.hoverElement("router");
+        }
+      } else {
+        if (p5.mouseX >= routers[i].x &&
+          p5.mouseX <= routers[i].x + routers[i].w &&
+          p5.mouseY >= routers[i].y &&
+          p5.mouseY <= routers[i].y + routers[i].h
+        ) {
+          hovering = "server"+i;
+          p5.cursor(p5.HAND);
+          this.props.hoverElement("server");
+        }
+      }
+    }
+
     // Boxes
     for (let i = 0; i < routers.length; i++) {
       p5.fill(255, 255, 255);

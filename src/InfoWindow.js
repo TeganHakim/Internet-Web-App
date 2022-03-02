@@ -18,11 +18,31 @@ export default function InfoWindow({ hoverState }) {
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
     },
+    tower: {
+      title: "Cell Tower",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+    },
+    httpRequest: {
+      title: "HTTP Request",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+    },
+    router: {
+      title: "Router",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+    },
+    server: {
+      title: "Server",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+    },
   };
 
   const content = () =>
     hoverState !== null ? (
-      <div class="container">
+      <div>
         <h1 class="title">{dataInfo[hoverState].title}</h1>
         <p class="description">{dataInfo[hoverState].description}</p>
       </div>
@@ -34,7 +54,9 @@ export default function InfoWindow({ hoverState }) {
     <div>
       <React.Fragment>
         <Drawer className={"info"} anchor={"right"} open={state["right"]}>
-          {content()}
+          <div className={"container"}>
+            {content()}
+          </div>
         </Drawer>
       </React.Fragment>
     </div>
