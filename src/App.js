@@ -3,7 +3,7 @@ import TemporaryDrawer from "./Drawer";
 import InfoWindow from "./InfoWindow";
 import DrawInfrastructure from "./DrawInfrastructure";
 
-function App() {
+function App() { 
   const dimensions = {width: 300, height: 400};
   if (window.innerHeight > 850) {
     dimensions.height = 600

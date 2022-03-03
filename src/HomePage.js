@@ -460,7 +460,7 @@ export default class HomePage extends Component {
       h: height,
       border: { tl: 10, tr: 10, bl: 10, br: 10 }
     };
-    p5.fill(0, 0, 0);
+    p5.fill(120, 120, 120);
     p5.noStroke();
     p5.rect(
       phone.x,
@@ -499,7 +499,7 @@ export default class HomePage extends Component {
       y: phone.y + (phone.h - screenBezel.vert / 2),
       r: 15
     };
-    p5.fill(128, 128, 128);
+    p5.fill(190, 190, 190);
     p5.noStroke();
     p5.ellipse(homeButton.x, homeButton.y, homeButton.r);
     if (
@@ -520,7 +520,7 @@ export default class HomePage extends Component {
       y: phone.y + screenBezel.vert / 2,
       r: 10
     };
-    p5.fill(128, 128, 128);
+    p5.fill(190, 190, 190);
     p5.noStroke();
     p5.ellipse(camera.x, camera.y, camera.r);
     // Speaker

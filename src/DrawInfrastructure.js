@@ -5,6 +5,9 @@ import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
 import { Router } from "./Router";
 import drawRouters from "./DrawRouters";
+import Background from "./assets/Images/Background-Map.png";
+
+let background;
 
 let width;
 let height;
@@ -149,11 +152,11 @@ export default class DrawInfrastucture extends Component {
   preload = (p5) => {
     regularFont = p5.loadFont(RegularFont);
     boldFont = p5.loadFont(BoldFont);
+    background = p5.loadImage(Background);
   };
   setup = (p5, canvasParentRef) => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     p5.frameRate(this.fr);
-
     width = this.props.dimensions.width;
     height = this.props.dimensions.height;
 
@@ -483,6 +486,8 @@ export default class DrawInfrastucture extends Component {
     };
   };
   draw = (p5) => {
+    // p5.scale(0.7, 0.7);
+    
     // Regulate Text
     p5.textSize(12);
     p5.textStyle(p5.NORMAL);
@@ -541,15 +546,15 @@ export default class DrawInfrastucture extends Component {
   };
 
   drawInfrastucture = (p5) => {
-    p5.background("rgba(255, 255, 255, 1)");
-    p5.stroke(0, 0, 0);
+    p5.background(background);
+    p5.stroke(150, 150, 150);
     for (let i = 0; i < infrastructurePath.length; i++) {
       p5.strokeWeight(10);
       if (this.props.pinged) {
         if (i === 13) {
           p5.stroke(cellTowerPingColor);
         } else {
-          p5.stroke(0, 0, 0);
+          p5.stroke(150, 150, 150);
         }
       }
       if (i !== infrastructurePath.length - 1) {
@@ -587,8 +592,11 @@ export default class DrawInfrastucture extends Component {
   };
 
   ispComponent = (p5) => {
+    p5.fill("rgba(0, 0, 0, 0.3)");
+    p5.rect(phone.x + phone.w / 2 + 205, phone.y - 270, 330, 140);
+
     p5.textSize(20);
-    p5.fill(0, 0, 0);
+    p5.fill(255, 255, 255);
     p5.noStroke();
     p5.text(
       "ISP",
@@ -601,14 +609,14 @@ export default class DrawInfrastucture extends Component {
       phone.y - (275 / 2 + 125 / 2)
     );
     p5.noFill();
-    p5.stroke(0, 0, 0);
+    p5.stroke(255, 255, 255);
     p5.rect(
       (phone.w + 400 - phone.x + phone.w / 2 + 200) / 2 - 145,
       phone.y - (275 / 2 + 125 / 2) + 20,
       phone.w + 40,
       25
     );
-    p5.fill(0, 0, 0);
+    p5.fill(255, 255, 255);
     p5.noStroke();
     p5.textFont(boldFont);
     p5.textSize(12);
@@ -656,8 +664,11 @@ export default class DrawInfrastucture extends Component {
   };
 
   dnsComponent = (p5) => {
+    p5.fill("rgba(0, 0, 0, 0.3)");
+    p5.rect(phone.x + phone.w + 505, phone.y - 270, 330, 140);
+
     p5.textSize(20);
-    p5.fill(0, 0, 0);
+    p5.fill(255, 255, 255);
     p5.noStroke();
     p5.text(
       "DNS",
@@ -670,7 +681,7 @@ export default class DrawInfrastucture extends Component {
       phone.y - (275 / 2 + 125 / 2) - 20
     );
     p5.noFill();
-    p5.stroke(0, 0, 0);
+    p5.stroke(255, 255, 255);
     p5.rect(
       phone.w + 400 - phone.x + phone.w / 2 + 200 - 210,
       phone.y - (275 / 2 + 125 / 2),
@@ -683,7 +694,7 @@ export default class DrawInfrastucture extends Component {
       phone.w + 40,
       25
     );
-    p5.fill(0, 0, 0);
+    p5.fill(255, 255, 255);
     p5.noStroke();
     p5.textFont(boldFont);
     p5.textSize(12);
@@ -841,14 +852,14 @@ export default class DrawInfrastucture extends Component {
 
     // Revert to normal
     p5.strokeWeight(1);
-    p5.fill(0, 0, 0);
+    p5.fill(255, 255, 255);
 
     // Request Text
-    p5.noFill();
-    p5.stroke(0, 0, 0);
+    p5.fill("rgba(0, 0, 0, 0.3)");
+    p5.stroke(255, 255, 255);
     p5.rect(phone.x + phone.w / 2 / 3, phone.y - 80, phone.w / 1.5, 25);
     if (this.props.httpSignal) {
-      p5.fill(0, 0, 0);
+      p5.fill(255, 255, 255);
       p5.noStroke();
       p5.textFont(boldFont);
       p5.textSize(12);
@@ -984,7 +995,7 @@ export default class DrawInfrastucture extends Component {
     // Boxes
     for (let i = 0; i < routers.length; i++) {
       p5.fill(255, 255, 255);
-      p5.stroke(0, 0, 0);
+      p5.stroke(150, 150, 150);
       p5.fill(routers[i].color);
       p5.rect(routers[i].x, routers[i].y, routers[i].w, routers[i].h, 5);
       p5.noStroke();
@@ -1049,7 +1060,7 @@ export default class DrawInfrastucture extends Component {
       }  
       
       // Server Text
-      p5.fill(0, 0, 0);
+      p5.fill(100, 100, 100);
       p5.textAlign(p5.CENTER);
       p5.textSize(18);
       p5.text("Shopping", possibleTargets["shopping"].entrancePoint.x, possibleTargets["shopping"].entrancePoint.y); 
@@ -1225,7 +1236,7 @@ export default class DrawInfrastucture extends Component {
               }
             }
 
-            p5.fill(0, 0, 0);
+            p5.fill(255, 255, 255);
             p5.ellipse(routerTurtle.x, routerTurtle.y, 30); 
             p5.fill(255, 255, 255);
             p5.ellipse(routerTurtle.x, routerTurtle.y, 25); 
@@ -1267,9 +1278,12 @@ export default class DrawInfrastucture extends Component {
 
   internetSpeed = (p5) => {
     let internetSpeedText = internetSpeed[0].toUpperCase() + internetSpeed.slice(1);
+    p5.fill("rgba(0, 0, 0, 0.4)");
+    p5.rect(0, 0, 190, 30);
+    
     p5.textSize(16);
     p5.textFont(regularFont);
-    p5.fill(0, 0, 0);
+    p5.fill(255, 255, 255);
     p5.text("Internet Speed: ", 60, 20);
     p5.textFont(boldFont);
     if (internetSpeed === "slow") {
