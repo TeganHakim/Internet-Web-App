@@ -38,3 +38,8 @@
     font-family: boldFont;
     src: url(../assets/Fonts/Roboto-Bold.ttf);
 }
+@media screen and (max-height: 969px) {
+    .info .container {
+        width: 17vw;        
+    }
+}

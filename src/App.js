@@ -4,11 +4,14 @@ import InfoWindow from "./InfoWindow";
 import DrawInfrastructure from "./DrawInfrastructure";
 
 function App() { 
-  const dimensions = {width: 300, height: 400};
-  if (window.innerHeight > 850) {
-    dimensions.height = 600
+  const dimensions = {width: 300, height: 600};
+
+  let scaleFactor = 1;
+  if (window.innerHeight < 969) {
+    scaleFactor = window.innerHeight/969;
+    // dimensions.height = window.innerHeight / (969/600);
   }
-  
+
   const [currentScreen, setCurrentScreen] = useState("Loading");
   const handleAppClicked = (icon) => {
     setCurrentScreen("Loading");    
@@ -325,6 +328,7 @@ function App() {
       />
       <DrawInfrastructure
         dimensions={dimensions}
+        scaleFactor={scaleFactor}
         handleAppClicked={handleAppClicked}
         httpSignal={httpSignal}
         pinged={pinged}

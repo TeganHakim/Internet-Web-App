@@ -486,8 +486,7 @@ export default class DrawInfrastucture extends Component {
     };
   };
   draw = (p5) => {
-    // p5.scale(0.7, 0.7);
-    
+    p5.scale(this.props.scaleFactor, this.props.scaleFactor);    
     // Regulate Text
     p5.textSize(12);
     p5.textStyle(p5.NORMAL);
