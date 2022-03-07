@@ -58,7 +58,7 @@ export default class HomePage extends Component {
       let scaledX = (screen.w / 3) * apps[i].x - apps[i].w;
       let scaledY =
         screen.y + screenBezel.horz + (screen.h / 9) * apps[i].y - apps[i].h;
-      if (
+        if (
         p5.mouseX <= scaledX + apps[i].w &&
         p5.mouseX >= scaledX &&
         p5.mouseY <= scaledY + apps[i].h &&
@@ -471,16 +471,17 @@ export default class HomePage extends Component {
       phone.border.tr,
       phone.border.br,
       phone.border.bl
-    );
-    // Screen
-    let screenBezel = { vert: 20, horz: 10 };
-    let screen = {
-      x: phone.x + screenBezel.horz,
-      y: phone.y + screenBezel.vert,
-      w: phone.w - screenBezel.horz * 2,
-      h: phone.h - screenBezel.vert * 2,
-      border: { tl: 5, tr: 5, bl: 5, br: 5 }
-    };
+      );
+      // Screen
+      let screenBezel = { vert: 20, horz: 10 };
+      let screen = {
+        x: phone.x + screenBezel.horz,
+        y: phone.y + screenBezel.vert,
+        w: phone.w - screenBezel.horz * 2,
+        h: phone.h - screenBezel.vert * 2,
+        border: { tl: 5, tr: 5, bl: 5, br: 5 }
+      };
+    
     p5.fill(255, 255, 255);
     p5.noStroke();
     p5.rect(

@@ -167,6 +167,10 @@ export default class DrawInfrastucture extends Component {
       h: height,
       border: { tl: 10, tr: 10, bl: 10, br: 10 },
     };
+    // CODE SHIFT HERE
+    if (this.props.scaleFactor != 1) {
+      phone.y += 60;
+    }
     infrastructurePath = [
       { x: phone.x + phone.w / 2 / 2, y: phone.y - 100 },
       { x: phone.x + phone.w / 2 - 10, y: phone.y - 250 },
@@ -486,7 +490,7 @@ export default class DrawInfrastucture extends Component {
     };
   };
   draw = (p5) => {
-    p5.scale(this.props.scaleFactor, this.props.scaleFactor);    
+    p5.scale(this.props.scaleFactor, this.props.scaleFactor);       
     // Regulate Text
     p5.textSize(12);
     p5.textStyle(p5.NORMAL);
