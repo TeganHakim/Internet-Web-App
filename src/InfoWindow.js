@@ -21,7 +21,7 @@ export default function InfoWindow({ hoverState }) {
     tower: {
       title: "Cell Tower",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+        "Cell towers (also known as cell sites), through the use of mounted antennas, help to facilitate the signal recption of electronic devices to allow for wireless communication.",
     },
     httpRequest: {
       title: "HTTP Request",
@@ -39,6 +39,9 @@ export default function InfoWindow({ hoverState }) {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
     },
   };
+
+  // Each server hover will be showing the corresponding URL and IP address
+  // Hovering DNS will say website url + endpoint with arrow to getting the url of the server with another arrow turning it into its IP address
 
   const content = () =>
     hoverState !== null ? (

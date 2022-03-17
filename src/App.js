@@ -66,7 +66,7 @@ function App() {
 
   const [currentBrowserPage, setCurrentBrowserPage] = useState("homeBrowser");
   const handleLinkClicked = (link) => {
-    setCurrentScreen("loading");
+    setCurrentScreen("Loading");
   };
   
   const setBrowserScreen = (link) => {

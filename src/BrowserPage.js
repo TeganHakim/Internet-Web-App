@@ -7,11 +7,6 @@ import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
 
 let urls = {
   homeBrowser: { url: "https://en.wikipedia.org/wiki/Vint-Cerf", statusCode: "202" },
-  goodLink: {
-    url: "https://howstuffworks.com/the-web",
-    statusCode: "202",
-    underline: false
-  },
   badLink: {
     url: "https://news.tk/free-wifi",
     statusCode: "404",
@@ -101,8 +96,6 @@ export default class BrowserPage extends Component {
     // Wiki Page
     if (this.props.currentBrowserPage === "homeBrowser") {
       this.homePage(p5, screen, screenBezel);
-    } else if (this.props.currentBrowserPage === "goodLink") {
-      this.goodPage(p5, screen, screenBezel);
     } else if (this.props.currentBrowserPage === "badLink") {
       this.brokenPage(p5, screen, screenBezel);
     }
@@ -174,38 +167,20 @@ export default class BrowserPage extends Component {
     );
     p5.textSize(12.5);
     p5.textFont(regularFont);
+   
     p5.text(
-      "1. ",
+      " - ",
       screen.x + screenBezel.horz,
       screen.y + screen.h - screenBezel.vert - 75
-    );
-    p5.text(
-      "2. ",
-      screen.x + screenBezel.horz,
-      screen.y + screen.h - screenBezel.vert - 55
     );
     p5.fill(51, 102, 187);
-    p5.text(
-      urls["goodLink"].url,
-      screen.x + screenBezel.horz + 18,
-      screen.y + screen.h - screenBezel.vert - 75
-    );
+  
     p5.text(
       urls["badLink"].url,
       screen.x + screenBezel.horz + 18,
-      screen.y + screen.h - screenBezel.vert - 55
+      screen.y + screen.h - screenBezel.vert - 75
     );
-    if (urls["goodLink"].underline) {
-      p5.stroke(51, 102, 187);
-    } else {
-      p5.noStroke();
-    }
-    p5.line(
-      screen.x + screenBezel.horz + 18,
-      screen.y + screen.h - screenBezel.vert - 73,
-      screen.x + screenBezel.horz + 18 + p5.textWidth(urls["goodLink"].url),
-      screen.y + screen.h - screenBezel.vert - 73
-    );
+   
     if (urls["badLink"].underline) {
       p5.stroke(51, 102, 187);
     } else {
@@ -213,34 +188,17 @@ export default class BrowserPage extends Component {
     }
     p5.line(
       screen.x + screenBezel.horz + 18,
-      screen.y + screen.h - screenBezel.vert - 53,
+      screen.y + screen.h - screenBezel.vert - 73,
       screen.x + screenBezel.horz + 18 + p5.textWidth(urls["badLink"].url),
-      screen.y + screen.h - screenBezel.vert - 53
+      screen.y + screen.h - screenBezel.vert - 73
     );
-    if (
-      p5.mouseX <
-        screen.x + screenBezel.horz + 18 + p5.textWidth(urls["goodLink"].url) &&
-      p5.mouseX > screen.x + screenBezel.horz + 18 &&
-      p5.mouseY > screen.y + screen.h - screenBezel.vert - 85 &&
-      p5.mouseY < screen.y + screen.h - screenBezel.vert - 72
-    ) {
-      p5.cursor(p5.HAND);
-      urls["goodLink"].underline = true;
-      if (p5.mouseIsPressed) {
-        if (p5.mouseButton === p5.LEFT) {
-          this.props.handleLinkClicked("goodLink");
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "goodLink"});
-        }
-      }
-    } else {
-      urls["goodLink"].underline = false;
-    }
+  
     if (
       p5.mouseX <
         screen.x + screenBezel.horz + 18 + p5.textWidth(urls["badLink"].url) &&
       p5.mouseX > screen.x + screenBezel.horz + 18 &&
-      p5.mouseY > screen.y + screen.h - screenBezel.vert - 65 &&
-      p5.mouseY < screen.y + screen.h - screenBezel.vert - 52
+      p5.mouseY > screen.y + screen.h - screenBezel.vert - 85 &&
+      p5.mouseY < screen.y + screen.h - screenBezel.vert - 72
     ) {
       p5.cursor(p5.HAND);
       urls["badLink"].underline = true;
@@ -256,9 +214,15 @@ export default class BrowserPage extends Component {
     p5.stroke(255, 255, 255);
     p5.line(
       screen.x + screenBezel.horz,
-      screen.y + screen.h - screenBezel.vert - 40,
+      screen.y + screen.h - screenBezel.vert - 55,
       screen.x + screen.w - screenBezel.horz,
-      screen.y + screen.h - screenBezel.vert - 40
+      screen.y + screen.h - screenBezel.vert - 55
+    );
+    p5.line(
+      screen.x + screenBezel.horz,
+      screen.y + screen.h - screenBezel.vert - 45,
+      screen.x + screen.w - screenBezel.horz,
+      screen.y + screen.h - screenBezel.vert - 45
     );
     p5.noStroke();
     p5.fill("rgba(0, 0, 0, 0.75)");
@@ -277,46 +241,6 @@ export default class BrowserPage extends Component {
       screen.x + screenBezel.horz,
       screen.y + screen.h - screenBezel.vert - 0
     );
-  };
-
-  goodPage = (p5, screen, screenBezel) => {
-    // Back Button
-    p5.fill(51, 102, 187);
-    p5.textSize(16);
-    p5.text(
-      "Return to Wiki",
-      screen.x + screenBezel.horz,
-      screen.y + screen.h - screenBezel.vert
-    );
-    if (returnLinkUnderline) {
-      p5.stroke(51, 102, 187);
-    } else {
-      p5.noStroke();
-    }
-    p5.line(
-      screen.x + screenBezel.horz,
-      screen.y + screen.h - screenBezel.vert + 3,
-      screen.x + screenBezel.horz + p5.textWidth("Return to Wiki"),
-      screen.y + screen.h - screenBezel.vert + 3
-    );
-    if (
-      p5.mouseX <
-        screen.x + screenBezel.horz + p5.textWidth("Return to Wiki") &&
-      p5.mouseX > screen.x + screenBezel.horz &&
-      p5.mouseY > screen.y + screen.h - screenBezel.vert - 10 &&
-      p5.mouseY < screen.y + screen.h - screenBezel.vert - 0
-    ) {
-      p5.cursor(p5.HAND);
-      returnLinkUnderline = true;
-      if (p5.mouseIsPressed) {
-        if (p5.mouseButton === p5.LEFT) {
-          this.props.handleLinkClicked("homeBrowser");
-          this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
-        }
-      }
-    } else {
-      returnLinkUnderline = false;
-    }
   };
 
   brokenPage = (p5, screen, screenBezel) => {

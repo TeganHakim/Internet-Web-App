@@ -536,7 +536,8 @@ export default class DrawInfrastucture extends Component {
       for (let endpoint of Object.keys(endpoints)) {
         if (this.props.httpSignal.endpoint.split("?")[0] === endpoint) {
           this.props.setPhoneScreen(endpoints[endpoint]);
-        } else if (["goodLink", "badLink", "homeBrowser"].includes(this.props.httpSignal.endpoint)) {
+        } else if (["badLink", "homeBrowser"].includes(this.props.httpSignal.endpoint)) {
+          this.props.setPhoneScreen("browser");
           this.props.setBrowserScreen(this.props.httpSignal.endpoint)
         }
       }
@@ -1315,7 +1316,6 @@ export default class DrawInfrastucture extends Component {
         if (canChangeSpeed){
           let possibleSpeeds = ["slow", "medium", "fast"];
           let index = possibleSpeeds.indexOf(internetSpeed);
-          console.log(index);
           if (index < possibleSpeeds.length - 1) {
             index += 1;
           } else if (index === possibleSpeeds.length - 1) {
