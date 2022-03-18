@@ -98,24 +98,32 @@ let clientIP = "";
 let toIP = "";
 let fromIP = "";
 
+let website = "internet-simulator.com";
+
+let homeInfo = {url: "url@example.com", ip: generateIP()};
+let musicInfo = {url: "url@example.com", ip: generateIP()};
+let browserInfo = {url: "url@example.com", ip: generateIP()};
+let chatInfo = {url: "url@example.com", ip: generateIP()};
+let shoppingInfo = {url: "url@example.com", ip: generateIP()};
+let socialInfo = {url: "url@example.com", ip: generateIP()};
+
 let requestsIP = {
-  homeScreen: generateIP(),
-  music: generateIP(),
-  browser: generateIP(),
-  homeBrowser: generateIP(),
-  goodLink: generateIP(),
-  badLink: generateIP(),
-  chat: generateIP(),
-  messageSent: generateIP(),
-  shopping: generateIP(),
-  cartQuantity: generateIP(),
-  social: generateIP(),
-  follow: generateIP(),
-  unfollow: generateIP(),
-  like: generateIP(),
-  unlike: generateIP(),
-  commentSent: generateIP(),
-  deleteComment: generateIP(),
+  homeScreen: homeInfo.ip,
+  music: musicInfo.ip,
+  browser: browserInfo.ip,
+  homeBrowser: browserInfo.ip,
+  badLink: browserInfo.ip,
+  chat: chatInfo.ip,
+  messageSent: chatInfo.ip,
+  shopping: shoppingInfo.ip,
+  cartQuantity: shoppingInfo.ip,
+  social: socialInfo.ip,
+  follow: socialInfo.ip,
+  unfollow: socialInfo.ip,
+  like: socialInfo.ip,
+  unlike: socialInfo.ip,
+  commentSent: socialInfo.ip,
+  deleteComment: socialInfo.ip,
 };
 
 function generateHexCode() {
@@ -441,7 +449,8 @@ export default class DrawInfrastucture extends Component {
       new Router(phone.x + phone.w + 1050, phone.y, 100, 150),
     ];
 
-    let targetLocations = {shopping: routers[3], phone: routers[8], music: routers[12], chat: routers[23], browser: routers[26], social: routers[31]}
+    let targetLocations = {shopping: routers[3], phone: routers[8], music: routers[12], chat: routers[23], browser: routers[26], social: routers[31]};
+
     possibleTargets = {
       homeScreen: targetLocations.phone,
       music: targetLocations.music,
@@ -757,8 +766,16 @@ export default class DrawInfrastucture extends Component {
       p5.mouseY >= phone.y - 275 &&
       p5.mouseY <= phone.y - 125
       ) {
+        let toURL = "";
         hovering = "DNS";
         p5.cursor(p5.HAND);
+        for (let i = 0; i < 6; i++) {
+          let requestData = [homeInfo, musicInfo, browserInfo, chatInfo, shoppingInfo, socialInfo];
+          if (toIP === requestData[i].ip) {
+            toURL = requestData[i].url;
+          }
+        }
+        this.props.setDNSHover(website + "/" + this.props.httpSignal.endpoint, toURL, toIP)
         this.props.hoverElement("DNS");
       } else if (!possibleHovers.filter(function(e) {return e != "DNS"}).includes(hovering)){
         hovering = null;
@@ -991,6 +1008,9 @@ export default class DrawInfrastucture extends Component {
         ) {
           hovering = "server"+i;
           p5.cursor(p5.HAND);
+          let serverLocs = {3: shoppingInfo, 8: homeInfo, 12: musicInfo, 23: chatInfo, 26: browserInfo, 31: socialInfo};
+          let currentServer = {url: serverLocs[i].url, ip: serverLocs[i].ip};
+          this.props.setServerHover(currentServer.url, currentServer.ip);
           this.props.hoverElement("server");
         }
       }

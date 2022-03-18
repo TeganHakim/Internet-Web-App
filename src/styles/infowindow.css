@@ -29,6 +29,43 @@
 .info .container .description { 
     padding: 0 15px 0 15px;  
 }
+.info .container .server-info { 
+    width: 100%;
+    text-align: center;
+    margin-top: 20px; 
+}
+.info .container .server-info h3 {
+    padding: 0 10px 0 10px;
+    display: inline;
+    border: 1px solid red;
+}
+.info .container .server-info p { 
+    margin-top: 10px;
+}
+.info .container .server-info .url { 
+    margin-bottom: 20px;
+}
+.info .container .server-info .ip { 
+    font-size: 14px;
+}
+
+.info .container .dns-info { 
+    width: 100%;
+    text-align: center;
+    margin-top: 20px; 
+}
+.info .container .dns-info h3 {
+    padding: 0 10px 0 10px;
+    display: inline;
+    border: 1px solid red;
+}
+.info .container .dns-info .web-url {
+    margin-top: 10px;
+}
+.info .container .dns-info .to-ip { 
+    font-size: 14px;
+}
+
 
 @font-face {
     font-family: regularFont;

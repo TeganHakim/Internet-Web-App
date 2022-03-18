@@ -288,6 +288,16 @@ function App() {
     setHoverState(element);
   }
 
+  const [serverInfo, setServerInfo] = useState(null);
+  const setServerHover = (url, ip) => {
+    setServerInfo({url: url, ip: ip});
+  }
+
+  const [DNSInfo, setDNSInfo] = useState(null);
+  const setDNSHover = (webURL, toURL, toIP) => {
+    setDNSInfo({webURL: webURL, toURL: toURL, toIP: toIP});
+  }
+
   return (
     <div className="App" id="App">
       <TemporaryDrawer
@@ -336,8 +346,14 @@ function App() {
         setPhoneScreen={setPhoneScreen}
         setBrowserScreen={setBrowserScreen}
         hoverElement={hoverElement}
+        setServerHover={setServerHover}
+        setDNSHover={setDNSHover}
       />
-      <InfoWindow hoverState={hoverState}/>
+      <InfoWindow 
+        hoverState={hoverState}
+        serverInfo={serverInfo}
+        DNSInfo={DNSInfo}
+      />
     </div>
   );
 }
