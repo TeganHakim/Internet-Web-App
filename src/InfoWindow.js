@@ -40,9 +40,6 @@ export default function InfoWindow({ hoverState, serverInfo, DNSInfo }) {
     },
   };
 
-  // Each server hover will be showing the corresponding URL and IP address
-  // Hovering DNS will say website url + endpoint with arrow to getting the url of the server with another arrow turning it into its IP address
-
   const content = () =>
     hoverState !== null ? (
       <div>
