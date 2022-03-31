@@ -11,12 +11,12 @@ export default function InfoWindow({ hoverState, serverInfo, DNSInfo }) {
     ISP: {
       title: "Internet Service Provider (ISP)",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+        "The Internet Service Provider assigns a unique IP address to each connected device. This is the company that you and your family pay to gain access to the Internet.",
     },
     DNS: {
       title: "Domain Name System (DNS)",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+        "Behind the scenes, each domain name maps to an IP address. When we type a URL in the address bar of our browser, the DNS has to figure out its IP address. If the IP address is not stored in the local cache, the ISP Domain Resolver will find it by communicating with Root Name Servers, TLD Servers, and Host Name Servers.",
     },
     tower: {
       title: "Cell Tower",
@@ -24,19 +24,19 @@ export default function InfoWindow({ hoverState, serverInfo, DNSInfo }) {
         "Cell towers (also known as cell sites), through the use of mounted antennas, help to facilitate the signal recption of electronic devices to allow for wireless communication.",
     },
     httpRequest: {
-      title: "HTTP Request",
+      title: "HTTP (Hypertext Transfer Protocol)",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+        "HTTP is a protocol that's built on top of the TCP/IP protocols. Through the use of a DNS Resolver, the Uniform Resource Locator (URL) maps the domain (ex: www.wikipedia.com) to an IP address. The browser then sends an HTTP Request to the host server with a specific action (GET, POST, DELETE, etc.). The host then sends a response back with both the content and metadata associated with it. The response has a status code associated with it to tell the computer whether or not the packets were successfully gathered (ex: 200 OK, 404 ERROR)",
     },
     router: {
       title: "Router",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+        "A router is a type of computing device used in computer networks that helps move the packets along. Computers send the first packet to the nearest router. Using a forwarding table, the router choses the next router to send the packets to based on the destination IP address.",
     },
     server: {
       title: "Server",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ullamcorper augue luctus, sodales quam nec, rhoncus lorem. Sed et volutpat enim. Suspendisse potenti. Donec ac convallis arcu. Morbi dapibus tellus non ipsum sagittis elementum eu sit amet enim. Sed condimentum massa dui, eget accumsan turpis vulputate finibus. Proin ac malesuada.",
+        "A server is a computer or system that across a network distributes resources, data, services, or programs to other computers known as clients through the use of multiple internet protocols such as IP, TCP, HTTP, etc.",
     },
   };
 

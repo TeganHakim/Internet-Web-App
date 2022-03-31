@@ -100,12 +100,12 @@ let fromIP = "";
 
 let website = "internet-simulator.com";
 
-let homeInfo = {url: "url@example.com", ip: generateIP()};
-let musicInfo = {url: "url@example.com", ip: generateIP()};
-let browserInfo = {url: "url@example.com", ip: generateIP()};
-let chatInfo = {url: "url@example.com", ip: generateIP()};
-let shoppingInfo = {url: "url@example.com", ip: generateIP()};
-let socialInfo = {url: "url@example.com", ip: generateIP()};
+let homeInfo = {url: "www.your-phone.com", ip: generateIP()};
+let musicInfo = {url: "www.prime-music.org", ip: generateIP()};
+let browserInfo = {url: "www.info-browser.com", ip: generateIP()};
+let chatInfo = {url: "www.chat-room.com", ip: generateIP()};
+let shoppingInfo = {url: "www.shop-online.org", ip: generateIP()};
+let socialInfo = {url: "www.friend-central.com", ip: generateIP()};
 
 let requestsIP = {
   homeScreen: homeInfo.ip,
