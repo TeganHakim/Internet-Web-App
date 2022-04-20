@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/Internet-Web-App/static/css/main.251f884c.chunk.css",
+    "main.js": "/Internet-Web-App/static/js/main.dd361b7e.chunk.js",
+    "main.js.map": "/Internet-Web-App/static/js/main.dd361b7e.chunk.js.map",
+    "runtime-main.js": "/Internet-Web-App/static/js/runtime-main.1650af1f.js",
+    "runtime-main.js.map": "/Internet-Web-App/static/js/runtime-main.1650af1f.js.map",
+    "static/js/2.53791e5d.chunk.js": "/Internet-Web-App/static/js/2.53791e5d.chunk.js",
+    "static/js/2.53791e5d.chunk.js.map": "/Internet-Web-App/static/js/2.53791e5d.chunk.js.map",
+    "index.html": "/Internet-Web-App/index.html",
+    "static/css/main.251f884c.chunk.css.map": "/Internet-Web-App/static/css/main.251f884c.chunk.css.map",
+    "static/js/2.53791e5d.chunk.js.LICENSE.txt": "/Internet-Web-App/static/js/2.53791e5d.chunk.js.LICENSE.txt",
+    "static/media/Background-Map.74f8ba82.png": "/Internet-Web-App/static/media/Background-Map.74f8ba82.png",
+    "static/media/Cat-Typing.81d30144.gif": "/Internet-Web-App/static/media/Cat-Typing.81d30144.gif",
+    "static/media/Code-Profile.1af02584.jpg": "/Internet-Web-App/static/media/Code-Profile.1af02584.jpg",
+    "static/media/Ethernet-Cable.5fda33e1.jpg": "/Internet-Web-App/static/media/Ethernet-Cable.5fda33e1.jpg",
+    "static/media/Heart-Filled.43fd6a44.png": "/Internet-Web-App/static/media/Heart-Filled.43fd6a44.png",
+    "static/media/Heart-Outline.75a9cdc2.png": "/Internet-Web-App/static/media/Heart-Outline.75a9cdc2.png",
+    "static/media/infowindow.css": "/Internet-Web-App/static/media/Roboto-Regular.a8d6ac03.ttf"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1650af1f.js",
+    "static/js/2.53791e5d.chunk.js",
+    "static/css/main.251f884c.chunk.css",
+    "static/js/main.dd361b7e.chunk.js"
+  ]
+}
