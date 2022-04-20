@@ -24,19 +24,19 @@ function App() {
     {
       author: "Bradley Wray",
       title: "Console.log",
-      url: "https://www.teganhakim.github.io/Internet-Web-App/music/console_log.mp3",
+      url: "https://teganhakim.github.io/Internet-Web-App/music/console_log.mp3",
       index: 0
     },
     {
       author: "Bradley Wray",
       title: "Train Struttin",
-      url: "https://www.teganhakim.github.io/Internet-Web-App/music/train_struttin.mp3",
+      url: "https://teganhakim.github.io/Internet-Web-App/music/train_struttin.mp3",
       index: 1
     },
     {
       author: "Bradley Wray",
       title: "On The Way To Koh Lipe",
-      url: "https://www.teganhakim.github.io/Internet-Web-App/music/on_the_way_to_koh_lipe.mp3",
+      url: "https://teganhakim.github.io/Internet-Web-App/music/on_the_way_to_koh_lipe.mp3",
       index: 2
     }
   ]);
