@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Internet-Web-App/static/css/main.251f884c.chunk.css",
-    "main.js": "/Internet-Web-App/static/js/main.dd361b7e.chunk.js",
-    "main.js.map": "/Internet-Web-App/static/js/main.dd361b7e.chunk.js.map",
+    "main.css": "/Internet-Web-App/static/css/main.3f68d4b0.chunk.css",
+    "main.js": "/Internet-Web-App/static/js/main.9b0e114b.chunk.js",
+    "main.js.map": "/Internet-Web-App/static/js/main.9b0e114b.chunk.js.map",
     "runtime-main.js": "/Internet-Web-App/static/js/runtime-main.1650af1f.js",
     "runtime-main.js.map": "/Internet-Web-App/static/js/runtime-main.1650af1f.js.map",
     "static/js/2.53791e5d.chunk.js": "/Internet-Web-App/static/js/2.53791e5d.chunk.js",
     "static/js/2.53791e5d.chunk.js.map": "/Internet-Web-App/static/js/2.53791e5d.chunk.js.map",
     "index.html": "/Internet-Web-App/index.html",
-    "static/css/main.251f884c.chunk.css.map": "/Internet-Web-App/static/css/main.251f884c.chunk.css.map",
+    "static/css/main.3f68d4b0.chunk.css.map": "/Internet-Web-App/static/css/main.3f68d4b0.chunk.css.map",
     "static/js/2.53791e5d.chunk.js.LICENSE.txt": "/Internet-Web-App/static/js/2.53791e5d.chunk.js.LICENSE.txt",
     "static/media/Background-Map.74f8ba82.png": "/Internet-Web-App/static/media/Background-Map.74f8ba82.png",
     "static/media/Cat-Typing.81d30144.gif": "/Internet-Web-App/static/media/Cat-Typing.81d30144.gif",
@@ -21,7 +21,7 @@
   "entrypoints": [
     "static/js/runtime-main.1650af1f.js",
     "static/js/2.53791e5d.chunk.js",
-    "static/css/main.251f884c.chunk.css",
-    "static/js/main.dd361b7e.chunk.js"
+    "static/css/main.3f68d4b0.chunk.css",
+    "static/js/main.9b0e114b.chunk.js"
   ]
 }
