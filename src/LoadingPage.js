@@ -155,7 +155,7 @@ export default class LoadingPage extends Component {
     p5.rect(screen.x + 15, screen.y + 5, 4, 10);
     p5.fill(0, 0, 0);
     p5.textSize(12);
-    p5.text("WiFi", screen.x + 25, screen.y + 14);
+    p5.text("5G", screen.x + 25, screen.y + 14);
   };
 
   render() {
