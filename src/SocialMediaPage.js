@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import Sketch from "react-p5";
+// import Sketch from "react-p5";
+import drawPhone from "./p5_functions/DrawPhone";
+import { ReactP5Wrapper } from "@p5-wrapper/react";
 import "./styles/style.css";
 import CodeProfile from "./assets/Images/Code-Profile.jpg";
 import CatTyping from "./assets/Images/Cat-Typing.gif";
@@ -21,576 +23,434 @@ let regularFont;
 let boldFont;
 
 export default class SocialMediaPage extends Component {
-  preload = (p5) => {
-    regularFont = p5.loadFont(RegularFont);
-  };
-  setup = (p5, canvasParentRef) => {
-    p5.createCanvas(this.props.dimensions.width, p5.windowHeight - 10).parent(canvasParentRef);
-    p5.frameRate(this.fr);
-    profile = p5.loadImage(CodeProfile);
-    gif = p5.loadImage(CatTyping);
-    heartFilled = p5.loadImage(HeartFilled);
-    heartOutline = p5.loadImage(HeartOutline);
-    boldFont = p5.loadFont(BoldFont);
-  };
-  draw = (p5) => {
-    // Regulate Text
-    p5.textSize(12);
-    p5.textFont(regularFont);
-    p5.textAlign(p5.LEFT);
-
-    // Cursor
-    p5.cursor(p5.ARROW);
-
-    // Screen variables
-    let width = this.props.dimensions.width;
-    let height = this.props.dimensions.height;
-    let phone = {
-      x: 10,
-      y: p5.windowHeight - 10 - height,
-      w: width - 10 * 2,
-      h: height,
-      border: { tl: 10, tr: 10, bl: 10, br: 10 }
+  sketch = (p5) => {
+    p5.preload = () => {
+      regularFont = p5.loadFont(RegularFont);
     };
-    let screenBezel = { vert: 20, horz: 10 };
-    let screen = {
-      x: phone.x + screenBezel.horz,
-      y: phone.y + screenBezel.vert,
-      w: phone.w - screenBezel.horz * 2,
-      h: phone.h - screenBezel.vert * 2,
-      border: { tl: 5, tr: 5, bl: 5, br: 5 }
+    p5.setup = (canvasParentRef) => {
+      p5.createCanvas(this.props.dimensions.width, p5.windowHeight - 10).parent(canvasParentRef);
+      p5.frameRate(this.fr);
+      profile = p5.loadImage(CodeProfile);
+      gif = p5.loadImage(CatTyping);
+      heartFilled = p5.loadImage(HeartFilled);
+      heartOutline = p5.loadImage(HeartOutline);
+      boldFont = p5.loadFont(BoldFont);
     };
-
-    // Phone
-    this.drawPhone(p5);
-
-    // Social Media
-    p5.fill(0, 0, 0);
-    p5.rect(screen.x, screen.y + 23, screen.w, 2);
-
-    // Post Title
-    p5.fill("rgba(0, 0, 0, 0.5)");
-    profile.resize(45, 45);
-    p5.image(
-      profile,
-      screen.x + screenBezel.horz - 3,
-      screen.y + screenBezel.vert + 13
-    );
-    p5.fill(0, 0, 0);
-    p5.textSize(18);
-    p5.textFont(boldFont);
-    p5.text(
-      "Coder Guy",
-      screen.x + screenBezel.horz + 45,
-      screen.y + screenBezel.vert + 30
-    );
-    p5.textSize(13);
-    p5.textFont(regularFont);
-    p5.fill("rgba(0, 0, 0, 0.6)");
-    p5.text(
-      "@coder_guy2021",
-      screen.x + screenBezel.horz + 45,
-      screen.y + screenBezel.vert + 50
-    );
-    if (this.props.followed) {
-      p5.fill(followButton.stroke);
-      p5.stroke(followButton.stroke);
-    } else {
-      p5.fill(followButton.fill);
-      p5.stroke(followButton.stroke);
-    }
-    p5.strokeWeight(3);
-    p5.rect(
-      screen.x + screen.w - 85,
-      screen.y + screenBezel.vert + 25,
-      70,
-      20,
-      10
-    );
-    p5.strokeWeight(1);
-    p5.textFont(boldFont);
-    if (this.props.followed) {
-      p5.fill(followButton.fill);
-      p5.noStroke();
-    } else {
-      p5.fill(followButton.stroke);
-      p5.noStroke();
-    }
-    p5.textAlign(p5.CENTER);
-    p5.textFont(boldFont);
-    if (this.props.followed) {
-      p5.text(
-        "Following",
-        screen.x + screen.w - 85 + 35,
-        screen.y + screenBezel.vert + 39
+    p5.draw = () => {
+      // Regulate Text
+      p5.textSize(12);
+      p5.textFont(regularFont);
+      p5.textAlign(p5.LEFT);
+  
+      // Cursor
+      p5.cursor(p5.ARROW);
+  
+      // Phone
+      drawPhone(p5, this.props.phone, this.props.screen, this.props.screenBezel, this.props.handleAppClicked, this.props.httpVisualize, this.props.percentage);
+  
+      // Social Media
+      p5.fill(0, 0, 0);
+      p5.rect(this.props.screen.x, this.props.screen.y + 23, this.props.screen.w, 2);
+  
+      // Post Title
+      p5.fill("rgba(0, 0, 0, 0.5)");
+      profile.resize(45, 45);
+      p5.image(
+        profile,
+        this.props.screen.x + this.props.screenBezel.horz - 3,
+        this.props.screen.y + this.props.screenBezel.vert + 13
       );
-    } else {
+      p5.fill(0, 0, 0);
+      p5.textSize(18);
+      p5.textFont(boldFont);
       p5.text(
-        "Follow",
-        screen.x + screen.w - 85 + 35,
-        screen.y + screenBezel.vert + 39
+        "Coder Guy",
+        this.props.screen.x + this.props.screenBezel.horz + 45,
+        this.props.screen.y + this.props.screenBezel.vert + 30
       );
-    }
-    if (
-      p5.mouseX <= screen.x + screen.w - 85 + 70 &&
-      p5.mouseX >= screen.x + screen.w - 85 &&
-      p5.mouseY <= screen.y + screenBezel.vert + 25 + 20 &&
-      p5.mouseY >= screen.y + screenBezel.vert + 25
-    ) {
-      p5.cursor(p5.HAND);
-      if (p5.mouseIsPressed) {
-        if (p5.mouseButton === p5.LEFT) {
-          if (this.props.followed) {
-            this.props.setPhoneScreen("Loading");
-            this.props.httpVisualize({status: 200, request: "POST", endpoint: "unfollow"});
-            this.props.unfollow();
-          } else {
-            this.props.setPhoneScreen("Loading");
-            this.props.httpVisualize({status: 200, request: "POST", endpoint: "follow"});
-            this.props.follow();
+      p5.textSize(13);
+      p5.textFont(regularFont);
+      p5.fill("rgba(0, 0, 0, 0.6)");
+      p5.text(
+        "@coder_guy2021",
+        this.props.screen.x + this.props.screenBezel.horz + 45,
+        this.props.screen.y + this.props.screenBezel.vert + 50
+      );
+      if (this.props.followed) {
+        p5.fill(followButton.stroke);
+        p5.stroke(followButton.stroke);
+      } else {
+        p5.fill(followButton.fill);
+        p5.stroke(followButton.stroke);
+      }
+      p5.strokeWeight(3);
+      p5.rect(
+        this.props.screen.x + this.props.screen.w - 85,
+        this.props.screen.y + this.props.screenBezel.vert + 25,
+        70,
+        20,
+        10
+      );
+      p5.strokeWeight(1);
+      p5.textFont(boldFont);
+      if (this.props.followed) {
+        p5.fill(followButton.fill);
+        p5.noStroke();
+      } else {
+        p5.fill(followButton.stroke);
+        p5.noStroke();
+      }
+      p5.textAlign(p5.CENTER);
+      p5.textFont(boldFont);
+      if (this.props.followed) {
+        p5.text(
+          "Following",
+          this.props.screen.x + this.props.screen.w - 85 + 35,
+          this.props.screen.y + this.props.screenBezel.vert + 39
+        );
+      } else {
+        p5.text(
+          "Follow",
+          this.props.screen.x + this.props.screen.w - 85 + 35,
+          this.props.screen.y + this.props.screenBezel.vert + 39
+        );
+      }
+      if (
+        p5.mouseX <= this.props.screen.x + this.props.screen.w - 85 + 70 &&
+        p5.mouseX >= this.props.screen.x + this.props.screen.w - 85 &&
+        p5.mouseY <= this.props.screen.y + this.props.screenBezel.vert + 25 + 20 &&
+        p5.mouseY >= this.props.screen.y + this.props.screenBezel.vert + 25
+      ) {
+        p5.cursor(p5.HAND);
+        if (p5.mouseIsPressed) {
+          if (p5.mouseButton === p5.LEFT) {
+            if (this.props.followed) {
+              this.props.setPhonethis.props.Screen("Loading");
+              this.props.httpVisualize({status: 200, request: "POST", endpoint: "unfollow"});
+              this.props.unfollow();
+            } else {
+              this.props.setPhonethis.props.Screen("Loading");
+              this.props.httpVisualize({status: 200, request: "POST", endpoint: "follow"});
+              this.props.follow();
+            }
           }
         }
       }
-    }
-
-    // Post Caption
-    p5.textAlign(p5.LEFT);
-    p5.fill(0, 0, 0);
-    p5.noStroke();
-    p5.textFont(regularFont);
-    p5.textSize(18);
-    p5.text(
-      "Me at 3:00 am trying to fix the bug I found last night.",
-      screen.x + screenBezel.horz,
-      screen.y + screenBezel.vert + 85,
-      screen.w - screenBezel.horz * 2
-    );
-
-    // Post Image
-    p5.image(
-      gif,
-      screen.x + screenBezel.horz,
-      screen.y + screenBezel.vert + 125,
-      screen.w - screenBezel.horz * 2,
-      215
-    );
-    if (this.props.playGif) {
-      gif.play();
-    } else {
-      gif.pause(); 
-      p5.fill("rgba(0, 0, 0, 0.5)");
-      p5.rect(
-        screen.x +
-        screenBezel.horz +
-        (screen.w - screenBezel.horz * 2) / 2 -
-        10,
-        screen.y + screenBezel.vert + 125 + 250 / 2 - 25,
-        10,
-        50,
-        5
-        );
+  
+      // Post Caption
+      p5.textAlign(p5.LEFT);
+      p5.fill(0, 0, 0);
+      p5.noStroke();
+      p5.textFont(regularFont);
+      p5.textSize(18);
+      p5.text(
+        "Me at 3:00 am trying to fix the bug I found last night.",
+        this.props.screen.x + this.props.screenBezel.horz,
+        this.props.screen.y + this.props.screenBezel.vert + 85,
+        this.props.screen.w - this.props.screenBezel.horz * 2
+      );
+  
+      // Post Image
+      p5.image(
+        gif,
+        this.props.screen.x + this.props.screenBezel.horz,
+        this.props.screen.y + this.props.screenBezel.vert + 125,
+        this.props.screen.w - this.props.screenBezel.horz * 2,
+        215
+      );
+      if (this.props.playGif) {
+        gif.play();
+      } else {
+        gif.pause(); 
+        p5.fill("rgba(0, 0, 0, 0.5)");
         p5.rect(
-          screen.x +
-          screenBezel.horz +
-          (screen.w - screenBezel.horz * 2) / 2 +
+          this.props.screen.x +
+          this.props.screenBezel.horz +
+          (this.props.screen.w - this.props.screenBezel.horz * 2) / 2 -
           10,
-          screen.y + screenBezel.vert + 125 + 250 / 2 - 25,
+          this.props.screen.y + this.props.screenBezel.vert + 125 + 250 / 2 - 25,
           10,
           50,
           5
           );
-    }
-    if (
-      p5.mouseX <=
-        screen.x + screenBezel.horz + screen.w - screenBezel.horz * 2 &&
-      p5.mouseX >= screen.x + screenBezel.horz &&
-      p5.mouseY <= screen.y + screenBezel.vert + 125 + 215 &&
-      p5.mouseY >= screen.y + screenBezel.vert + 125
-    ) {
-      p5.cursor(p5.HAND);
-      if (p5.mouseIsPressed) {
-        if (p5.mouseButton === p5.LEFT) {
-          this.props.handlePlayGif(this.props.playGif);
-        }
+          p5.rect(
+            this.props.screen.x +
+            this.props.screenBezel.horz +
+            (this.props.screen.w - this.props.screenBezel.horz * 2) / 2 +
+            10,
+            this.props.screen.y + this.props.screenBezel.vert + 125 + 250 / 2 - 25,
+            10,
+            50,
+            5
+            );
       }
-    }
-    // Post Utilities
-    const todaysDate = Date()
-      .toLocaleString("default", { month: "long" })
-      .split(" ");
-    p5.textSize(12);
-    p5.fill("rgba(0, 0, 0, 0.6)");
-    p5.text(
-      `3:01 AM • ${todaysDate[2] + " " + todaysDate[1] + " " + todaysDate[3]}`,
-      screen.x + screenBezel.horz,
-      screen.y + screen.h - 185
-    );
-    p5.fill("rgba(0, 0, 0, 1)");
-    p5.textSize(43);
-    p5.textFont("Helvetica");
-    
-    if (this.props.liked) {
-      p5.image(heartFilled, screen.x + screenBezel.horz,
-        screen.y + screen.h - 180, 24, 27);
-    } else {
-      p5.image(heartOutline, screen.x + screenBezel.horz,
-        screen.y + screen.h - 180, 24, 27);
-    }
-    p5.fill(0, 0, 0);
-    p5.stroke(0, 0, 0);
-    p5.text(
-      "♡",
-      screen.x + screenBezel.horz-2,
-      screen.y + screen.h - 185,
-      screen.w - screenBezel.horz * 2
-      );
-    p5.noStroke();
-    p5.textFont(regularFont);
-    p5.textSize(16);
-    p5.text(
-      ` ${this.props.numLikes.toLocaleString()}`,
-      screen.x + screenBezel.horz + 27,
-      screen.y + screen.h - 160,
-      screen.w - screenBezel.horz * 2
-    );
-    if (
-      p5.mouseX <= screen.x + screenBezel.horz + 25 &&
-      p5.mouseX >= screen.x + screenBezel.horz &&
-      p5.mouseY <= screen.y + screen.h - 180 + 25 &&
-      p5.mouseY >= screen.y + screen.h - 180
-    ) {
-      p5.cursor(p5.HAND);
-      if (p5.mouseIsPressed) {
-        if (p5.mouseButton === p5.LEFT) {
-          if (this.props.liked) {
-            this.props.setPhoneScreen("Loading");
-            this.props.httpVisualize({status: 200, request: "POST", endpoint: "unlike"});
-            this.props.unlike();
-          } else {
-            this.props.setPhoneScreen("Loading");
-            this.props.httpVisualize({status: 200, request: "POST", endpoint: "like"});
-            this.props.like();
+      if (
+        p5.mouseX <=
+          this.props.screen.x + this.props.screenBezel.horz + this.props.screen.w - this.props.screenBezel.horz * 2 &&
+        p5.mouseX >= this.props.screen.x + this.props.screenBezel.horz &&
+        p5.mouseY <= this.props.screen.y + this.props.screenBezel.vert + 125 + 215 &&
+        p5.mouseY >= this.props.screen.y + this.props.screenBezel.vert + 125
+      ) {
+        p5.cursor(p5.HAND);
+        if (p5.mouseIsPressed) {
+          if (p5.mouseButton === p5.LEFT) {
+            this.props.handlePlayGif(this.props.playGif);
           }
-          this.props.handleLikesChanged(this.props.liked)
         }
       }
-    }
-    p5.fill("rgba(0, 0, 0, 0.2)");
-    p5.rect(
-      screen.x + screenBezel.horz,
-      screen.y + screen.h - screenBezel.vert - 125,
-      screen.w - screenBezel.horz * 2,
-      1
-    );
-
-    // Comments
-    p5.fill("rgba(0, 0, 0, 1)");
-    p5.text(
-      "Comments:",
-      screen.x + screenBezel.horz,
-      screen.y + screen.h - screenBezel.vert - 100
-    );
-    p5.fill("rgba(0, 0, 0, 0.5)");
-    p5.ellipse(
-      screen.x + screenBezel.horz + 15,
-      screen.y + screen.h - screenBezel.vert - 75,
-      30
-    );
-    p5.fill(255, 255, 255);
-    p5.stroke(255, 255, 255);
-    p5.text(
-      "VC",
-      screen.x + screenBezel.horz + 5,
-      screen.y + screen.h - screenBezel.vert - 70
-    );
-    p5.noStroke();
-    p5.fill("rgba(0, 0, 0, 1)");
-    p5.textFont(boldFont);
-    p5.textSize(15);
-    p5.text(
-      "vint_cerf1943",
-      screen.x + screenBezel.horz + 35,
-      screen.y + screen.h - screenBezel.vert - 80
-    );
-    p5.textFont(regularFont);
-    p5.text(
-      "\t\t\t\t\t\t\t\t\t\t\t\t\t Haha! This \nis so relatable!",
-      screen.x + screenBezel.horz + 35,
-      screen.y + screen.h - screenBezel.vert - 80
-    );
-    if (this.props.comment !== null) {
+      // Post Utilities
+      const todaysDate = Date()
+        .toLocaleString("default", { month: "long" })
+        .split(" ");
+      p5.textSize(12);
+      p5.fill("rgba(0, 0, 0, 0.6)");
+      p5.text(
+        `3:01 AM • ${todaysDate[2] + " " + todaysDate[1] + " " + todaysDate[3]}`,
+        this.props.screen.x + this.props.screenBezel.horz,
+        this.props.screen.y + this.props.screen.h - 185
+      );
+      p5.fill("rgba(0, 0, 0, 1)");
+      p5.textSize(43);
+      p5.textFont("Helvetica");
+      
+      if (this.props.liked) {
+        p5.image(heartFilled, this.props.screen.x + this.props.screenBezel.horz,
+          this.props.screen.y + this.props.screen.h - 180, 24, 27);
+      } else {
+        p5.image(heartOutline, this.props.screen.x + this.props.screenBezel.horz,
+          this.props.screen.y + this.props.screen.h - 180, 24, 27);
+      }
+      p5.fill(0, 0, 0);
+      p5.stroke(0, 0, 0);
+      p5.text(
+        "♡",
+        this.props.screen.x + this.props.screenBezel.horz-2,
+        this.props.screen.y + this.props.screen.h - 185,
+        this.props.screen.w - this.props.screenBezel.horz * 2
+        );
+      p5.noStroke();
+      p5.textFont(regularFont);
+      p5.textSize(16);
+      p5.text(
+        ` ${this.props.numLikes.toLocaleString()}`,
+        this.props.screen.x + this.props.screenBezel.horz + 27,
+        this.props.screen.y + this.props.screen.h - 160,
+        this.props.screen.w - this.props.screenBezel.horz * 2
+      );
+      if (
+        p5.mouseX <= this.props.screen.x + this.props.screenBezel.horz + 25 &&
+        p5.mouseX >= this.props.screen.x + this.props.screenBezel.horz &&
+        p5.mouseY <= this.props.screen.y + this.props.screen.h - 180 + 25 &&
+        p5.mouseY >= this.props.screen.y + this.props.screen.h - 180
+      ) {
+        p5.cursor(p5.HAND);
+        if (p5.mouseIsPressed) {
+          if (p5.mouseButton === p5.LEFT) {
+            if (this.props.liked) {
+              this.props.setPhonethis.props.Screen("Loading");
+              this.props.httpVisualize({status: 200, request: "POST", endpoint: "unlike"});
+              this.props.unlike();
+            } else {
+              this.props.setPhonethis.props.Screen("Loading");
+              this.props.httpVisualize({status: 200, request: "POST", endpoint: "like"});
+              this.props.like();
+            }
+            this.props.handleLikesChanged(this.props.liked)
+          }
+        }
+      }
+      p5.fill("rgba(0, 0, 0, 0.2)");
+      p5.rect(
+        this.props.screen.x + this.props.screenBezel.horz,
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 125,
+        this.props.screen.w - this.props.screenBezel.horz * 2,
+        1
+      );
+  
+      // Comments
+      p5.fill("rgba(0, 0, 0, 1)");
+      p5.text(
+        "Comments:",
+        this.props.screen.x + this.props.screenBezel.horz,
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 100
+      );
       p5.fill("rgba(0, 0, 0, 0.5)");
       p5.ellipse(
-        screen.x + screenBezel.horz + 15,
-        screen.y + screen.h - screenBezel.vert - 75 + 35,
+        this.props.screen.x + this.props.screenBezel.horz + 15,
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 75,
         30
       );
       p5.fill(255, 255, 255);
       p5.stroke(255, 255, 255);
       p5.text(
-        "AM",
-        screen.x + screenBezel.horz + 4,
-        screen.y + screen.h - screenBezel.vert - 70 + 35
+        "VC",
+        this.props.screen.x + this.props.screenBezel.horz + 5,
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 70
       );
       p5.noStroke();
       p5.fill("rgba(0, 0, 0, 1)");
       p5.textFont(boldFont);
       p5.textSize(15);
       p5.text(
-        "anonymous",
-        screen.x + screenBezel.horz + 35,
-        screen.y + screen.h - screenBezel.vert - 80 + 35
+        "vint_cerf1943",
+        this.props.screen.x + this.props.screenBezel.horz + 35,
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 80
       );
       p5.textFont(regularFont);
       p5.text(
-        `\t\t\t\t\t\t\t\t\t\t\t ${this.props.comment}`,
-        screen.x + screenBezel.horz + 35,
-        screen.y + screen.h - screenBezel.vert - 45,
-        screen.w - 55
+        "\t\t\t\t\t\t\t\t\t\t\t\t\t Haha! This \nis so relatable!",
+        this.props.screen.x + this.props.screenBezel.horz + 35,
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 80
       );
-      if (
-        p5.mouseX <= screen.x + screenBezel.horz + screen.w - 20 &&
-        p5.mouseX >= screen.x + screenBezel.horz &&
-        p5.mouseY <= screen.y + screen.h - screenBezel.vert - 90 + 35 + 30 &&
-        p5.mouseY >= screen.y + screen.h - screenBezel.vert - 90 + 35
-      ) {
-        p5.cursor(p5.HAND);
-        p5.stroke(0, 0, 0);
+      if (this.props.comment !== null) {
+        p5.fill("rgba(0, 0, 0, 0.5)");
+        p5.ellipse(
+          this.props.screen.x + this.props.screenBezel.horz + 15,
+          this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 75 + 35,
+          30
+        );
         p5.fill(255, 255, 255);
-        p5.rect(
-          screen.x + screenBezel.horz + screen.w - 65,
-          screen.y + screen.h - screenBezel.vert - 90 + 31,
-          55,
-          35
-        );
-        p5.stroke(255, 0, 0);
-        p5.strokeWeight(3);
-        p5.line(
-          screen.x + screenBezel.horz + screen.w - 50,
-          screen.y + screen.h - screenBezel.vert - 90 + 40,
-          screen.x + screenBezel.horz + screen.w - 25,
-          screen.y + screen.h - screenBezel.vert - 90 + 55
-        );
-        p5.line(
-          screen.x + screenBezel.horz + screen.w - 50,
-          screen.y + screen.h - screenBezel.vert - 90 + 55,
-          screen.x + screenBezel.horz + screen.w - 25,
-          screen.y + screen.h - screenBezel.vert - 90 + 40
+        p5.stroke(255, 255, 255);
+        p5.text(
+          "AM",
+          this.props.screen.x + this.props.screenBezel.horz + 4,
+          this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 70 + 35
         );
         p5.noStroke();
-        p5.strokeWeight(1);
-        if (p5.mouseIsPressed) {
-          if (p5.mouseButton === p5.LEFT) {
-            this.props.setPhoneScreen("Loading");
-            this.props.httpVisualize({status: 200, request: "DEL", endpoint: "deleteComment"});
-            this.props.handleCommentSent(null, true);
+        p5.fill("rgba(0, 0, 0, 1)");
+        p5.textFont(boldFont);
+        p5.textSize(15);
+        p5.text(
+          "anonymous",
+          this.props.screen.x + this.props.screenBezel.horz + 35,
+          this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 80 + 35
+        );
+        p5.textFont(regularFont);
+        p5.text(
+          `\t\t\t\t\t\t\t\t\t\t\t ${this.props.comment}`,
+          this.props.screen.x + this.props.screenBezel.horz + 35,
+          this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 45,
+          this.props.screen.w - 55
+        );
+        if (
+          p5.mouseX <= this.props.screen.x + this.props.screenBezel.horz + this.props.screen.w - 20 &&
+          p5.mouseX >= this.props.screen.x + this.props.screenBezel.horz &&
+          p5.mouseY <= this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 90 + 35 + 30 &&
+          p5.mouseY >= this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 90 + 35
+        ) {
+          p5.cursor(p5.HAND);
+          p5.stroke(0, 0, 0);
+          p5.fill(255, 255, 255);
+          p5.rect(
+            this.props.screen.x + this.props.screenBezel.horz + this.props.screen.w - 65,
+            this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 90 + 31,
+            55,
+            35
+          );
+          p5.stroke(255, 0, 0);
+          p5.strokeWeight(3);
+          p5.line(
+            this.props.screen.x + this.props.screenBezel.horz + this.props.screen.w - 50,
+            this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 90 + 40,
+            this.props.screen.x + this.props.screenBezel.horz + this.props.screen.w - 25,
+            this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 90 + 55
+          );
+          p5.line(
+            this.props.screen.x + this.props.screenBezel.horz + this.props.screen.w - 50,
+            this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 90 + 55,
+            this.props.screen.x + this.props.screenBezel.horz + this.props.screen.w - 25,
+            this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert - 90 + 40
+          );
+          p5.noStroke();
+          p5.strokeWeight(1);
+          if (p5.mouseIsPressed) {
+            if (p5.mouseButton === p5.LEFT) {
+              this.props.setPhonethis.props.Screen("Loading");
+              this.props.httpVisualize({status: 200, request: "DEL", endpoint: "deleteComment"});
+              this.props.handleCommentSent(null, true);
+            }
           }
         }
       }
-    }
-    p5.fill("rgba(0, 0, 0, 0.05)");
-    p5.stroke(0, 0, 0);
-    p5.rect(
-      screen.x + screenBezel.horz,
-      screen.y + screen.h - screenBezel.vert * 2,
-      screen.w - screenBezel.horz * 2,
-      30,
-      10
-    );
-    p5.noStroke();
-    p5.fill("rgba(0, 0, 0, 0.65)");
-    p5.textSize(14);
-    p5.textAlign(p5.LEFT);
-    p5.textFont(regularFont);
-    let formattedMessage =
-      messageText.join("").charAt(0).toUpperCase() +
-      messageText.join("").slice(1);
-    if (formattedMessage !== "") {
-      p5.text(
-        formattedMessage,
-        screen.x + screenBezel.horz + 10,
-        screen.y + screen.h - screenBezel.vert * 2 + 20
+      p5.fill("rgba(0, 0, 0, 0.05)");
+      p5.stroke(0, 0, 0);
+      p5.rect(
+        this.props.screen.x + this.props.screenBezel.horz,
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert * 2,
+        this.props.screen.w - this.props.screenBezel.horz * 2,
+        30,
+        10
       );
-    } else {
-      p5.text(
-        "Enter a comment",
-        screen.x + screenBezel.horz + 10,
-        screen.y + screen.h - screenBezel.vert * 2 + 20
-      );
-    }
-    p5.stroke(0, 0, 0);
-    p5.line(
-      screen.x + screenBezel.horz + 10 + p5.textWidth(formattedMessage),
-      screen.y + screen.h - screenBezel.vert * 2 + 20 - 15,
-      screen.x + screenBezel.horz + 10 + p5.textWidth(formattedMessage),
-      screen.y + screen.h - screenBezel.vert * 2 + 20 + 5
-    );
-    if (
-      screen.x + screenBezel.horz + 10 + p5.textWidth(formattedMessage) >
-      255
-    ) {
-      allowMessageEdit = false;
-    } else {
-      allowMessageEdit = true;
-    }
-  };
-
-  drawPhone = (p5) => {
-    // Phone
-    let width = this.props.dimensions.width;
-    let height = this.props.dimensions.height;
-
-    let phone = {
-      x: 10,
-      y: p5.windowHeight - 10 - height,
-      w: width - 10 * 2,
-      h: height,
-      border: { tl: 10, tr: 10, bl: 10, br: 10 }
-    };
-    p5.fill(120, 120, 120);
-    p5.noStroke();
-    p5.rect(
-      phone.x,
-      phone.y,
-      phone.w,
-      phone.h,
-      phone.border.tl,
-      phone.border.tr,
-      phone.border.br,
-      phone.border.bl
-    );
-    // Screen
-    let screenBezel = { vert: 20, horz: 10 };
-    let screen = {
-      x: phone.x + screenBezel.horz,
-      y: phone.y + screenBezel.vert,
-      w: phone.w - screenBezel.horz * 2,
-      h: phone.h - screenBezel.vert * 2,
-      border: { tl: 5, tr: 5, bl: 5, br: 5 }
-    };
-    p5.fill(255, 255, 255);
-    p5.noStroke();
-    p5.rect(
-      screen.x,
-      screen.y,
-      screen.w,
-      screen.h,
-      screen.border.tl,
-      screen.border.tr,
-      screen.border.br,
-      screen.border.bl
-    );
-    // Home Button
-    let homeButton = {
-      x: phone.x + phone.w / 2,
-      y: phone.y + (phone.h - screenBezel.vert / 2),
-      r: 15
-    };
-    p5.fill(190, 190, 190);
-    p5.noStroke();
-    p5.ellipse(homeButton.x, homeButton.y, homeButton.r);
-    if (
-      p5.mouseX <= homeButton.x + homeButton.r / 2 &&
-      p5.mouseX >= homeButton.x - homeButton.r / 2 &&
-      p5.mouseY <= homeButton.y + homeButton.r / 2 &&
-      p5.mouseY >= homeButton.y - homeButton.r / 2
-    ) {
-      p5.cursor(p5.HAND);
-      if (p5.mouseIsPressed) {
-        this.props.handleAppClicked("home");
-        this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeScreen"});
+      p5.noStroke();
+      p5.fill("rgba(0, 0, 0, 0.65)");
+      p5.textSize(14);
+      p5.textAlign(p5.LEFT);
+      p5.textFont(regularFont);
+      let formattedMessage =
+        messageText.join("").charAt(0).toUpperCase() +
+        messageText.join("").slice(1);
+      if (formattedMessage !== "") {
+        p5.text(
+          formattedMessage,
+          this.props.screen.x + this.props.screenBezel.horz + 10,
+          this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert * 2 + 20
+        );
+      } else {
+        p5.text(
+          "Enter a comment",
+          this.props.screen.x + this.props.screenBezel.horz + 10,
+          this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert * 2 + 20
+        );
       }
-    }
-    // Camera
-    let camera = {
-      x: phone.x + phone.w / 3,
-      y: phone.y + screenBezel.vert / 2,
-      r: 10
+      p5.stroke(0, 0, 0);
+      p5.line(
+        this.props.screen.x + this.props.screenBezel.horz + 10 + p5.textWidth(formattedMessage),
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert * 2 + 20 - 15,
+        this.props.screen.x + this.props.screenBezel.horz + 10 + p5.textWidth(formattedMessage),
+        this.props.screen.y + this.props.screen.h - this.props.screenBezel.vert * 2 + 20 + 5
+      );
+      if (
+        this.props.screen.x + this.props.screenBezel.horz + 10 + p5.textWidth(formattedMessage) >
+        255
+      ) {
+        allowMessageEdit = false;
+      } else {
+        allowMessageEdit = true;
+      }
     };
-    p5.fill(190, 190, 190);
-    p5.noStroke();
-    p5.ellipse(camera.x, camera.y, camera.r);
-    // Speaker
-    let speaker = {
-      x: camera.x + screenBezel.vert,
-      y: camera.y - camera.r / 2,
-      w: phone.w / 3,
-      h: camera.r,
-      border: 5
+  
+    keyPressed = (e) => {
+      if (e.key === "Enter") {
+        this.props.setPhonethis.props.Screen("Loading");
+        this.props.httpVisualize({status: 200, request: "POST", endpoint: "commentSent"});
+        this.props.handleCommentSent(
+          messageText.join("").charAt(0).toUpperCase() +
+            messageText.join("").slice(1),
+          false
+        );
+        messageText = [];
+      } else if (e.key === "Backspace") {
+        messageText.pop();
+      } else if (
+        (e.keyCode > 8 && e.keyCode <= 46) ||
+        (e.keyCode >= 91 && e.keyCode <= 93) ||
+        (e.keyCode >= 112) & (e.keyCode <= 123) ||
+        (e.keyCode >= 144 && e.keyCode <= 145)
+      ) {
+        if (e.keyCode === 32 && allowMessageEdit) {
+          messageText.push(" ");
+        } else {
+          return;
+        }
+      } else {
+        if (allowMessageEdit) {
+          messageText.push(e.key);
+        }
+      }
     };
-    p5.rect(speaker.x, speaker.y, speaker.w, speaker.h, speaker.border);
-    // Battery
-    let percentage = parseInt(this.props.percentage, 10);
-    p5.fill(255, 255, 255);
-    p5.stroke(0, 0, 0);
-    p5.rect(screen.x + screen.w - 40, screen.y + 5, 35, 10, 4);
-    if (percentage <= 20) {
-      p5.fill(255, 0, 0);
-    } else if (percentage < 50) {
-      p5.fill(255, 125, 0);
-    } else {
-      p5.fill(0, 255, 0);
-    }
-    p5.noStroke();
-    p5.rect(
-      screen.x + screen.w - 39,
-      screen.y + 6,
-      parseInt(p5.map(percentage, 0, 100, 0, 34), 10),
-      8,
-      2
-    );
-    p5.fill(0, 0, 0);
-    p5.textSize(12);
-    p5.text(
-      percentage + "%",
-      screen.x + screen.w - (percentage < 100 ? 67 : 72),
-      screen.y + 14
-    );
-    // Wifi
-    p5.rect(screen.x + 5, screen.y + 9, 4, 6);
-    p5.rect(screen.x + 10, screen.y + 7, 4, 8);
-    p5.rect(screen.x + 15, screen.y + 5, 4, 10);
-    p5.fill(0, 0, 0);
-    p5.textSize(12);
-    p5.text("5G", screen.x + 25, screen.y + 14);
-  };
-
+  }
+  
   render() {
-    return (
-      <Sketch
-        preload={this.preload}
-        setup={this.setup}
-        draw={this.draw}
-        keyPressed={(e) => {
-          if (e.key === "Enter") {
-            this.props.setPhoneScreen("Loading");
-            this.props.httpVisualize({status: 200, request: "POST", endpoint: "commentSent"});
-            this.props.handleCommentSent(
-              messageText.join("").charAt(0).toUpperCase() +
-                messageText.join("").slice(1),
-              false
-            );
-            messageText = [];
-          } else if (e.key === "Backspace") {
-            messageText.pop();
-          } else if (
-            (e.keyCode > 8 && e.keyCode <= 46) ||
-            (e.keyCode >= 91 && e.keyCode <= 93) ||
-            (e.keyCode >= 112) & (e.keyCode <= 123) ||
-            (e.keyCode >= 144 && e.keyCode <= 145)
-          ) {
-            if (e.keyCode === 32 && allowMessageEdit) {
-              messageText.push(" ");
-            } else {
-              return;
-            }
-          } else {
-            if (allowMessageEdit) {
-              messageText.push(e.key);
-            }
-          }
-        }}
-      />
-    );
+    return <ReactP5Wrapper sketch={this.sketch} />
   }
 }

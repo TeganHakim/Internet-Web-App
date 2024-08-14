@@ -43,25 +43,25 @@ export default function InfoWindow({ hoverState, serverInfo, DNSInfo }) {
   const content = () =>
     hoverState !== null ? (
       <div>
-        <h1 class="title">{dataInfo[hoverState].title}</h1>
-        <p class="description">{dataInfo[hoverState].description}</p>
+        <h1 className="title">{dataInfo[hoverState].title}</h1>
+        <p className="description">{dataInfo[hoverState].description}</p>
         {hoverState === "server" ? 
-          <div class="server-info">
+          <div className="server-info">
             <h3>URL</h3>
-            <p class="url">{serverInfo.url}</p> 
+            <p className="url">{serverInfo.url}</p> 
             <h3>IP ADDRESS</h3>
-            <p class="ip">{serverInfo.ip}</p> 
+            <p className="ip">{serverInfo.ip}</p> 
           </div>  
           : <div></div>}
 
         {hoverState === "DNS" ? 
-          <div class="dns-info">
+          <div className="dns-info">
             <h3>Convert to IP</h3>
-            <p class="web-url">{DNSInfo.webURL}</p> 
-            <p class="arrow">&#8595;</p>
-            <p class="to-url">{DNSInfo.toURL}</p> 
-            <p class="arrow">&#8595;</p>
-            <p class="to-ip">{DNSInfo.toIP}</p> 
+            <p className="web-url">{DNSInfo.webURL}</p> 
+            <p className="arrow">&#8595;</p>
+            <p className="to-url">{DNSInfo.toURL}</p> 
+            <p className="arrow">&#8595;</p>
+            <p className="to-ip">{DNSInfo.toIP}</p> 
           </div>  
           : <div></div>}
       </div>

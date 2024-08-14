@@ -4,16 +4,33 @@ import InfoWindow from "./InfoWindow";
 import DrawInfrastructure from "./DrawInfrastructure";
 
 function App() { 
-  const dimensions = {width: 300, height: 600};
-
+  
   let scaleFactor = 1;
   if (window.innerHeight < 969) {
     scaleFactor = window.innerHeight/969;
     // dimensions.height = window.innerHeight / (969/600);
   }
+  const dimensions = {width: 300 * scaleFactor, height: 600 * scaleFactor};
+
+  // Screen Variables
+  let phone = {
+    x: 10,
+    y: window.innerHeight - 10 - dimensions.height,
+    w: dimensions.width - 10 * 2,
+    h: dimensions.height,
+    border: {tl: 10, tr: 10, bl: 10, br: 10}
+  };
+  let screenBezel = {vert: 20, horz: 10};
+  let screen = {
+    x: phone.x + screenBezel.horz,
+    y: phone.y + screenBezel.vert,
+    w: phone.w - screenBezel.horz * 2,
+    h: phone.h - screenBezel.vert * 2,
+    border: { tl: 5, tr: 5, bl: 5, br: 5 }
+  };
 
   const [currentScreen, setCurrentScreen] = useState("home");
-  const handleAppClicked = (icon) => {
+  const handleAppClicked = () => {
     setCurrentScreen("Loading");    
   };
   const setPhoneScreen = (screen) => {
@@ -71,7 +88,7 @@ function App() {
   }, [currentSong]);
 
   const [currentBrowserPage, setCurrentBrowserPage] = useState("homeBrowser");
-  const handleLinkClicked = (link) => {
+  const handleLinkClicked = () => {
     setCurrentScreen("Loading");
   };
   
@@ -309,6 +326,9 @@ function App() {
       <TemporaryDrawer
         key={currentScreen}
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
+        screenBezel={screenBezel}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -344,6 +364,8 @@ function App() {
       />
       <DrawInfrastructure
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
         scaleFactor={scaleFactor}
         handleAppClicked={handleAppClicked}
         httpSignal={httpSignal}
@@ -352,6 +374,7 @@ function App() {
         setPhoneScreen={setPhoneScreen}
         setBrowserScreen={setBrowserScreen}
         hoverElement={hoverElement}
+        hoverState={hoverState}
         setServerHover={setServerHover}
         setDNSHover={setDNSHover}
       />

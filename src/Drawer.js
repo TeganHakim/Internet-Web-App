@@ -1,6 +1,5 @@
 import * as React from "react";
-import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
+import Drawer from "@mui/material/Drawer"
 import HomePage from "./HomePage";
 import MusicPage from "./MusicPage";
 import BrowserPage from "./BrowserPage";
@@ -12,6 +11,9 @@ import "./styles/drawer.css";
 
 export default function TemporaryDrawer({
   dimensions,
+  phone,
+  screen,
+  screenBezel,
   currentScreen,
   handleAppClicked,
   percentage,
@@ -53,6 +55,9 @@ export default function TemporaryDrawer({
       <HomePage
         key={"home"}
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
+        screenBezel={screenBezel}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -63,6 +68,9 @@ export default function TemporaryDrawer({
       <MusicPage
         key={playMusic && currentSong.title}
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
+        screenBezel={screenBezel}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -77,6 +85,9 @@ export default function TemporaryDrawer({
       <BrowserPage
         key={currentBrowserPage}
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
+        screenBezel={screenBezel}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -88,6 +99,9 @@ export default function TemporaryDrawer({
       <ChatPage
         key={chatHistory}
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
+        screenBezel={screenBezel}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -101,6 +115,9 @@ export default function TemporaryDrawer({
       <ShoppingPage
         key={quantity + cartQuantity}
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
+        screenBezel={screenBezel}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -114,6 +131,9 @@ export default function TemporaryDrawer({
       <SocialMediaPage
         key={playGif + follow + liked}
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
+        screenBezel={screenBezel}
         currentScreen={currentScreen}
         handleAppClicked={handleAppClicked}
         percentage={percentage}
@@ -136,6 +156,9 @@ export default function TemporaryDrawer({
       <LoadingPage 
         key={"loading"}
         dimensions={dimensions}
+        phone={phone}
+        screen={screen}
+        screenBezel={screenBezel}
         currentScreen={currentScreen}
         percentage={percentage}
       />
