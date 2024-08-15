@@ -10,14 +10,21 @@ function App() {
     scaleFactor = window.innerHeight/969;
     // dimensions.height = window.innerHeight / (969/600);
   }
-  const dimensions = {width: 300 * scaleFactor, height: 600 * scaleFactor};
 
+  const yOffset = 10;
+  const phoneDimensions = {
+    width: 300 * scaleFactor, 
+    height: 600 * scaleFactor,
+    canvasHeight: window.innerHeight - yOffset
+  };
+
+  
   // Screen Variables
   let phone = {
     x: 10,
-    y: window.innerHeight - 10 - dimensions.height,
-    w: dimensions.width - 10 * 2,
-    h: dimensions.height,
+    y: window.innerHeight - 10 - phoneDimensions.height,
+    w: phoneDimensions.width - 10 * 2,
+    h: phoneDimensions.height,
     border: {tl: 10, tr: 10, bl: 10, br: 10}
   };
   let screenBezel = {vert: 20, horz: 10};
@@ -31,7 +38,7 @@ function App() {
 
   const [currentScreen, setCurrentScreen] = useState("home");
   const handleAppClicked = () => {
-    setCurrentScreen("Loading");    
+    setCurrentScreen("loading");    
   };
   const setPhoneScreen = (screen) => {
     setCurrentScreen(screen);
@@ -325,7 +332,7 @@ function App() {
     <div className="App" id="App">
       <TemporaryDrawer
         key={currentScreen}
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         screenBezel={screenBezel}
@@ -363,7 +370,7 @@ function App() {
         setPhoneScreen={setPhoneScreen}
       />
       <DrawInfrastructure
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         scaleFactor={scaleFactor}

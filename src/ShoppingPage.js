@@ -21,7 +21,7 @@ export default class ChatPage extends Component {
       regularFont = p5.loadFont(RegularFont);
     };
     p5.setup = (canvasParentRef) => {
-      p5.createCanvas(this.props.dimensions.width, p5.windowHeight - 10).parent(canvasParentRef);
+      p5.createCanvas(this.props.phoneDimensions.width, this.props.phoneDimensions.canvasHeight).parent(canvasParentRef);
       p5.frameRate(this.fr);
       image = p5.loadImage(EthernetCable);
       boldFont = p5.loadFont(BoldFont);

@@ -1,4 +1,4 @@
-export default function drawDNSComponent(p5, phone, boldFont, regularFont, toIP, fromIP, requestData, httpSignal, website, setDNSHover, hovering, setHovering, hoverElement, possibleHovers) {
+export default function drawDNSComponent(p5, phone, scaleFactor, boldFont, regularFont, toIP, fromIP, requestData, httpSignal, website, setDNSHover, hovering, setHovering, hoverElement, possibleHovers) {
     p5.fill("rgba(0, 0, 0, 0.3)");
     p5.rect(phone.x + phone.w + 505, phone.y - 270, 330, 140);
 

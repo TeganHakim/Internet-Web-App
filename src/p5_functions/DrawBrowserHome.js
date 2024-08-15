@@ -1,6 +1,6 @@
-export default function browserHome(p5) {
+export default function browserHome(p5, boldFont, regularFont, webImage, screen, screenBezel, urls, handleLinkClicked, httpVisualize) {
     p5.image(
-        image,
+        webImage,
         screen.x + screenBezel.horz + (screen.w - screenBezel.horz * 2) / 2,
         screen.y + screenBezel.vert + 50,
         (screen.w - screenBezel.horz * 2) / 2,
@@ -101,8 +101,8 @@ export default function browserHome(p5) {
         urls["badLink"].underline = true;
         if (p5.mouseIsPressed) {
           if (p5.mouseButton === p5.LEFT) {
-            this.props.handleLinkClicked("badLink");
-            this.props.httpVisualize({status: 404, request: "GET", endpoint: "badLink"});
+            handleLinkClicked("badLink");
+            httpVisualize({status: 404, request: "GET", endpoint: "badLink"});
           }
         }
       } else {

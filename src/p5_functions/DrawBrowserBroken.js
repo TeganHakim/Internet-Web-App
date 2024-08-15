@@ -1,4 +1,4 @@
-export default function browserBroken(p5) {
+export default function browserBroken(p5, boldFont, regularFont, screen, screenBezel, handleLinkClicked, httpVisualize) {
     p5.textAlign(p5.CENTER);
         p5.textSize(30);
         p5.textFont(boldFont);
@@ -52,8 +52,8 @@ export default function browserBroken(p5) {
           returnLinkUnderline = true;
           if (p5.mouseIsPressed) {
             if (p5.mouseButton === p5.LEFT) {
-              this.props.handleLinkClicked("homeBrowser");
-              this.props.httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
+              handleLinkClicked("homeBrowser");
+              httpVisualize({status: 200, request: "GET", endpoint: "homeBrowser"});
             }
           }
         } else {

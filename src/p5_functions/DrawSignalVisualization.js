@@ -1,4 +1,4 @@
-export default function drawSignalVisualization(p5, boldFont, regularFont, phone, httpSignal, httpSignalPos, previousSignalEndpoint, drawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, drawTurtle, turtleReverse, turtleColor, turtleColors, cellTowerPingColor, routers, routerTurtle, routerMovements, createIP, pathFullyCompleted, pinged, setPing, hovering, setHovering, hoverElement, possibleHovers) {
+export default function drawSignalVisualization(p5, scaleFactor, boldFont, regularFont, phone, httpSignal, httpSignalPos, previousSignalEndpoint, drawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, drawTurtle, turtleReverse, turtleColor, turtleColors, cellTowerPingColor, routers, routerTurtle, routerMovements, createIP, pathFullyCompleted, pinged, setPing, hovering, setHovering, hoverElement, possibleHovers) {
     if (httpSignal.endpoint != previousSignalEndpoint) {
         drawSignal = true;
      

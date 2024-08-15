@@ -30,7 +30,7 @@ export default class BrowserPage extends Component {
       regularFont = p5.loadFont(RegularFont);
     };
     p5.setup = (canvasParentRef) => {
-      p5.createCanvas(this.props.dimensions.width, p5.windowHeight - 10).parent(canvasParentRef);
+      p5.createCanvas(this.props.phoneDimensions.width, this.props.phoneDimensions.canvasHeight).parent(canvasParentRef);
       p5.frameRate(this.fr);
       image = p5.loadImage(VintCerf);
       boldFont = p5.loadFont(BoldFont);
@@ -81,9 +81,9 @@ export default class BrowserPage extends Component {
       );
       // Wiki Page
       if (this.props.currentBrowserPage === "homeBrowser") {
-        browserHome(p5, this.props.screen, this.props.screenBezel);
+        browserHome(p5, boldFont, regularFont, image, this.props.screen, this.props.screenBezel, urls, this.props.handleLinkClicked, this.props.httpVisualize);
       } else if (this.props.currentBrowserPage === "badLink") {
-        browserBroken(p5, this.props.screen, this.props.screenBezel);
+        browserBroken(p5, boldFont, regularFont, this.props.screen, this.props.screenBezel, this.props.handleLinkClicked, this.props.httpVisualize);
       }
     };
   }

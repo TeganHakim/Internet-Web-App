@@ -1,28 +1,49 @@
+// React
 import React, { Component } from "react";
-// import Sketch from "react-p5";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
-import "./styles/style.css";
+// p5 Custom Functions
 import drawPhone from "./p5_functions/DrawPhone";
 import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
+// Styles
+import "./styles/style.css";
 
+// Regular Font
 let regularFont;
 
+function getAppBounds(appData, scaledX, scaledY) {
+  return {
+    left: scaledX, 
+    right: (scaledX + appData.width), 
+    top: scaledY, 
+    bottom: (scaledY + appData.height) 
+  };
+}
+
 export default class HomePage extends Component {
+  // p5.js sketch function
   sketch = (p5) => {
+    // Function that executes only once, prior to load
     p5.preload = () => {
+      // Load the regular font
       regularFont = p5.loadFont(RegularFont);
     };
+    // Function that executes only once, after preload
     p5.setup = (canvasParentRef) => {
-      p5.createCanvas(this.props.dimensions.width, p5.windowHeight - 10).parent(canvasParentRef);
+      // Initialize canvas
+      p5.createCanvas(this.props.phoneDimensions.width, this.props.phoneDimensions.canvasHeight).parent(canvasParentRef);
+      // Set frame rate
       p5.frameRate(this.fr);
     };
+    // Function that executes every frame (draw loop)
     p5.draw = () => {
+      // Clear the canvas each frame to create animation effect
       p5.background('rgba(255, 255, 255, 0)')
+
       // Regulate Text
       p5.textSize(12);
       p5.textStyle(p5.NORMAL);
-      p5.textFont(regularFont);
       p5.textAlign(p5.LEFT);
+      p5.textFont(regularFont);
   
       // Cursor
       p5.cursor(p5.ARROW);
@@ -30,23 +51,44 @@ export default class HomePage extends Component {
       // Phone
       drawPhone(p5, this.props.phone, this.props.screen, this.props.screenBezel, this.props.handleAppClicked, this.props.httpVisualize, this.props.percentage);
   
-      // Apps
+      // App information
+      let maxRows = 8;
+      let maxCols = 3;
+      // App size
+      let appData = {
+        width: 50,
+        height: 50,
+      }
+      // Grid of apps
       let apps = [
-        { x: 1, y: 1, w: 50, h: 50, border: 18, icon: "music" },
-        { x: 2, y: 1, w: 50, h: 50, border: 18, icon: "browser" },
-        { x: 3, y: 1, w: 50, h: 50, border: 18, icon: "chat" },
-        { x: 1, y: 2, w: 50, h: 50, border: 18, icon: "shopping" },
-        { x: 2, y: 2, w: 50, h: 50, border: 18, icon: "social" }
+        {x: 1, y: 0, border: 18, icon: "browser"},
+        {x: 0, y: 0, border: 18, icon: "music"},
+        {x: 2, y: 0, border: 18, icon: "chat"},
+        {x: 0, y: 1, border: 18, icon: "shopping"},
+        {x: 1, y: 1, border: 18, icon: "social"}
       ];
+      // Space between apps
+      let appSpacing = {
+        x: this.props.screen.w / maxCols,
+        y: this.props.screen.h / maxRows
+      }
+      // Offset for app placement
+      let appOffset = {
+        x: this.props.screen.x + (appSpacing.x / 2) - (appData.width / 2),
+        y: this.props.screen.y + (this.props.screenBezel.horz * 2) + (appSpacing.y / 2) - (appData.height / 2)
+      }
+
       for (let i = 0; i < apps.length; i++) {
-        let scaledX = (this.props.screen.w / 3) * apps[i].x - apps[i].w;
-        let scaledY =
-          this.props.screen.y + this.props.screenBezel.horz + (this.props.screen.h / 9) * apps[i].y - apps[i].h;
-          if (
-          p5.mouseX <= scaledX + apps[i].w &&
-          p5.mouseX >= scaledX &&
-          p5.mouseY <= scaledY + apps[i].h &&
-          p5.mouseY >= scaledY
+        // Scale app position
+        let scaledX = appOffset.x + (appSpacing.x * apps[i].x);
+        let scaledY = appOffset.y + (appSpacing.y * apps[i].y);
+        // Check for mouse hover and/or interaction with app
+        const appBounds = getAppBounds(appData, scaledX, scaledY);
+        if (
+          p5.mouseX >= appBounds.left &&
+          p5.mouseX <= appBounds.right &&
+          p5.mouseY >= appBounds.top &&
+          p5.mouseY <= appBounds.bottom
         ) {
           p5.cursor(p5.HAND);
           apps[i].border = 12;
@@ -67,357 +109,249 @@ export default class HomePage extends Component {
             }
           }
         }
+        // Drawing apps
         p5.fill(0, 0, 0);
         p5.noStroke();
-        p5.rect(scaledX, scaledY, apps[i].w, apps[i].h, apps[i].border);
+        p5.rect(scaledX, scaledY, appData.width, appData.height, apps[i].border);
         if (apps[i].icon === "music") {
+          let iconData = {
+            width: appData.width / 2.3,
+            height: appData.height / 2.3,
+            border: 5
+          }
           p5.fill(100, 255, 100);
           p5.noStroke();
+          let diameter = 10;
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2 - 10,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 2 +
-              10,
-            10
+            scaledX + ((appData.width - iconData.width) / 2),
+            scaledY + ((appData.height - iconData.height) / 2) + iconData.height,
+            diameter
           );
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2 + 10,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 2 +
-              10,
-            10
+            scaledX + ((appData.width - iconData.width) / 2) + iconData.width,
+            scaledY + ((appData.height - iconData.height) / 2) + iconData.height,
+            diameter
           );
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + 15,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              15,
+            scaledX + ((appData.width - iconData.width) / 2),
+            scaledY + ((appData.height - iconData.height) / 2),
             5,
-            20,
+            25,
             5
           );
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + 35,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              15,
+            scaledX + ((appData.width - iconData.width) / 2) + iconData.width,
+            scaledY + ((appData.height - iconData.height) / 2),
             5,
-            20,
+            25,
             5
           );
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + 15,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              15,
-            24,
+            scaledX + ((appData.width - iconData.width) / 2),
+            scaledY + ((appData.height - iconData.height) / 2),
+            25,
             5,
             5
           );
         } else if (apps[i].icon === "browser") {
+          let iconData = {
+            width: 30,
+            height: 30,
+            border: 15
+          }
           p5.fill(75, 125, 255);
           p5.noStroke();
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 2,
-            30
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2),
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2),
+            iconData.width
           );
           p5.fill(255, 255, 255);
+          let lineWidth = 22;
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + 14,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].w / 2 -
-              1.5,
-            22,
+            scaledX + ((appData.width - iconData.width) / 2) + ((iconData.width - lineWidth) / 2),
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2) - 1.5,
+            lineWidth,
             3,
-            15
+            iconData.border
           );
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2 - 1.5,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              14,
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2) - 1.5,
+            scaledY + ((appData.height - iconData.height) / 2) + ((iconData.width - lineWidth) / 2),
             3,
-            22,
-            15
+            lineWidth,
+            iconData.border
           );
           p5.fill(75, 125, 255);
           p5.stroke(255, 255, 255);
           p5.strokeWeight(3);
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              25,
-            12
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2),
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2),
+            (iconData.width / 2) - 3
           );
           p5.strokeWeight(4);
           p5.stroke(180, 180, 180);
           p5.line(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              25,
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2 + 7,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              33
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2) + 7,
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2) + 7,
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2),
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2)
           );
           p5.stroke(255, 0, 0);
           p5.line(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2 - 7,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              18,
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              25
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2),
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2),
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2) - 7,
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2) - 7
           );
           p5.fill(255, 255, 255);
           p5.noStroke();
           p5.strokeWeight(1);
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 2,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              25,
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2),
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2),
             5
           );
         } else if (apps[i].icon === "chat") {
+          let iconData = {
+            width: 33,
+            height: 33,
+            border: 10
+          }
           p5.fill(220, 180, 0);
           p5.noStroke();
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + 8,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              10,
-            33,
+            scaledX + ((appData.width - iconData.width) / 2),
+            scaledY + ((appData.height - iconData.height) / 2),
+            iconData.width,
             26,
-            10
+            iconData.border
           );
+          let diameter = 7;
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w - 8,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 2 +
-              12,
-            7
+            scaledX + ((appData.width - iconData.width) / 2) + iconData.width,
+            scaledY + ((appData.height - iconData.height) / 2) + iconData.height - (diameter / 2),
+            diameter
           );
           p5.fill(255, 255, 255);
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 3 - 1,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 2,
-            7
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2) - 10,
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2) - (diameter / 2),
+            diameter
           );
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x -
-              apps[i].w +
-              apps[i].w / 3 +
-              apps[i].w / 3 / 2,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 2,
-            7
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2),
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2) - (diameter / 2),
+            diameter
           );
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x -
-              apps[i].w +
-              apps[i].w / 3 +
-              apps[i].w / 3 +
-              1,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 2,
-            7
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width / 2) + 10,
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2) - (diameter / 2),
+            diameter
           );
         } else if (apps[i].icon === "shopping") {
+          let iconData = {
+            width: appData.width / 1.5,
+            height: appData.height / 1.5,
+            border: 20
+          }
           p5.fill(128, 128, 128);
           p5.noStroke();
+          let cartLength = 10;
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 - 3,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 4,
-            10,
+            scaledX + ((appData.width - iconData.width) / 2),
+            scaledY + ((appData.height - iconData.height) / 2),
+            cartLength,
             3,
-            20
+            iconData.border
           );
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 + 6,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 4,
+            scaledX + ((appData.width - iconData.width) / 2) + cartLength - 2,
+            scaledY + ((appData.height - iconData.height) / 2) + 3,
             3,
             20,
-            20
+            iconData.border
           );
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 + 6,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 4 +
-              19,
+            scaledX + ((appData.width - iconData.width) / 2) + cartLength - 2,
+            scaledY + ((appData.height - iconData.height) / 2) + 3,
             25,
             3,
-            20
+            iconData.border
+          );
+          p5.rect(
+            scaledX + ((appData.width - iconData.width) / 2) + cartLength * 2,
+            scaledY + ((appData.height - iconData.height) / 2) + 3,
+            3,
+            20,
+            iconData.border
+          );
+          p5.rect(
+            scaledX + ((appData.width - iconData.width) / 2) + cartLength - 2,
+            scaledY + ((appData.height - iconData.height) / 2) + 12,
+            25,
+            3,
+            iconData.border
+          );
+          p5.rect(
+            scaledX + ((appData.width - iconData.width) / 2) + cartLength + 22,
+            scaledY + ((appData.height - iconData.height) / 2) + 3,
+            3,
+            20,
+            iconData.border
+          );
+          p5.rect(
+            scaledX + ((appData.width - iconData.width) / 2) + cartLength - 2,
+            scaledY + ((appData.height - iconData.height) / 2) + 20,
+            25,
+            3,
+            iconData.border
           );
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 + 10,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 4 +
-              28,
+            scaledX + ((appData.width - iconData.width) / 2) + 15,
+            scaledY + ((appData.height - iconData.height) / 2) + 30,
             7
           );
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 + 25,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 4 +
-              28,
+            scaledX + ((appData.width - iconData.width) / 2) + 28,
+            scaledY + ((appData.height - iconData.height) / 2) + 30,
             7
-          );
-          p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 + 28,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 3,
-            3,
-            16,
-            20
-          );
-          p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 + 6,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 3,
-            23,
-            3,
-            20
-          );
-          p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 + 18,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 3,
-            3,
-            15,
-            20
-          );
-          p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 5 + 6,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 3 +
-              7,
-            23,
-            3,
-            20
           );
         } else if (apps[i].icon === "social") {
           // Social Media App
-          p5.textSize(20);
+          let iconData = {
+            width: appData.width / 1.5,
+            height: appData.height / 1.5,
+            border: 5
+          }
+          let fontSize = 20;
+          p5.textSize(fontSize);
           p5.textFont("Helvetica");
           p5.text(
             "😆",
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 4 - 3,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 1.5
+            scaledX + ((appData.width - iconData.width) / 2) + 1,
+            scaledY + ((appData.height - iconData.height) / 2) + (iconData.height / 2) + (fontSize / 2),
           );
           p5.textFont(regularFont);
           p5.stroke(162, 40, 255);
           p5.strokeWeight(3);
           p5.noFill();
           p5.rect(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w / 1.5 / 4,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 1.5 / 4,
-            apps[i].w / 1.5,
-            apps[i].h / 1.5,
-            5
+            scaledX + ((appData.width - iconData.width) / 2),
+            scaledY + ((appData.height - iconData.height) / 2),
+            iconData.width,
+            iconData.height,
+            iconData.border
           );
           p5.fill(162, 40, 255);
           p5.noStroke();
-  
+          
+          let diameter = 7;
           p5.ellipse(
-            (this.props.screen.w / 3) * apps[i].x - apps[i].w + apps[i].w - 15,
-            this.props.screen.y +
-              this.props.screenBezel.horz +
-              (this.props.screen.h / 9) * apps[i].y -
-              apps[i].h +
-              apps[i].h / 4 +
-              2,
-            7
+            scaledX + ((appData.width - iconData.width) / 2) + (iconData.width - 7),
+            scaledY + ((appData.height - iconData.height) / 2) + diameter,
+            diameter
           );
           p5.strokeWeight(1);
         }
@@ -426,7 +360,7 @@ export default class HomePage extends Component {
         p5.noStroke();
         p5.text(
           "©Tegan Hakim " + new Date().getFullYear(),
-          this.props.screen.x + 145,
+          this.props.screen.x + 5,
           this.props.screen.y + this.props.screen.h - 5
         );
       }

@@ -1,12 +1,6 @@
 import drawRouters from "./DrawRouters";
 import findAdjacentNearestTarget from "./FindAdjacentNearestTarget";
 
-function getMouseLoc(p5) {
-  return {
-    x: p5.mouseX, 
-    y: p5.mouseY
-  };
-}
 function getRouterBounds(router, scaleFactor) {
   return {
     left: router.x * scaleFactor, 
@@ -16,34 +10,31 @@ function getRouterBounds(router, scaleFactor) {
   };
 }
 
-
 export default function drawRoutersInfo(p5, boldFont, scaleFactor, drawData, routers, serverLocs, routersReached, routerMovements, routerTurtle, turtlePath, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets, setServerHover, setHovering, hoverElement) {
     drawRouters(p5, routers);
     
     for (let i = 0; i < routers.length; i++) {
       let routerBounds = getRouterBounds(routers[i], scaleFactor);
       if (routers[i].w === 50 && routers[i].h === 50) {
-        if (getMouseLoc(p5).x >= routerBounds.left &&
-          getMouseLoc(p5).x <= routerBounds.right &&
-          getMouseLoc(p5).y >= routerBounds.top &&
-          getMouseLoc(p5).y <= routerBounds.bottom
+        if (p5.mouseX >= routerBounds.left &&
+          p5.mouseX <= routerBounds.right &&
+          p5.mouseY >= routerBounds.top &&
+          p5.mouseY <= routerBounds.bottom
         ) {
-          setHovering("router"+i);
+          setHovering("router");
           p5.cursor(p5.HAND);
           hoverElement("router");
         }
-      } else {
-        if (getMouseLoc(p5).x >= routerBounds.left &&
-          getMouseLoc(p5).x <= routerBounds.right &&
-          getMouseLoc(p5).y >= routerBounds.top &&
-          getMouseLoc(p5).y <= routerBounds.bottom
-        ) {
-          setHovering("server"+i);
-          p5.cursor(p5.HAND);
-          let currentServer = {url: serverLocs[i].url, ip: serverLocs[i].ip};
-          setServerHover(currentServer.url, currentServer.ip);
-          hoverElement("server");
-        }
+      } else if (p5.mouseX >= routerBounds.left &&
+        p5.mouseX <= routerBounds.right &&
+        p5.mouseY >= routerBounds.top &&
+        p5.mouseY <= routerBounds.bottom
+      ) {
+        setHovering("server");
+        p5.cursor(p5.HAND);
+        let currentServer = {url: serverLocs[i].url, ip: serverLocs[i].ip};
+        setServerHover(currentServer.url, currentServer.ip);
+        hoverElement("server");
       }
     }
 

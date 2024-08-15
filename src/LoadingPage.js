@@ -9,7 +9,7 @@ let arcRotation = 0;
 export default class LoadingPage extends Component {
   sketch = (p5) => {
     p5.setup = (canvasParentRef) => {
-      p5.createCanvas(this.props.dimensions.width, p5.windowHeight - 10).parent(canvasParentRef);
+      p5.createCanvas(this.props.phoneDimensions.width, this.props.phoneDimensions.canvasHeight).parent(canvasParentRef);
       p5.frameRate(15);
     };
     p5.draw = () => {

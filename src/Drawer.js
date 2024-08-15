@@ -10,8 +10,9 @@ import LoadingPage from "./LoadingPage";
 import "./styles/drawer.css";
 
 export default function TemporaryDrawer({
-  dimensions,
+  phoneDimensions,
   phone,
+  scaleFactor,
   screen,
   screenBezel,
   currentScreen,
@@ -54,7 +55,7 @@ export default function TemporaryDrawer({
     currentScreen === "home" ? (
       <HomePage
         key={"home"}
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         screenBezel={screenBezel}
@@ -67,7 +68,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "music" ? (
       <MusicPage
         key={playMusic && currentSong.title}
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         screenBezel={screenBezel}
@@ -84,7 +85,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "browser" ? (
       <BrowserPage
         key={currentBrowserPage}
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         screenBezel={screenBezel}
@@ -98,7 +99,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "chat" ? (
       <ChatPage
         key={chatHistory}
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         screenBezel={screenBezel}
@@ -114,7 +115,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "shopping" ? (
       <ShoppingPage
         key={quantity + cartQuantity}
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         screenBezel={screenBezel}
@@ -130,7 +131,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "social" ? (
       <SocialMediaPage
         key={playGif + follow + liked}
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         screenBezel={screenBezel}
@@ -155,7 +156,7 @@ export default function TemporaryDrawer({
     ) : currentScreen === "Loading" ? (
       <LoadingPage 
         key={"loading"}
-        dimensions={dimensions}
+        phoneDimensions={phoneDimensions}
         phone={phone}
         screen={screen}
         screenBezel={screenBezel}

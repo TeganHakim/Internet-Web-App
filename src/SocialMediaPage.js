@@ -28,7 +28,7 @@ export default class SocialMediaPage extends Component {
       regularFont = p5.loadFont(RegularFont);
     };
     p5.setup = (canvasParentRef) => {
-      p5.createCanvas(this.props.dimensions.width, p5.windowHeight - 10).parent(canvasParentRef);
+      p5.createCanvas(this.props.phoneDimensions.width, this.props.phoneDimensions.canvasHeight).parent(canvasParentRef);
       p5.frameRate(this.fr);
       profile = p5.loadImage(CodeProfile);
       gif = p5.loadImage(CatTyping);
