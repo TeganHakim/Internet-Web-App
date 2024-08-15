@@ -1,13 +1,22 @@
-export default function drawSignalVisualization(p5, scaleFactor, boldFont, regularFont, phone, httpSignal, httpSignalPos, previousSignalEndpoint, drawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, drawTurtle, turtleReverse, turtleColor, turtleColors, cellTowerPingColor, routers, routerTurtle, routerMovements, createIP, pathFullyCompleted, pinged, setPing, hovering, setHovering, hoverElement, possibleHovers) {
+function getHeaderBounds(headerData, scaleFactor) {
+  return {
+    left: headerData.x * scaleFactor, 
+    right: (headerData.x + headerData.width) * scaleFactor, 
+    top: headerData.y * scaleFactor, 
+    bottom: (headerData.y + headerData.height) * scaleFactor
+  };
+}
+
+export default function drawSignalVisualization(p5, scaleFactor, boldFont, regularFont, phone, httpSignal, httpSignalPos, previousSignalEndpoint, drawSignal, setDrawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, drawTurtle, turtleReverse, setTurtleColor, turtleColors, cellTowerPingColor, routers, routerTurtle, setRouterMovements, createIP, pathFullyCompleted, pinged, setPing, hovering, setHovering, hoverElement, possibleHovers) {
     if (httpSignal.endpoint != previousSignalEndpoint) {
-        drawSignal = true;
+        setDrawSignal(true);
      
-        routerMovements = [];
+        setRouterMovements([]);
         for (let router of routers) {
-          router.visited = false;
-          router.color = "rgba(255, 255, 255, 1)";
+          router.setVisited(false);
+          router.setColor("rgba(255, 255, 255, 1)");
         }
-        turtleColor = turtleColors.good;
+        setTurtleColor(turtleColors.good);
   
         routerTurtle.index = 0;
         routerTurtle.x = phone.x + phone.w + (500 / 2 + (phone.w / 2 + 700) / 2);
@@ -125,11 +134,17 @@ export default function drawSignalVisualization(p5, scaleFactor, boldFont, regul
         );
         p5.textFont(regularFont);
       }
-  
-      if (p5.mouseX >= phone.x + phone.w / 2 / 3 &&
-        p5.mouseX <= phone.x + phone.w / 2 / 3 + phone.w / 1.5 &&
-        p5.mouseY >= phone.y - 80 &&
-        p5.mouseY <= phone.y - 80 + 25
+      let headerData = {
+        x: phone.x + phone.w / 2 / 3,
+        y: phone.y - 80,
+        width: phone.w / 1.5,
+        height: 25
+      };
+      let headerBounds = getHeaderBounds(headerData, scaleFactor);
+      if (p5.mouseX >= headerBounds.left &&
+        p5.mouseX <= headerBounds.right &&
+        p5.mouseY >= headerBounds.top &&
+        p5.mouseY <= headerBounds.bottom
         ) {
           setHovering("httpRequest");
           p5.cursor(p5.HAND);

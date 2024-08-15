@@ -13,7 +13,7 @@ function App() {
 
   const yOffset = 10;
   const phoneDimensions = {
-    width: 300 * scaleFactor, 
+    width: 300, 
     height: 600 * scaleFactor,
     canvasHeight: window.innerHeight - yOffset
   };

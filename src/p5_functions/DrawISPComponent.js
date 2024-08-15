@@ -7,7 +7,7 @@ function getISPBounds(ISPData, scaleFactor) {
   };
 }
 
-export default function drawISPComponent(p5, phone, scaleFactor, boldFont, regularFont, createIP, clientIP, generateIP, hovering, setHovering, hoverElement, possibleHovers) {
+export default function drawISPComponent(p5, phone, scaleFactor, boldFont, regularFont, createIP, clientIP, setClientIP, generateIP, hovering, setHovering, hoverElement, possibleHovers) {
   const ISPData = {
     x: phone.x + phone.w / 2 + 205,
     y: phone.y - 270,
@@ -28,7 +28,7 @@ export default function drawISPComponent(p5, phone, scaleFactor, boldFont, regul
     p5.text(
       "ISP",
       ISPData.x + ((ISPData.width - p5.textWidth("ISP")) / 2),
-      ISPData.y + ISPData.height / 3
+      ISPData.y + ISPData.height / 4
     );
     p5.text(
       "Internet Service Provider",
@@ -62,10 +62,11 @@ export default function drawISPComponent(p5, phone, scaleFactor, boldFont, regul
     p5.textSize(12);
 
     let ISPBounds = getISPBounds(ISPData, scaleFactor);
-    if (p5.mouseX >= ISPBounds.left &&
-    p5.mouseX <= ISPBounds.right &&
-    p5.mouseY >= ISPBounds.top &&
-    p5.mouseY <= ISPBounds.bottom
+    if (
+      p5.mouseX >= ISPBounds.left &&
+      p5.mouseX <= ISPBounds.right &&
+      p5.mouseY >= ISPBounds.top &&
+      p5.mouseY <= ISPBounds.bottom
     ) {
       setHovering("ISP");
       p5.cursor(p5.HAND);
@@ -76,10 +77,10 @@ export default function drawISPComponent(p5, phone, scaleFactor, boldFont, regul
 
     if (createIP) {
       if (clientIP === "generating...") {
-        clientIP = generateIP();
+        setClientIP(generateIP());
       }
     } else {
-      clientIP = "generating...";
+      setClientIP("generating...");
     }
     p5.text(
       clientIP,
