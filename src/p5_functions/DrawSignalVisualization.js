@@ -151,5 +151,4 @@ export default function drawSignalVisualization(p5, scaleFactor, boldFont, regul
     setHovering("httpRequest");
     hoverElement("httpRequest");
   } 
-  drawTurtlePath(p5, drawTurtle, turtle, turtlePath, turtleReverse, turtleMovements, reverseSignal, turtleColor, turtleColors, setToIP, setFromIP, clientIP, requestsIP, httpSignal, httpSignalPos, phone, routersReached, routerTurtle, routerMovements, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets);
 }

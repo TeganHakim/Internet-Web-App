@@ -8,15 +8,37 @@ import { Router } from "./Router";
 import drawInfrastructureNodes from "./p5_functions/DrawInfrastructureNodes";
 import drawSignalVisualization from "./p5_functions/DrawSignalVisualization";
 import drawRoutersInfo from "./p5_functions/DrawRoutersInfo";
+// import findAdjacentNearestTarget from "./p5_functions/FindAdjacentNearestTarget";
 import drawTurtlePath from "./p5_functions/DrawTurtlePath";
+import drawRouters from "./p5_functions/DrawRouters";
 import drawInternetSpeed from "./p5_functions/DrawInternetSpeed";
 import Background from "./assets/Images/Background-Map.png";
+import drawISPComponent from "./p5_functions/DrawISPComponent";
+import drawDNSComponent from "./p5_functions/DrawDNSComponent";
+
+function getBounds(data, scaleFactor) {
+  return {
+    left: data.x * scaleFactor, 
+    right: (data.x + data.width) * scaleFactor, 
+    top: data.y * scaleFactor, 
+    bottom: (data.y + data.height) * scaleFactor
+  };
+}
+
+function getRouterBounds(router, scaleFactor) {
+  return {
+    left: router.x * scaleFactor, 
+    right: (router.x + router.w) * scaleFactor, 
+    top: router.y * scaleFactor, 
+    bottom: (router.y + router.h) * scaleFactor
+  };
+}
 
 let background;
 
-let width;
-let height;
-let phone;
+// let width;
+// let height;
+// let phone;
 
 let drawData = false;
 
@@ -585,13 +607,16 @@ export default class DrawInfrastucture extends Component {
       // Cursor
       p5.cursor(p5.ARROW);
   
-      drawInfrastructureNodes(p5, this.props.phone, this.props.scaleFactor, boldFont, regularFont, infrastructurePath, cellTowerPingColor, this.props.httpSignal, getCreateIP, getClientIP, setClientIP, generateIP, getToIP, getFromIP, website, requestData, this.props.setDNSHover, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
-      drawSignalVisualization(p5, this.props.scaleFactor, boldFont, regularFont, this.props.phone, this.props.httpSignal, httpSignalPos, getPreviousSignalEndpoint, setPreviousSignalEndpoint, getDrawSignal, setDrawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, turtleMovements, drawTurtle, turtleReverse, setTurtleColor, turtleColor, turtleColors, setCellTowerPingColor, routers, routersReached, routerPathMade, pathMade, turtlePathMade, routerTurtle, routerMovements, setRouterMovements, setToIP, setFromIP, clientIP, requestsIP, setCreateIP, targetServer, possibleTargets, setPathFullyCompleted, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
-      // drawSignalVisualization(p5, this.props.scaleFactor, boldFont, regularFont, this.props.phone, this.props.httpSignal, httpSignalPos, getPreviousSignalEndpoint, setPreviousSignalEndpoint, getDrawSignal, setDrawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, drawTurtle, turtleReverse, setTurtleColor, turtleColors, cellTowerPingColor, routers, routerTurtle, setRouterMovements, setCreateIP, setPathFullyCompleted, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
-      // drawTurtlePath(p5, drawTurtle, turtle, turtlePath, turtleReverse, turtleMovements, reverseSignal, turtleColor, turtleColors, setToIP, setFromIP, clientIP, requestsIP, this.props.httpSignal, httpSignalPos, this.props.phone, routersReached, routerTurtle, routerMovements, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets);
-      drawRoutersInfo(p5, boldFont, this.props.scaleFactor, drawData, routers, serverLocs, routersReached, routerMovements, routerTurtle, turtlePath, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets, this.props.setServerHover, setHovering, this.props.hoverElement);
-      drawInternetSpeed(p5, this.props.scaleFactor, boldFont, regularFont, getInternetSpeed, setInternetSpeed, speeds, getCanChangeSpeed, setCanChangeSpeed, possibleSpeeds, setTurtle, setRouterTurtle, getHttpSignalPos, setHttpSignalPos);
-      
+      // drawInfrastructureNodes(p5, this.props.phone, this.props.scaleFactor, boldFont, regularFont, infrastructurePath, cellTowerPingColor, this.props.httpSignal, getCreateIP, getClientIP, setClientIP, generateIP, getToIP, getFromIP, website, requestData, this.props.setDNSHover, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
+      this.drawInfrastructureNodes(p5);
+      // drawSignalVisualization(p5, this.props.scaleFactor, boldFont, regularFont, this.props.phone, this.props.httpSignal, httpSignalPos, getPreviousSignalEndpoint, setPreviousSignalEndpoint, getDrawSignal, setDrawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, turtleMovements, drawTurtle, turtleReverse, setTurtleColor, turtleColor, turtleColors, setCellTowerPingColor, routers, routersReached, routerPathMade, pathMade, turtlePathMade, routerTurtle, routerMovements, setRouterMovements, setToIP, setFromIP, clientIP, requestsIP, setCreateIP, targetServer, possibleTargets, setPathFullyCompleted, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
+      this.drawSignalVisualization(p5);
+      this.drawTurtlePath(p5);
+      // drawRoutersInfo(p5, boldFont, this.props.scaleFactor, drawData, routers, serverLocs, routersReached, routerMovements, routerTurtle, turtlePath, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets, this.props.setServerHover, setHovering, this.props.hoverElement);
+      this.drawRoutersInfo(p5);
+      // drawInternetSpeed(p5, this.props.scaleFactor, boldFont, regularFont, getInternetSpeed, setInternetSpeed, speeds, getCanChangeSpeed, setCanChangeSpeed, possibleSpeeds, setTurtle, setRouterTurtle, getHttpSignalPos, setHttpSignalPos);
+      this.drawInternetSpeed(p5);
+
       let endpoints = {
       homeScreen: "home",
       music: "music",
@@ -625,9 +650,828 @@ export default class DrawInfrastucture extends Component {
         this.props.hoverElement(null);
       }
     };
+
     p5.windowResized = () => {
       p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
     };
+
+    this.drawInfrastructureNodes = (p5) => {
+      p5.stroke(150, 150, 150);
+      for (let i = 0; i < infrastructurePath.length; i++) {
+        p5.strokeWeight(10);
+        if (this.props.pinged) {
+          if (i === 13) {
+            p5.stroke(cellTowerPingColor);
+          } else {
+            p5.stroke(150, 150, 150);
+          }
+        }
+        if (i !== infrastructurePath.length - 1) {
+          if (infrastructurePath[i].hasOwnProperty("size")) {
+            p5.strokeWeight(infrastructurePath[i].size);
+          }
+          if (!infrastructurePath[i].hasOwnProperty("moveTo")) {
+            p5.line(
+              infrastructurePath[i].x,
+              infrastructurePath[i].y,
+              infrastructurePath[i + 1].x,
+              infrastructurePath[i + 1].y
+            );
+          }
+        }
+      }
+      this.props.setPing(false);
+      p5.strokeWeight(1);
+
+      // Text
+      this.drawISPComponent(p5);
+      this.drawDNSComponent(p5);
+      const towerData = {
+        x: ((this.props.phone.x + this.props.phone.w) / 2) / 2 - 5,
+        y: this.props.phone.y - 310,
+        width: 150,
+        height: 225
+      }
+      let towerBounds = getBounds(towerData, this.props.scaleFactor);
+      if (p5.mouseX >= towerBounds.left &&
+        p5.mouseX <= towerBounds.right &&
+        p5.mouseY >= towerBounds.top &&
+        p5.mouseY <= towerBounds.bottom 
+      ) {
+        p5.cursor(p5.HAND);
+        hovering = "tower";
+        this.props.hoverElement("tower");
+      } 
+    };
+    this.drawISPComponent = (p5) => {
+      const ISPData = {
+        x: this.props.phone.x + this.props.phone.w / 2 + 205,
+        y: this.props.phone.y - 270,
+        width: (this.props.phone.x + this.props.phone.w + 395) - (this.props.phone.x + this.props.phone.w / 2 + 205),
+        height: 140
+      }  
+      p5.fill("rgba(0, 0, 0, 0.3)");
+      p5.rect(
+        ISPData.x,
+        ISPData.y,
+        ISPData.width,
+        ISPData.height
+      );
+  
+      p5.textSize(20);
+      p5.fill(255, 255, 255);
+      p5.noStroke();
+      p5.text(
+        "ISP",
+        ISPData.x + ((ISPData.width - p5.textWidth("ISP")) / 2),
+        ISPData.y + ISPData.height / 4
+      );
+      p5.text(
+        "Internet Service Provider",
+        ISPData.x + ((ISPData.width - p5.textWidth("Internet Service Provider")) / 2),
+        ISPData.y + ISPData.height / 2
+      );
+      p5.noFill();
+      p5.stroke(255, 255, 255);
+      p5.rect(
+        ISPData.x + 10,
+        ISPData.y + (2 * (ISPData.height / 3)),
+        ISPData.width - 20,
+        25
+      );
+      p5.fill(255, 255, 255);
+      p5.noStroke();
+      p5.textFont(boldFont);
+      p5.textSize(12);
+      p5.text(
+        "IPv6",
+        ISPData.x + 20,
+        ISPData.y + (2 * (ISPData.height / 3)) + 16,
+      );
+      p5.textFont(regularFont);
+      p5.textSize(20);
+      p5.text(
+        "|",
+        ISPData.x + 10 + p5.textWidth("IPv6"),
+        ISPData.y + (2 * (ISPData.height / 3)) + 18,
+      );
+      p5.textSize(12);
+  
+      let ISPBounds = getBounds(ISPData, this.props.scaleFactor);
+      if (
+        p5.mouseX >= ISPBounds.left &&
+        p5.mouseX <= ISPBounds.right &&
+        p5.mouseY >= ISPBounds.top &&
+        p5.mouseY <= ISPBounds.bottom
+      ) {
+        p5.cursor(p5.HAND);
+        hovering = "ISP";
+        this.props.hoverElement("ISP");
+      } 
+      else {
+        hovering = null;
+      }
+  
+      if (createIP) {
+        if (clientIP === "generating...") {
+          clientIP = generateIP();
+        }
+      } else {
+        clientIP = "generating...";
+      }
+      p5.text(
+        clientIP,
+        ISPData.x + 35 + p5.textWidth("IPv6"),
+        ISPData.y + (2 * (ISPData.height / 3)) + 15,
+      );
+    };
+    this.drawDNSComponent = (p5) => {
+      const DNSData = {
+        x: this.props.phone.x + this.props.phone.w + 505,
+        y: this.props.phone.y - 270,
+        width: (this.props.phone.x + this.props.phone.w + 395) - (this.props.phone.x + this.props.phone.w / 2 + 205),
+        height: 140
+      }  
+      p5.fill("rgba(0, 0, 0, 0.3)");
+      p5.rect(
+        DNSData.x,
+        DNSData.y,
+        DNSData.width,
+        DNSData.height
+      );
+    
+      p5.textSize(20);
+      p5.fill(255, 255, 255);
+      p5.noStroke();
+      p5.text(
+        "DNS",
+        DNSData.x + ((DNSData.width - p5.textWidth("DNS")) / 2),
+        DNSData.y + DNSData.height / 5
+      );
+      p5.text(
+        "Domain Name System",
+        DNSData.x + ((DNSData.width - p5.textWidth("Domain Name Systemr")) / 2),
+        DNSData.y + DNSData.height / 2.5
+      );
+      p5.noFill();
+      p5.stroke(255, 255, 255);
+      p5.rect(
+        DNSData.x + 10,
+        DNSData.y + (2 * (DNSData.height / 3)) - (25 / 2) - 10,
+        DNSData.width - 20,
+        25
+      );
+      p5.rect(
+        DNSData.x + 10,
+        DNSData.y + (2 * (DNSData.height / 3)) + (25 / 2),
+        DNSData.width - 20,
+        25
+      );
+      p5.fill(255, 255, 255);
+      p5.noStroke();
+      p5.textFont(boldFont);
+      p5.textSize(12);
+      p5.text(
+        "TO",
+        DNSData.x + 20,
+        DNSData.y + (2 * (DNSData.height / 3)) - (25 / 2) + 7,
+      );
+      p5.text(
+        "FROM",
+        DNSData.x + 20,
+        DNSData.y + (2 * (DNSData.height / 3)) + 29
+      );
+      p5.textFont(regularFont);
+      p5.textSize(20);
+      p5.text(
+        "|",
+        DNSData.x + 58,
+        DNSData.y + (2 * (DNSData.height / 3)) - 4,
+      );
+      p5.text(
+        "|",
+        DNSData.x + 58,
+        DNSData.y + (2 * (DNSData.height / 3)) + 31,
+      );
+      p5.textSize(12);
+    
+      p5.text(
+        toIP,
+        DNSData .x + 58 + 10,
+        DNSData.y + (2 * (DNSData.height / 3)) - (25 / 2) + 7
+      );
+    
+      p5.text(
+        fromIP,
+        DNSData .x + 58 + 10,
+        DNSData.y + (2 * (DNSData.height / 3)) + 29
+      );
+      
+      let DNSBounds = getBounds(DNSData, this.props.scaleFactor);
+      if (
+        p5.mouseX >= DNSBounds.left &&
+        p5.mouseX <= DNSBounds.right &&
+        p5.mouseY >= DNSBounds.top &&
+        p5.mouseY <= DNSBounds.bottom
+      ) {
+        p5.cursor(p5.HAND);
+        hovering = "DNS";
+        let toURL = "";
+        for (let i = 0; i < 6; i++) {
+          if (toIP === requestData[i].ip) {
+            toURL = requestData[i].url;
+          }
+        }
+        this.props.setDNSHover(website + "/" + this.props.httpSignal.endpoint, toURL, toIP)
+        this.props.hoverElement("DNS");
+      }
+    };
+    this.drawSignalVisualization = (p5) => {
+      if (this.props.httpSignal.endpoint != previousSignalEndpoint) {
+        drawSignal = true;
+      
+        routerMovements = [];
+        for (let router of routers) {
+          router.visited = false;
+          router.color = "rgba(255, 255, 255, 1)";
+        }
+        turtleColor = turtleColors.good;
+    
+        routerTurtle.index = 0;
+        routerTurtle.x = this.props.phone.x + this.props.phone.w + (500 / 2 + (this.props.phone.w / 2 + 700) / 2);
+        routerTurtle.y = this.props.phone.y - 25;
+        routerTurtle.draw = true;
+    
+        turtleReverse = false;
+        
+        if (httpSignalPos.y >= this.props.phone.y) {
+          httpSignalPos.y = this.props.phone.y;
+          httpSignalPos.size = 0;
+          httpSignalPos.stop = false;
+          reverseSignal = false;
+        }      
+      }
+        
+      if (drawSignal) {
+        p5.noFill();
+        p5.stroke(80, 190, 255);
+        p5.strokeWeight(5);
+        if (httpSignalPos.y <= this.props.phone.y - 280 && reverseSignal === false) {
+          httpSignalPos.stop = true;
+          previousSignalEndpoint = this.props.httpSignal.endpoint;
+        }
+        if (httpSignalPos.stop === false) {
+          if (reverseSignal === false) {
+            for (let i = 0; i < 5; i++) {
+              let tempY = httpSignalPos.y - i * 10;
+              if (tempY < this.props.phone.y - 280) {
+                tempY = this.props.phone.y - 280;
+                this.props.setPing(true);
+                createIP = true;
+              }
+              p5.arc(
+                httpSignalPos.x,
+                tempY,
+                50,
+                50,
+                p5.PI + httpSignalPos.size + 0.04 * i,
+                p5.PI * 2 - httpSignalPos.size - 0.04 * i
+              );
+            }
+            httpSignalPos.y -= httpSignalPos.speed;
+            httpSignalPos.size += 0.005 * httpSignalPos.speed;
+          } else {
+            for (let i = 0; i < 5; i++) {
+              let tempY = httpSignalPos.y + i * 10;
+              if (tempY >= this.props.phone.y + 25) {
+                tempY = this.props.phone.y;
+                pathFullyCompleted = true;
+                break;
+              }
+              p5.arc(
+                httpSignalPos.x,
+                tempY,
+                50,
+                50,
+                p5.PI + httpSignalPos.size + 0.04 * i,
+                p5.PI * 2 - httpSignalPos.size - 0.04 * i
+              );
+            }
+            httpSignalPos.y += httpSignalPos.speed;
+            httpSignalPos.size += 0.005 * httpSignalPos.speed;
+          } 
+        }
+      }
+    
+      if (this.props.pinged) {
+        drawTurtle = true;
+        turtle.stop = false;
+        turtlePath = originalTurtlePath;
+        turtle.index = 1;
+        turtle.x = turtlePath[0].x;
+        turtle.y = turtlePath[0].y;
+    
+        cellTowerPingColor = "rgb(0, 255, 0)";
+      }
+    
+      // Revert to normal
+      p5.strokeWeight(1);
+      p5.fill(255, 255, 255);
+    
+      // Request Text
+      p5.fill("rgba(0, 0, 0, 0.3)");
+      p5.stroke(255, 255, 255);
+      p5.rect(this.props.phone.x + this.props.phone.w / 2 / 3, this.props.phone.y - 80, this.props.phone.w / 1.5, 25);
+      if (this.props.httpSignal) {
+        p5.fill(255, 255, 255);
+        p5.noStroke();
+        p5.textFont(boldFont);
+        p5.textSize(12);
+        p5.text(
+          this.props.httpSignal.request,
+          this.props.phone.x + this.props.phone.w / 2 / 3 + 10,
+          this.props.phone.y - 80 + 25 / 1.5
+        );
+        p5.textFont(regularFont);
+        p5.text(
+          "/" + this.props.httpSignal.endpoint.split("?")[0],
+          this.props.phone.x +
+            this.props.phone.w / 2 / 3 +
+            15 +
+            p5.textWidth(this.props.httpSignal.request),
+          this.props.phone.y - 80 + 25 / 1.5
+        );
+        p5.textSize(20);
+        p5.text("|", this.props.phone.x + this.props.phone.w / 2 / 3 + 140, this.props.phone.y - 78.5 + 25 / 1.5);
+        p5.textSize(12);
+        p5.textFont(boldFont);
+        p5.text(
+          this.props.httpSignal.status,
+          this.props.phone.x + this.props.phone.w / 2 / 3 + 155,
+          this.props.phone.y - 80 + 25 / 1.5
+        );
+        p5.textFont(regularFont);
+      }
+      let headerData = {
+        x: this.props.phone.x + this.props.phone.w / 2 / 3,
+        y: this.props.phone.y - 80,
+        width: this.props.phone.w / 1.5,
+        height: 25
+      };
+      let headerBounds = getBounds(headerData, this.props.scaleFactor);
+      if (p5.mouseX >= headerBounds.left &&
+        p5.mouseX <= headerBounds.right &&
+        p5.mouseY >= headerBounds.top &&
+        p5.mouseY <= headerBounds.bottom
+      ) {
+        p5.cursor(p5.HAND);
+        hovering = "httpRequest";
+        this.props.hoverElement("httpRequest");
+      } 
+    };
+    this.drawTurtlePath = (p5) => {
+      if (drawTurtle) {
+        if (turtle.stop === false) {
+          for (let i = 0; i < turtle.speed; i++) {
+            if (
+              Math.abs(p5.dist(
+                turtlePath[turtlePath.length - 1].x,
+                turtlePath[turtlePath.length - 1].y,
+                turtle.x,
+                turtle.y
+              )) <= turtle.distanceCheck
+            ) {
+              drawTurtle = false;
+            }
+            if (
+              Math.abs(p5.dist(
+                turtlePath[turtle.index].x,
+                turtlePath[turtle.index].y,
+                turtle.x,
+                turtle.y
+              )) <= turtle.distanceCheck
+            ) {
+              if (turtle.index === turtlePath.length - 1) {
+                turtle.stop = true;
+              } else {
+                turtle.index += 1;
+              }
+            }
+            if (turtlePath[turtle.index].hasOwnProperty("moveTo")) {
+              turtle.x = turtlePath[turtle.index].moveTo["x"];
+              turtle.y = turtlePath[turtle.index].moveTo["y"];
+              turtle.index += 1;
+            } else {
+              if (
+                Math.abs(turtlePath[turtle.index].x - turtle.x) >=
+                turtle.distanceCheck
+              ) {
+                if (turtlePath[turtle.index].x > turtle.x) {
+                  turtle.x += 1;
+                  turtle.y +=
+                  (turtlePath[turtle.index].y - turtle.y) /
+                  (turtlePath[turtle.index].x - turtle.x);
+                } else {
+                  turtle.x -= 1;
+                  turtle.y -=
+                  (turtlePath[turtle.index].y - turtle.y) /
+                  (turtlePath[turtle.index].x - turtle.x);
+                }
+              } else {
+                if (turtlePath[turtle.index].y > turtle.y) {
+                  turtle.y += 1;
+                } else {
+                  turtle.y -= 1;
+                }
+                turtle.x = turtlePath[turtle.index].x;
+              }
+            }          
+            p5.fill(turtleColor);
+            if (turtlePath[turtle.index].hasOwnProperty("size")) {
+              p5.ellipse(turtle.x, turtle.y, turtlePath[turtle.index].size);
+            } else {
+              p5.ellipse(turtle.x, turtle.y, turtle.size);
+            }
+  
+            // DNS Server Reached
+            if (
+              Math.abs(this.props.phone.x + this.props.phone.w + 500 - turtle.x) <= turtle.distanceCheck
+            ) {
+              toIP = requestsIP[this.props.httpSignal.endpoint.split("?")[0]];
+              fromIP = clientIP;
+            }
+  
+            // Routers Reached
+            if (
+              Math.abs(
+                this.props.phone.x + this.props.phone.w + (500 / 2 + (this.props.phone.w / 2 + 700) / 2) - turtle.x
+              ) +
+                Math.abs(this.props.phone.y - 25 - turtle.y) <=
+              turtle.distanceCheck * 2
+            ) {
+              //Routers reached 
+              turtle.stop = true; 
+              drawTurtle = false;              
+              
+              routersReached = true;
+              
+              pathMade = false;
+              targetServer = possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].entrancePoint;  
+            } else {
+              routersReached = false;
+            }
+  
+            if (turtleReverse) {
+              if (p5.dist(turtle.x, turtle.y, this.props.phone.x + this.props.phone.w / 2, this.props.phone.y - 300) < turtle.distanceCheck) {
+                drawTurtle = false;
+                turtle.stop = true;
+                turtleReverse = false;
+                reverseSignal = true;
+                drawSignal = true;
+                httpSignalPos.stop = false;
+                httpSignalPos.size = 0;
+              }
+            }
+          }
+        }
+      } else {
+        turtle.index = 1;
+        turtle.x = turtlePath[0].x;
+        turtle.y = turtlePath[0].y;
+        turtle.stop = false;
+        turtle.size = 10;
+      }
+  
+      if (turtlePathMade) {
+        if (routerTurtle.stop === false && !routerPathMade) {        
+          for (let i = 0; i < routerTurtle.speed; i++) {
+            if (
+              Math.abs(p5.dist(
+                turtleMovements[routerTurtle.index].entrancePoint.x,
+                turtleMovements[routerTurtle.index].entrancePoint.y,
+                routerTurtle.x,
+                routerTurtle.y
+              )) <= routerTurtle.distanceCheck
+            ) {
+              if (routerTurtle.index === turtleMovements.length - 1) {
+                routerTurtle.stop = true;
+              } else {
+                routerTurtle.index += 1;
+              }
+            }
+            
+            if (
+              Math.abs(turtleMovements[routerTurtle.index].entrancePoint.x - routerTurtle.x) >=
+              routerTurtle.distanceCheck
+            ) {
+              if (turtleMovements[routerTurtle.index].entrancePoint.x > routerTurtle.x) {
+                routerTurtle.x += 1;
+                routerTurtle.y +=
+                  (turtleMovements[routerTurtle.index].entrancePoint.y - routerTurtle.y) /
+                  (turtleMovements[routerTurtle.index].entrancePoint.x - routerTurtle.x);
+              } else {
+                routerTurtle.x -= 1;
+                routerTurtle.y -=
+                  (turtleMovements[routerTurtle.index].entrancePoint.y - routerTurtle.y) /
+                  (turtleMovements[routerTurtle.index].entrancePoint.x - routerTurtle.x);
+              }
+            } else {
+              if (turtleMovements[routerTurtle.index].entrancePoint.y > routerTurtle.y) {
+                routerTurtle.y += 0.5;
+              } else {
+                routerTurtle.y -= 0.5;
+              }
+              routerTurtle.x = turtleMovements[routerTurtle.index].entrancePoint.x;
+            }
+            }
+            if (routerTurtle.draw) {
+              if (!turtleReverse) {
+                for (let movement of routerMovements) {
+                  if (p5.dist(routerTurtle.x, routerTurtle.y, movement.entrancePoint.x, movement.entrancePoint.y) < routerTurtle.distanceCheck * routerTurtle.speed) {
+                    let router = routers.find((e)=> e.entrancePoint.x === movement.entrancePoint.x && e.entrancePoint.y === movement.entrancePoint.y);
+                    router.color = "rgba(0, 255, 0, 1)";                  
+                  }  
+                }
+              }
+  
+              p5.fill(255, 255, 255);
+              p5.ellipse(routerTurtle.x, routerTurtle.y, 30); 
+              p5.fill(255, 255, 255);
+              p5.ellipse(routerTurtle.x, routerTurtle.y, 25); 
+              p5.fill(turtleColor);
+              p5.ellipse(routerTurtle.x, routerTurtle.y, 20); 
+            }
+            
+            if (targetServer) {
+              if (p5.dist(routerTurtle.x, routerTurtle.y, targetServer.x, targetServer.y) < routerTurtle.distanceCheck) {
+                turtleReverse = true;
+                possibleTargets[this.props.httpSignal.endpoint.split("?")[0]].color = this.props.httpSignal.status == 200 ? "rgba(0, 255, 0, 1)" : "rgba(255, 0, 0, 1)";
+                routerTurtle.index = 0;
+                turtleMovements = turtleMovements.reverse();
+                if (this.props.httpSignal.status == 200) {
+                  turtleColor = turtleColors.good;
+                } else if (this.props.httpSignal.status == 404) {
+                  turtleColor = turtleColors.bad;
+                } 
+              }
+            }
+            if (turtleReverse) {
+              if (p5.dist(routerTurtle.x, routerTurtle.y, routers[0].entrancePoint.x, routers[0].entrancePoint.y) < routerTurtle.distanceCheck) {
+                routerTurtle.stop = true;
+                routerTurtle.draw = false;      
+                
+                turtle.stop = false;
+                drawTurtle = true;           
+              }
+            }
+  
+          }
+        } else {
+          routerTurtle.index = 0;
+          routerTurtle.x = this.props.phone.x + this.props.phone.w + (500 / 2 + (this.props.phone.w / 2 + 700) / 2);
+          routerTurtle.y = this.props.phone.y - 25;
+          routerTurtle.draw = true;
+        } 
+    };
+    this.drawRoutersInfo = (p5) => {
+      drawRouters(p5, routers);
+      for (let i = 0; i < routers.length; i++) {
+        let routerBounds = getRouterBounds(routers[i], this.props.scaleFactor);
+        if (p5.mouseX >= routerBounds.left &&
+          p5.mouseX <= routerBounds.right &&
+          p5.mouseY >= routerBounds.top &&
+          p5.mouseY <= routerBounds.bottom) {
+            p5.cursor(p5.HAND);
+            if (routers[i].w === 50 && routers[i].h === 50) {
+              hovering = "router";
+              this.props.hoverElement("router");
+            } else {
+              let currentServer = {url: serverLocs[i].url, ip: serverLocs[i].ip};
+              hovering = "server";
+              this.props.setServerHover(currentServer.url, currentServer.ip);
+              this.props.hoverElement("server");
+            }
+          } 
+      }
+
+      // Boxes
+      for (let i = 0; i < routers.length; i++) {
+        p5.fill(255, 255, 255);
+        p5.stroke(150, 150, 150);
+        p5.fill(routers[i].color);
+        p5.rect(routers[i].x, routers[i].y, routers[i].w, routers[i].h, 5);
+        p5.noStroke();
+      }
+      p5.strokeWeight(1);
+      p5.noStroke();
+      if (drawData) {
+        for (let i=0; i<routers.length; i++) {
+          p5.fill(255, 255, 255);
+          p5.stroke(1);
+          p5.rect(routers[i].entrancePoint.x - 52, routers[i].y - 23, 105, 20);
+          p5.fill(255, 0, 0);
+          p5.textAlign(p5.CENTER);
+          p5.textFont(boldFont);
+          p5.noStroke();
+          p5.text(`${i}; x: ${routers[i].entrancePoint.x}; y: ${routers[i].entrancePoint.y}`, routers[i].entrancePoint.x, routers[i].y - 10);
+        }
+      }
+      p5.strokeWeight(1);
+      p5.noStroke();
+
+      // Turtle
+      if (routersReached && pathMade === false) {
+        turtlePath = turtlePath.map((item,idx) => turtlePath[turtlePath.length - 1 - idx]);
+        pathMade = this.findAdjacentNearestTarget(p5, routers[0]);
+      }
+      if (routerMovements.length !== 0) {
+
+        for (let router of routers) {
+          router.visited = false;
+        }
+        turtlePathMade = true;
+        routerTurtle.stop = false;
+        routerPathMade = false;
+        
+        turtleMovements = routerMovements;
+
+        for (let router of routerMovements) {
+          if (drawData) {
+            p5.fill(255, 0, 0);
+            p5.ellipse (
+              router.entrancePoint.x,
+              router.entrancePoint.y,
+              40,
+              40
+              );        
+              p5.beginShape();
+              p5.stroke(255, 0, 0);
+              p5.noFill();
+              for (let i=0; i<routerMovements.length; i++) {
+                p5.vertex(routerMovements[i].entrancePoint.x, routerMovements[i].entrancePoint.y);
+              }
+              p5.endShape();
+              p5.noStroke();
+            }
+          }
+        }  
+        
+        // Server Text
+        p5.fill(100, 100, 100);
+        p5.textAlign(p5.CENTER);
+        p5.textSize(18);
+        p5.text("Shopping", possibleTargets["shopping"].entrancePoint.x, possibleTargets["shopping"].entrancePoint.y); 
+        p5.text("Music", possibleTargets["music"].entrancePoint.x, possibleTargets["music"].entrancePoint.y); 
+        p5.text("Chat", possibleTargets["chat"].entrancePoint.x, possibleTargets["chat"].entrancePoint.y); 
+        p5.text("Browser", possibleTargets["browser"].entrancePoint.x, possibleTargets["browser"].entrancePoint.y); 
+        p5.text("Social", possibleTargets["social"].entrancePoint.x, possibleTargets["social"].entrancePoint.y); 
+        p5.text("Phone Cloud", possibleTargets["homeScreen"].entrancePoint.x, possibleTargets["homeScreen"].entrancePoint.y);
+    };
+    this.drawInternetSpeed = (p5) => {
+      // Declare sizing and positioning for the internet speed component
+      const internetSpeedData = {
+        x: 0,
+        y: 0,
+        width: 190,
+        height: 30
+      }
+      // Text to be displayed
+      const internetSpeedText = internetSpeed[0].toUpperCase() + internetSpeed.slice(1);
+
+      // Draw the internet speed component
+      p5.fill("rgba(0, 0, 0, 0.5)");
+      p5.rect(
+        internetSpeedData.x,
+        internetSpeedData.y,
+        internetSpeedData.width,
+        internetSpeedData.height
+      );
+
+      // Label text
+      const textY = 20;
+      p5.textSize(16);
+      p5.textFont(regularFont);
+      p5.fill(255, 255, 255);
+      p5.text(
+        "Internet Speed: ", 
+        60, 
+        textY
+      );
+      // Clickable text
+      const internetSpeedTextData = {
+        x: p5.textWidth("Internet Speed:  "),
+        y: 5,
+        w: p5.textWidth(internetSpeedText),
+        h: 27
+      }
+      p5.textFont(boldFont);
+      if (internetSpeed === "slow") {
+        p5.fill(255, 0, 0);
+      } else if (internetSpeed === "medium") {
+        p5.fill(230, 180, 0);
+      } else {
+        p5.fill(0, 200, 0);
+      }
+      p5.textAlign(p5.LEFT);
+      p5.text(
+        internetSpeedText, 
+        p5.textWidth("Internet Speed:  "),
+        textY
+      );
+      // Set speed based on internet speed (user input)
+      turtle.speed = 20 + speeds[internetSpeed];
+      routerTurtle.speed = 15 + speeds[internetSpeed];
+      httpSignalPos.speed = 5 + speeds[internetSpeed];
+      if (httpSignalPos.speed < 0) {
+        httpSignalPos.speed = 1;
+      }
+
+      // Handle interaction with user's mouse
+      let internetSpeedBounds = getBounds(internetSpeedTextData, this.props.scaleFactor);
+      if (p5.mouseX >= internetSpeedBounds.left &&
+      p5.mouseX <= internetSpeedBounds.right &&
+      p5.mouseY >= internetSpeedBounds.top &&
+      p5.mouseY <= internetSpeedBounds.bottom
+      ) {
+        p5.cursor(p5.HAND);
+        // If pressed, iterate through possible speeds
+        if (p5.mouseIsPressed) {
+          if (canChangeSpeed){
+            let index = possibleSpeeds.indexOf(internetSpeed);
+            if (index < possibleSpeeds.length - 1) {
+              index += 1;
+            } else if (index === possibleSpeeds.length - 1) {
+              index = 0;
+            }
+            internetSpeed = possibleSpeeds[index]; 
+            canChangeSpeed = false;        
+          }
+        } else {
+          canChangeSpeed = true;
+        }
+      }
+    };
+    this.findAdjacentNearestTarget = (p5, currentRouter) => {
+      let adjacents = [];
+      // console.log(currentRouter.closestRouters);
+      if (currentRouter.closestRouters.length != 0) {
+        adjacents = currentRouter.closestRouters.filter (
+          (router) => routers.find((e)=> e.entrancePoint.x === router.x && e.entrancePoint.y === router.y).visited === false 
+          && (router.type === "router" || p5.dist(router.x, router.y, targetServer.x, targetServer.y) === 0)
+        )
+        // If the router has two or more closest routers that are not yet visited ***
+        adjacents.filter((router) => {
+          let counter = 0;
+          if (routers.find((e)=> e.entrancePoint.x === router.x && e.entrancePoint.y === router.y).closestRouters.some((element)=>routers.find((e)=> e.entrancePoint.x === element.x && e.entrancePoint.y === element.y).visited === false))  {
+            counter ++;
+          }
+          return counter >= 2
+        })
+      }
+      
+      let nearestToTarget = currentRouter;
+      
+      if (Math.random() <= 0.1) {
+        let randomIndex = Math.floor(Math.random()*adjacents.length);
+        nearestToTarget = routers.find((e)=> {        
+          return e.entrancePoint.x === adjacents[randomIndex].x && e.entrancePoint.y === adjacents[randomIndex].y
+        });
+      } else {
+        adjacents.forEach((adjacent) => {
+          if (
+            p5.dist(
+              adjacent.x,
+              adjacent.y,
+              targetServer.x,
+              targetServer.y
+            ) <
+            p5.dist(
+              nearestToTarget.entrancePoint.x,
+              nearestToTarget.entrancePoint.y,
+              targetServer.x,
+              targetServer.y
+            )
+          ) 
+          nearestToTarget = routers.find((e)=> e.entrancePoint.x === adjacent.x && e.entrancePoint.y === adjacent.y);
+        });
+      }
+      if (routerMovements.includes(routers[0]) === false) {
+        routerMovements.push(routers[0]);
+        routers[0].visited = true;
+      }
+      if (routerMovements.includes(nearestToTarget) === false) {
+        routerMovements.push(nearestToTarget);
+        nearestToTarget.visited = true;
+      }
+      if (
+        nearestToTarget.entrancePoint.x === targetServer.x &&
+        nearestToTarget.entrancePoint.y === targetServer.y
+      ) {
+        return true;
+      } else {
+        this.findAdjacentNearestTarget(p5, nearestToTarget);
+      }
+    }
   }
 
   render() {

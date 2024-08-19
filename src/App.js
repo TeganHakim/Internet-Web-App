@@ -39,7 +39,7 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState("home");
   const handleAppClicked = (icon) => {
     setCurrentScreen("loading"); 
-    setTimeout(() => setCurrentScreen(icon), 1000);   
+    // setTimeout(() => setCurrentScreen(icon), 1000);   
   };
   const setPhoneScreen = (screen) => {
     setCurrentScreen(screen);

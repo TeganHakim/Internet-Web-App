@@ -8,12 +8,5 @@ export class Router {
     this.closestRouters = closestRouters;
     this.visited = visited;
     this.color = "rgba(255, 255, 255, 1)";
-
-    this.setVisited = (visited) => {
-      this.visited = visited;
-    };
-    this.setColor = (color) => {
-      this.color = color;
-    };
   }
 }
