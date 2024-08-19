@@ -7,7 +7,7 @@ function getDNSBounds(DNSData, scaleFactor) {
   };
 }
 
-export default function drawDNSComponent(p5, phone, scaleFactor, boldFont, regularFont, toIP, fromIP, requestData, httpSignal, website, setDNSHover, hovering, setHovering, hoverElement, possibleHovers) {
+export default function drawDNSComponent(p5, phone, scaleFactor, boldFont, regularFont, getToIP, getFromIP, requestData, httpSignal, website, setDNSHover, setHovering, hoverElement) {
   const DNSData = {
     x: phone.x + phone.w + 505,
     y: phone.y - 270,
@@ -78,13 +78,13 @@ export default function drawDNSComponent(p5, phone, scaleFactor, boldFont, regul
   p5.textSize(12);
 
   p5.text(
-    toIP,
+    getToIP(),
     DNSData .x + 58 + 10,
     DNSData.y + (2 * (DNSData.height / 3)) - (25 / 2) + 7
   );
 
   p5.text(
-    fromIP,
+    getFromIP(),
     DNSData .x + 58 + 10,
     DNSData.y + (2 * (DNSData.height / 3)) + 29
   );
@@ -96,17 +96,15 @@ export default function drawDNSComponent(p5, phone, scaleFactor, boldFont, regul
     p5.mouseY >= DNSBounds.top &&
     p5.mouseY <= DNSBounds.bottom
   ) {
-    let toURL = "";
-    setHovering("DNS");
     p5.cursor(p5.HAND);
+    setHovering("DNS");
+    let toURL = "";
     for (let i = 0; i < 6; i++) {
-      if (toIP === requestData[i].ip) {
+      if (getToIP() === requestData[i].ip) {
         toURL = requestData[i].url;
       }
     }
-    setDNSHover(website + "/" + httpSignal.endpoint, toURL, toIP)
+    setDNSHover(website + "/" + httpSignal.endpoint, toURL, getToIP())
     hoverElement("DNS");
-  } else if (!possibleHovers.filter(function(e) {return e != "DNS"}).includes(hovering)){
-    setHovering(null);
-  }
+  } 
 }

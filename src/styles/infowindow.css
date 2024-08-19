@@ -14,8 +14,9 @@
     box-shadow: none!important;
 }
 .info .container {
-    min-width: 20vw;
-    max-width: 25vw;
+    /* min-width: 20vw;
+    max-width: 25vw; */
+    width: 330px;
     height: 100vh;
     border-left: 2px solid rgb(150, 150, 150);
     background: rgba(0, 0, 0, 0.4);
@@ -79,8 +80,8 @@
     font-family: boldFont;
     src: url(../assets/Fonts/Roboto-Bold.ttf);
 }
-@media screen and (max-height: 969px) {
+/* @media screen and (max-height: 969px) {
     .info .container {
-        max-width: 22vw;        
+        width: 300px;        
     }
-}
+} */

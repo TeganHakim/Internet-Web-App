@@ -1,6 +1,6 @@
-export default function drawTurtlePath(p5, drawTurtle, turtle, turtlePath, turtleReverse, turtleMovements, reverseSignal, turtleColor, turtleColors, toIP, fromIP, clientIP, requestsIP, httpSignal, httpSignalPos, phone, routersReached, routerTurtle, routerMovements, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets) {
+export default function drawTurtlePath(p5, drawTurtle, turtle, turtlePath, turtleReverse, turtleMovements, reverseSignal, turtleColor, turtleColors, setToIP, setFromIP, clientIP, requestsIP, httpSignal, httpSignalPos, phone, routersReached, routerTurtle, routerMovements, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets) {
     if (drawTurtle) {
-        if (turtle.stop === false) {
+      if (turtle.stop === false) {
           for (let i = 0; i < turtle.speed; i++) {
             if (
               Math.abs(p5.dist(
@@ -38,20 +38,20 @@ export default function drawTurtlePath(p5, drawTurtle, turtle, turtlePath, turtl
                 if (turtlePath[turtle.index].x > turtle.x) {
                   turtle.x += 1;
                   turtle.y +=
-                    (turtlePath[turtle.index].y - turtle.y) /
-                    (turtlePath[turtle.index].x - turtle.x);
+                  (turtlePath[turtle.index].y - turtle.y) /
+                  (turtlePath[turtle.index].x - turtle.x);
                 } else {
                   turtle.x -= 1;
                   turtle.y -=
-                    (turtlePath[turtle.index].y - turtle.y) /
-                    (turtlePath[turtle.index].x - turtle.x);
+                  (turtlePath[turtle.index].y - turtle.y) /
+                  (turtlePath[turtle.index].x - turtle.x);
                 }
               } else {
                 if (turtlePath[turtle.index].y > turtle.y) {
                   turtle.y += 1;
                 } else {
-                  turtle.y -= 1;
                 }
+                turtle.y -= 1;
                 turtle.x = turtlePath[turtle.index].x;
               }
             }          
@@ -66,8 +66,8 @@ export default function drawTurtlePath(p5, drawTurtle, turtle, turtlePath, turtl
             if (
               Math.abs(phone.x + phone.w + 500 - turtle.x) <= turtle.distanceCheck
             ) {
-              toIP = requestsIP[httpSignal.endpoint.split("?")[0]];
-              fromIP = clientIP;
+              setToIP(requestsIP[httpSignal.endpoint.split("?")[0]]);
+              setFromIP(clientIP);
             }
   
             // Routers Reached

@@ -10,7 +10,7 @@ function getTowerBounds(towerData, scaleFactor) {
   };
 }
 
-export default function drawInfrastructureNodes(p5, phone, scaleFactor, boldFont, regularFont, infrastructurePath, cellTowerPingColor, httpSignal, createIP, clientIP, setClientIP, generateIP, toIP, fromIP, website, requestData, setDNSHover, pinged, setPing, hovering, setHovering, hoverElement, possibleHovers) {
+export default function drawInfrastructureNodes(p5, phone, scaleFactor, boldFont, regularFont, infrastructurePath, cellTowerPingColor, httpSignal, getCreateIP, getClientIP, setClientIP, generateIP, toIP, fromIP, website, requestData, setDNSHover, pinged, setPing, setHovering, hoverElement) {
     p5.stroke(150, 150, 150);
     for (let i = 0; i < infrastructurePath.length; i++) {
       p5.strokeWeight(10);
@@ -39,8 +39,8 @@ export default function drawInfrastructureNodes(p5, phone, scaleFactor, boldFont
     p5.strokeWeight(1);
 
     // Text
-    drawISPComponent(p5, phone, scaleFactor, boldFont, regularFont, createIP, clientIP, setClientIP, generateIP, hovering, setHovering, hoverElement, possibleHovers);
-    drawDNSComponent(p5, phone, scaleFactor, boldFont, regularFont, toIP, fromIP, requestData, httpSignal, website, setDNSHover, hovering, setHovering, hoverElement, possibleHovers);
+    drawISPComponent(p5, phone, scaleFactor, boldFont, regularFont, getCreateIP, getClientIP, setClientIP, generateIP, setHovering, hoverElement);
+    drawDNSComponent(p5, phone, scaleFactor, boldFont, regularFont, toIP, fromIP, requestData, httpSignal, website, setDNSHover, setHovering, hoverElement);
     const towerData = {
       x: ((phone.x + phone.w) / 2) / 2 - 5,
       y: phone.y - 310,
@@ -56,7 +56,5 @@ export default function drawInfrastructureNodes(p5, phone, scaleFactor, boldFont
       p5.cursor(p5.HAND);
       setHovering("tower");
       hoverElement("tower");
-    } else if (!possibleHovers.filter(function(e) {return e != "tower"}).includes(hovering)) {
-      setHovering(null);
-    }
+    } 
 }

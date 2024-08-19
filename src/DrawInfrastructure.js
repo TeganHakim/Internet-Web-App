@@ -25,12 +25,21 @@ let boldFont;
 
 let infrastructurePath;
 let cellTowerPingColor = "rgb(0, 255, 0)";
+const setCellTowerPingColor = (color) => {
+  cellTowerPingColor = color;
+}
 
 let canChangeSpeed = true;
+const getCanChangeSpeed = () => {
+  return canChangeSpeed;
+}
 const setCanChangeSpeed = (change) => {
   canChangeSpeed = change;
 }
 let internetSpeed = "medium";
+const getInternetSpeed = () => {
+  return internetSpeed;
+}
 const setInternetSpeed = (speed) => {
   internetSpeed = speed;
 }
@@ -41,7 +50,13 @@ let speeds = {
 }
 
 let turtle;
+const setTurtle = (attr, value) => {
+  turtle[attr] = value;
+}
 let routerTurtle;
+const setRouterTurtle = (attr, value) => {
+  routerTurtle[attr] = value;
+}
 const turtleColors = { good: "rgb(0, 255, 0)", bad: "rgb(255, 0, 0)" };
 let turtleColor;
 const setTurtleColor = (color) => {
@@ -66,15 +81,39 @@ let turtleMovements = [];
 let routersReached = false;
 let targetServer;
 let pathFullyCompleted = false;
+const setPathFullyCompleted = (completed) => {
+  pathFullyCompleted = completed;
+}
 
 let httpSignalPos;
+const getHttpSignalPos = () => {
+  return httpSignalPos;
+}
+const setHttpSignalPos = (attr, value) => {
+  httpSignalPos[attr] = value;
+}
 let previousSignalEndpoint = null;
+const getPreviousSignalEndpoint = () => {
+  return previousSignalEndpoint;
+}
+const setPreviousSignalEndpoint = (endpoint) => {
+  previousSignalEndpoint = endpoint;
+}
 let drawSignal = false;
+const getDrawSignal = () => {
+  return drawSignal;
+}
 const setDrawSignal = (draw) => {
   drawSignal = draw;
 }
 
 let createIP = false;
+const getCreateIP = () => {
+  return createIP;
+}
+const setCreateIP = (create) => {
+  createIP = create;
+}
 const ipCharacters = [
   "0",
   "1",
@@ -114,12 +153,27 @@ const ipCharacters = [
   "Z",
 ];
 let clientIP = "";
+const getClientIP = () => {
+  return clientIP;
+}
 const setClientIP = (ip) => {
   clientIP = ip;
 }
 
 let toIP = "";
+const getToIP = () => {
+  return toIP;
+}
+const setToIP = (ip) => {
+  toIP = ip;
+}
 let fromIP = "";
+const getFromIP = () => {
+  return fromIP;
+}
+const setFromIP = (ip) => {
+  fromIP = ip;
+}
 
 let website = "internet-simulator.com";
 
@@ -182,10 +236,13 @@ function generateIP() {
 }
 
 let hovering = null;
+// const getHovering = () => {
+//   return hovering;
+// }
 const setHovering = (hover) => {
   hovering = hover;
 }
-let possibleHovers = ["ISP", "DNS", "tower", "cable", "httpRequest", "router", "server"];
+// let possibleHovers = ["ISP", "DNS", "tower", "cable", "httpRequest", "router", "server"];
 
 export default class DrawInfrastucture extends Component {
   sketch = (p5) => {
@@ -258,6 +315,7 @@ export default class DrawInfrastucture extends Component {
         { x: this.props.phone.x + this.props.phone.w + (500 / 2 + (this.props.phone.w / 2 + 700) / 2), y: this.props.phone.y - 125 },
         { x: this.props.phone.x + this.props.phone.w + (500 / 2 + (this.props.phone.w / 2 + 700) / 2), y: this.props.phone.y - 25 },
       ];
+
       originalTurtlePath = [
         { x: this.props.phone.x + this.props.phone.w / 2, y: this.props.phone.y - 300 },
         { x: this.props.phone.x + this.props.phone.w / 2, y: this.props.phone.y - 250 },
@@ -280,6 +338,7 @@ export default class DrawInfrastucture extends Component {
           y: this.props.phone.y - 25,
         },
       ];
+
       turtlePath = originalTurtlePath;
   
       routers = [
@@ -526,11 +585,12 @@ export default class DrawInfrastucture extends Component {
       // Cursor
       p5.cursor(p5.ARROW);
   
-      drawInfrastructureNodes(p5, this.props.phone, this.props.scaleFactor, boldFont, regularFont, infrastructurePath, cellTowerPingColor, this.props.httpSignal, createIP, clientIP, setClientIP, generateIP, toIP, fromIP, website, requestData, this.props.setDNSHover, this.props.pinged, this.props.setPing, hovering, setHovering, this.props.hoverElement, possibleHovers);
-      drawSignalVisualization(p5, this.props.scaleFactor, boldFont, regularFont, this.props.phone, this.props.httpSignal, httpSignalPos, previousSignalEndpoint, drawSignal, setDrawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, drawTurtle, turtleReverse, setTurtleColor, turtleColors, cellTowerPingColor, routers, routerTurtle, setRouterMovements, createIP, pathFullyCompleted, this.props.pinged, this.props.setPing, hovering, setHovering, this.props.hoverElement, possibleHovers);
+      drawInfrastructureNodes(p5, this.props.phone, this.props.scaleFactor, boldFont, regularFont, infrastructurePath, cellTowerPingColor, this.props.httpSignal, getCreateIP, getClientIP, setClientIP, generateIP, getToIP, getFromIP, website, requestData, this.props.setDNSHover, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
+      drawSignalVisualization(p5, this.props.scaleFactor, boldFont, regularFont, this.props.phone, this.props.httpSignal, httpSignalPos, getPreviousSignalEndpoint, setPreviousSignalEndpoint, getDrawSignal, setDrawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, turtleMovements, drawTurtle, turtleReverse, setTurtleColor, turtleColor, turtleColors, setCellTowerPingColor, routers, routersReached, routerPathMade, pathMade, turtlePathMade, routerTurtle, routerMovements, setRouterMovements, setToIP, setFromIP, clientIP, requestsIP, setCreateIP, targetServer, possibleTargets, setPathFullyCompleted, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
+      // drawSignalVisualization(p5, this.props.scaleFactor, boldFont, regularFont, this.props.phone, this.props.httpSignal, httpSignalPos, getPreviousSignalEndpoint, setPreviousSignalEndpoint, getDrawSignal, setDrawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, drawTurtle, turtleReverse, setTurtleColor, turtleColors, cellTowerPingColor, routers, routerTurtle, setRouterMovements, setCreateIP, setPathFullyCompleted, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
+      // drawTurtlePath(p5, drawTurtle, turtle, turtlePath, turtleReverse, turtleMovements, reverseSignal, turtleColor, turtleColors, setToIP, setFromIP, clientIP, requestsIP, this.props.httpSignal, httpSignalPos, this.props.phone, routersReached, routerTurtle, routerMovements, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets);
       drawRoutersInfo(p5, boldFont, this.props.scaleFactor, drawData, routers, serverLocs, routersReached, routerMovements, routerTurtle, turtlePath, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets, this.props.setServerHover, setHovering, this.props.hoverElement);
-      drawTurtlePath(p5, drawTurtle, turtle, turtlePath, turtleReverse, turtleMovements, reverseSignal, turtleColor, turtleColors, toIP, fromIP, clientIP, requestsIP, this.props.httpSignal, httpSignalPos, this.props.phone, routersReached, routerTurtle, routerMovements, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets);
-      drawInternetSpeed(p5, this.props.scaleFactor, boldFont, regularFont, internetSpeed, setInternetSpeed, speeds, canChangeSpeed, setCanChangeSpeed, possibleSpeeds, turtle, routerTurtle, httpSignalPos);
+      drawInternetSpeed(p5, this.props.scaleFactor, boldFont, regularFont, getInternetSpeed, setInternetSpeed, speeds, getCanChangeSpeed, setCanChangeSpeed, possibleSpeeds, setTurtle, setRouterTurtle, getHttpSignalPos, setHttpSignalPos);
       
       let endpoints = {
       homeScreen: "home",

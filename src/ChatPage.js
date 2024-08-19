@@ -200,7 +200,7 @@ export default class ChatPage extends Component {
     p5.keyPressed = (e) => {
       if (e.key === "Enter") {
         chatId += 1;
-        this.props.setPhonethis.props.Screen("Loading");
+        this.props.setPhoneScreen("Loading");
         this.props.httpVisualize({status: 200, request: "POST", endpoint: "messageSent"+ "?" + chatId});
         this.props.handleMessageSent({
           id: "user",

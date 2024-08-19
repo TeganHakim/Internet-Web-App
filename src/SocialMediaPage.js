@@ -419,7 +419,7 @@ export default class SocialMediaPage extends Component {
       }
     };
   
-    keyPressed = (e) => {
+    p5.keyPressed = (e) => {
       if (e.key === "Enter") {
         this.props.setPhonethis.props.Screen("Loading");
         this.props.httpVisualize({status: 200, request: "POST", endpoint: "commentSent"});

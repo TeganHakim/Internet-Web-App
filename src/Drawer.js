@@ -153,7 +153,7 @@ export default function TemporaryDrawer({
         httpVisualize={httpVisualize}
         setPhoneScreen={setPhoneScreen}
       />
-    ) : currentScreen === "Loading" ? (
+    ) : currentScreen === "loading" ? (
       <LoadingPage 
         key={"loading"}
         phoneDimensions={phoneDimensions}

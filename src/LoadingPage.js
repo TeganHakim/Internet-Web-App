@@ -4,13 +4,14 @@ import { ReactP5Wrapper } from "@p5-wrapper/react";
 import drawPhone from "./p5_functions/DrawPhone";
 import "./styles/style.css";
 
-let arcRotation = 0;
+let arcRotation;
 
 export default class LoadingPage extends Component {
   sketch = (p5) => {
     p5.setup = (canvasParentRef) => {
       p5.createCanvas(this.props.phoneDimensions.width, this.props.phoneDimensions.canvasHeight).parent(canvasParentRef);
       p5.frameRate(15);
+      arcRotation = 0;
     };
     p5.draw = () => {
       // Regulate Text
@@ -29,7 +30,7 @@ export default class LoadingPage extends Component {
       p5.arc(this.props.phone.x + this.props.phone.w / 2, this.props.phone.y + this.props.phone.h / 2, 50, 50, 0 + arcRotation, p5.PI + arcRotation);
       p5.arc(this.props.phone.x + this.props.phone.w / 2, this.props.phone.y + this.props.phone.h / 2, 30, 30, 0 - arcRotation, p5.PI - arcRotation);
   
-      if (this.props.currentScreen === "Loading") {
+      if (this.props.currentScreen === "loading") {
           arcRotation++;
       }
     };

@@ -1,9 +1,9 @@
-function getHomeButtonBounds(homeButton, scaleFactor) {
+function getHomeButtonBounds(homeButton) {
   return {
-    left: (homeButton.x - homeButton.r / 2) * scaleFactor, 
-    right: (homeButton.x + homeButton.width) * scaleFactor, 
-    top: (homeButton.y - homeButton.r / 2) * scaleFactor, 
-    bottom: (homeButton.y + homeButton.r / 2) * scaleFactor, 
+    left: (homeButton.x - (homeButton.r / 2)), 
+    right: (homeButton.x + (homeButton.r / 2)), 
+    top: (homeButton.y - (homeButton.r / 2)), 
+    bottom: (homeButton.y + (homeButton.r / 2)), 
   };
 }
 
@@ -43,7 +43,7 @@ export default function drawPhone(p5, phone, screen, screenBezel, handleAppClick
   p5.fill(190, 190, 190);
   p5.noStroke();
   p5.ellipse(homeButton.x, homeButton.y, homeButton.r);
-  let homeButtonBounds = getHomeButtonBounds(homeButton, 1);
+  let homeButtonBounds = getHomeButtonBounds(homeButton);
   if (
     p5.mouseX >= homeButtonBounds.left &&
     p5.mouseX <= homeButtonBounds.right &&

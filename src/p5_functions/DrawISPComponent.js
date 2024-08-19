@@ -7,7 +7,7 @@ function getISPBounds(ISPData, scaleFactor) {
   };
 }
 
-export default function drawISPComponent(p5, phone, scaleFactor, boldFont, regularFont, createIP, clientIP, setClientIP, generateIP, hovering, setHovering, hoverElement, possibleHovers) {
+export default function drawISPComponent(p5, phone, scaleFactor, boldFont, regularFont, getCreateIP, getClientIP, setClientIP, generateIP, setHovering, hoverElement) {
   const ISPData = {
     x: phone.x + phone.w / 2 + 205,
     y: phone.y - 270,
@@ -68,22 +68,23 @@ export default function drawISPComponent(p5, phone, scaleFactor, boldFont, regul
       p5.mouseY >= ISPBounds.top &&
       p5.mouseY <= ISPBounds.bottom
     ) {
-      setHovering("ISP");
       p5.cursor(p5.HAND);
+      setHovering("ISP");
       hoverElement("ISP");
-    } else if (!possibleHovers.filter(function(e) {return e != "ISP"}).includes(hovering)) {
+    } 
+    else {
       setHovering(null);
     }
 
-    if (createIP) {
-      if (clientIP === "generating...") {
+    if (getCreateIP()) {
+      if (getClientIP() === "generating...") {
         setClientIP(generateIP());
       }
     } else {
       setClientIP("generating...");
     }
     p5.text(
-      clientIP,
+      getClientIP(),
       ISPData.x + 35 + p5.textWidth("IPv6"),
       ISPData.y + (2 * (ISPData.height / 3)) + 15,
     );

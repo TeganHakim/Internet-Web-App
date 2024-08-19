@@ -37,8 +37,9 @@ function App() {
   };
 
   const [currentScreen, setCurrentScreen] = useState("home");
-  const handleAppClicked = () => {
-    setCurrentScreen("loading");    
+  const handleAppClicked = (icon) => {
+    setCurrentScreen("loading"); 
+    setTimeout(() => setCurrentScreen(icon), 1000);   
   };
   const setPhoneScreen = (screen) => {
     setCurrentScreen(screen);
@@ -96,7 +97,7 @@ function App() {
 
   const [currentBrowserPage, setCurrentBrowserPage] = useState("homeBrowser");
   const handleLinkClicked = () => {
-    setCurrentScreen("Loading");
+    setCurrentScreen("loading");
   };
   
   const setBrowserScreen = (link) => {

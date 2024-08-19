@@ -7,7 +7,7 @@ function getInternetSpeedBounds(internetSpeedTextData, scaleFactor) {
   };
 }
 
-export default function drawInternetSpeed(p5, scaleFactor, boldFont, regularFont, internetSpeed, setInternetSpeed, speeds, canChangeSpeed, setCanChangeSpeed, possibleSpeeds, turtle, routerTurtle, httpSignalPos) {
+export default function drawInternetSpeed(p5, scaleFactor, boldFont, regularFont, getInternetSpeed, setInternetSpeed, speeds, getCanChangeSpeed, setCanChangeSpeed, possibleSpeeds, setTurtle, setRouterTurtle, getHttpSignalPos, setHttpSignalPos) {
   // Declare sizing and positioning for the internet speed component
   const internetSpeedData = {
     x: 0,
@@ -16,7 +16,7 @@ export default function drawInternetSpeed(p5, scaleFactor, boldFont, regularFont
     height: 30
   }
   // Text to be displayed
-  const internetSpeedText = internetSpeed[0].toUpperCase() + internetSpeed.slice(1);
+  const internetSpeedText = getInternetSpeed()[0].toUpperCase() + getInternetSpeed().slice(1);
 
   // Draw the internet speed component
   p5.fill("rgba(0, 0, 0, 0.5)");
@@ -45,9 +45,9 @@ export default function drawInternetSpeed(p5, scaleFactor, boldFont, regularFont
     h: 27
   }
   p5.textFont(boldFont);
-  if (internetSpeed === "slow") {
+  if (getInternetSpeed() === "slow") {
     p5.fill(255, 0, 0);
-  } else if (internetSpeed === "medium") {
+  } else if (getInternetSpeed() === "medium") {
     p5.fill(230, 180, 0);
   } else {
     p5.fill(0, 200, 0);
@@ -59,11 +59,11 @@ export default function drawInternetSpeed(p5, scaleFactor, boldFont, regularFont
     textY
   );
   // Set speed based on internet speed (user input)
-  turtle.speed = 20 + speeds[internetSpeed];
-  routerTurtle.speed = 15 + speeds[internetSpeed];
-  httpSignalPos.speed = 5 + speeds[internetSpeed];
-  if (httpSignalPos.speed < 0) {
-    httpSignalPos.speed = 1;
+  setTurtle("speed", 20 + speeds[getInternetSpeed()]);
+  setRouterTurtle("speed", 15 + speeds[getInternetSpeed()]);
+  setHttpSignalPos("speed", 5 + speeds[getInternetSpeed()]);
+  if (getHttpSignalPos().speed < 0) {
+    setHttpSignalPos("speed", 1);
   }
 
   // Handle interaction with user's mouse
@@ -76,8 +76,8 @@ export default function drawInternetSpeed(p5, scaleFactor, boldFont, regularFont
     p5.cursor(p5.HAND);
     // If pressed, iterate through possible speeds
     if (p5.mouseIsPressed) {
-      if (canChangeSpeed){
-        let index = possibleSpeeds.indexOf(internetSpeed);
+      if (getCanChangeSpeed()){
+        let index = possibleSpeeds.indexOf(getInternetSpeed());
         if (index < possibleSpeeds.length - 1) {
           index += 1;
         } else if (index === possibleSpeeds.length - 1) {
