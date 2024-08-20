@@ -5,16 +5,8 @@ import "./styles/style.css";
 import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 import BoldFont from "./assets/Fonts/Roboto-Bold.ttf";
 import { Router } from "./Router";
-import drawInfrastructureNodes from "./p5_functions/DrawInfrastructureNodes";
-import drawSignalVisualization from "./p5_functions/DrawSignalVisualization";
-import drawRoutersInfo from "./p5_functions/DrawRoutersInfo";
-// import findAdjacentNearestTarget from "./p5_functions/FindAdjacentNearestTarget";
-import drawTurtlePath from "./p5_functions/DrawTurtlePath";
 import drawRouters from "./p5_functions/DrawRouters";
-import drawInternetSpeed from "./p5_functions/DrawInternetSpeed";
 import Background from "./assets/Images/Background-Map.png";
-import drawISPComponent from "./p5_functions/DrawISPComponent";
-import drawDNSComponent from "./p5_functions/DrawDNSComponent";
 
 function getBounds(data, scaleFactor) {
   return {
@@ -35,10 +27,6 @@ function getRouterBounds(router, scaleFactor) {
 }
 
 let background;
-
-// let width;
-// let height;
-// let phone;
 
 let drawData = false;
 
@@ -607,14 +595,10 @@ export default class DrawInfrastucture extends Component {
       // Cursor
       p5.cursor(p5.ARROW);
   
-      // drawInfrastructureNodes(p5, this.props.phone, this.props.scaleFactor, boldFont, regularFont, infrastructurePath, cellTowerPingColor, this.props.httpSignal, getCreateIP, getClientIP, setClientIP, generateIP, getToIP, getFromIP, website, requestData, this.props.setDNSHover, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
       this.drawInfrastructureNodes(p5);
-      // drawSignalVisualization(p5, this.props.scaleFactor, boldFont, regularFont, this.props.phone, this.props.httpSignal, httpSignalPos, getPreviousSignalEndpoint, setPreviousSignalEndpoint, getDrawSignal, setDrawSignal, reverseSignal, turtle, turtlePath, originalTurtlePath, turtleMovements, drawTurtle, turtleReverse, setTurtleColor, turtleColor, turtleColors, setCellTowerPingColor, routers, routersReached, routerPathMade, pathMade, turtlePathMade, routerTurtle, routerMovements, setRouterMovements, setToIP, setFromIP, clientIP, requestsIP, setCreateIP, targetServer, possibleTargets, setPathFullyCompleted, this.props.pinged, this.props.setPing, setHovering, this.props.hoverElement);
       this.drawSignalVisualization(p5);
-      this.drawTurtlePath(p5);
-      // drawRoutersInfo(p5, boldFont, this.props.scaleFactor, drawData, routers, serverLocs, routersReached, routerMovements, routerTurtle, turtlePath, routerPathMade, pathMade, turtlePathMade, targetServer, possibleTargets, this.props.setServerHover, setHovering, this.props.hoverElement);
       this.drawRoutersInfo(p5);
-      // drawInternetSpeed(p5, this.props.scaleFactor, boldFont, regularFont, getInternetSpeed, setInternetSpeed, speeds, getCanChangeSpeed, setCanChangeSpeed, possibleSpeeds, setTurtle, setRouterTurtle, getHttpSignalPos, setHttpSignalPos);
+      this.drawTurtlePath(p5);
       this.drawInternetSpeed(p5);
 
       let endpoints = {
@@ -1111,8 +1095,8 @@ export default class DrawInfrastucture extends Component {
             ) {
               //Routers reached 
               turtle.stop = true; 
-              drawTurtle = false;              
-              
+              drawTurtle = false;   
+
               routersReached = true;
               
               pathMade = false;
@@ -1224,8 +1208,7 @@ export default class DrawInfrastucture extends Component {
                 drawTurtle = true;           
               }
             }
-  
-          }
+          } 
         } else {
           routerTurtle.index = 0;
           routerTurtle.x = this.props.phone.x + this.props.phone.w + (500 / 2 + (this.props.phone.w / 2 + 700) / 2);
@@ -1361,8 +1344,8 @@ export default class DrawInfrastucture extends Component {
       const internetSpeedTextData = {
         x: p5.textWidth("Internet Speed:  "),
         y: 5,
-        w: p5.textWidth(internetSpeedText),
-        h: 27
+        width: p5.textWidth(internetSpeedText),
+        height: 27
       }
       p5.textFont(boldFont);
       if (internetSpeed === "slow") {

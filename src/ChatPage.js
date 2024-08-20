@@ -8,6 +8,7 @@ import RegularFont from "./assets/Fonts/Roboto-Regular.ttf";
 let messageText = [];
 let chatId = 0;
 let allowMessageEdit = true;
+let previousChar = null;
 
 let regularFont;
 
@@ -196,7 +197,6 @@ export default class ChatPage extends Component {
         return false;
       });
     };
-  
     p5.keyPressed = (e) => {
       if (e.key === "Enter") {
         chatId += 1;
@@ -209,28 +209,32 @@ export default class ChatPage extends Component {
             messageText.join("").slice(1)
         });
         messageText = [];
-      } else if (e.key === "Backspace") {
+      } else if (e.key === "Backspace" && e.key !== previousChar) {
         messageText.pop();
+        previousChar = e.key;
       } else if (
         (e.keyCode > 8 && e.keyCode <= 46) ||
         (e.keyCode >= 91 && e.keyCode <= 93) ||
         (e.keyCode >= 112) & (e.keyCode <= 123) ||
         (e.keyCode >= 144 && e.keyCode <= 145)
       ) {
-        if (e.keyCode === 32 && allowMessageEdit) {
+        if (allowMessageEdit && e.keyCode === 32 && e.key !== previousChar) {
           messageText.push(" ");
-        } else {
-          return;
+          previousChar = e.key;
         }
       } else {
-        if (allowMessageEdit) {
+        if (allowMessageEdit && e.key !== previousChar) {
           messageText.push(e.key);
+          previousChar = e.key;
         }
       }
+      return false;
+    };
+    p5.keyReleased = () => {
+      previousChar = null;
     }
   }
   
-
   render() {
     return <ReactP5Wrapper sketch={this.sketch} />
   }

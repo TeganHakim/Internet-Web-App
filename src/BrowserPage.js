@@ -83,7 +83,7 @@ export default class BrowserPage extends Component {
       if (this.props.currentBrowserPage === "homeBrowser") {
         browserHome(p5, boldFont, regularFont, image, this.props.screen, this.props.screenBezel, urls, this.props.handleLinkClicked, this.props.httpVisualize);
       } else if (this.props.currentBrowserPage === "badLink") {
-        browserBroken(p5, boldFont, regularFont, this.props.screen, this.props.screenBezel, this.props.handleLinkClicked, this.props.httpVisualize);
+        browserBroken(p5, boldFont, regularFont, this.props.screen, this.props.screenBezel, this.props.handleLinkClicked, this.props.httpVisualize, returnLinkUnderline);
       }
     };
   }
