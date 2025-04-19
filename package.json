@@ -1,5 +1,5 @@
 {
-  "name": "internet-web-app",
+  "name": "protocol-playground",
   "version": "1.0.0",
   "private": true,
   "description": "",
@@ -40,5 +40,5 @@
     
     ]
   },
-  "homepage": "http://teganhakim.github.io/Internet-Web-App/"
+  "homepage": "http://teganhakim.github.io/Protocol-Playground/"
 }
