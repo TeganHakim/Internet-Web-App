@@ -1,27 +1,21 @@
 {
   "files": {
-    "main.css": "/Internet-Web-App/static/css/main.3f68d4b0.chunk.css",
-    "main.js": "/Internet-Web-App/static/js/main.d7a9fce0.chunk.js",
-    "main.js.map": "/Internet-Web-App/static/js/main.d7a9fce0.chunk.js.map",
-    "runtime-main.js": "/Internet-Web-App/static/js/runtime-main.1650af1f.js",
-    "runtime-main.js.map": "/Internet-Web-App/static/js/runtime-main.1650af1f.js.map",
-    "static/js/2.53791e5d.chunk.js": "/Internet-Web-App/static/js/2.53791e5d.chunk.js",
-    "static/js/2.53791e5d.chunk.js.map": "/Internet-Web-App/static/js/2.53791e5d.chunk.js.map",
-    "index.html": "/Internet-Web-App/index.html",
-    "static/css/main.3f68d4b0.chunk.css.map": "/Internet-Web-App/static/css/main.3f68d4b0.chunk.css.map",
-    "static/js/2.53791e5d.chunk.js.LICENSE.txt": "/Internet-Web-App/static/js/2.53791e5d.chunk.js.LICENSE.txt",
-    "static/media/Background-Map.74f8ba82.png": "/Internet-Web-App/static/media/Background-Map.74f8ba82.png",
-    "static/media/Cat-Typing.81d30144.gif": "/Internet-Web-App/static/media/Cat-Typing.81d30144.gif",
-    "static/media/Code-Profile.1af02584.jpg": "/Internet-Web-App/static/media/Code-Profile.1af02584.jpg",
-    "static/media/Ethernet-Cable.5fda33e1.jpg": "/Internet-Web-App/static/media/Ethernet-Cable.5fda33e1.jpg",
-    "static/media/Heart-Filled.43fd6a44.png": "/Internet-Web-App/static/media/Heart-Filled.43fd6a44.png",
-    "static/media/Heart-Outline.75a9cdc2.png": "/Internet-Web-App/static/media/Heart-Outline.75a9cdc2.png",
-    "static/media/infowindow.css": "/Internet-Web-App/static/media/Roboto-Regular.a8d6ac03.ttf"
+    "main.css": "/Protocol-Playground/static/css/main.f339092e.css",
+    "main.js": "/Protocol-Playground/static/js/main.cb0113ea.js",
+    "static/media/Background-Map.png": "/Protocol-Playground/static/media/Background-Map.74f8ba82e19b77dd3778.png",
+    "static/media/Cat-Typing.gif": "/Protocol-Playground/static/media/Cat-Typing.81d30144053110f552d0.gif",
+    "static/media/Roboto-Regular.ttf": "/Protocol-Playground/static/media/Roboto-Regular.a8d6ac03c7b96b7acb62.ttf",
+    "static/media/Roboto-Bold.ttf": "/Protocol-Playground/static/media/Roboto-Bold.75371f53f06181df75f1.ttf",
+    "static/media/Code-Profile.jpg": "/Protocol-Playground/static/media/Code-Profile.1af025846afd2bb92f15.jpg",
+    "static/media/Heart-Filled.png": "/Protocol-Playground/static/media/Heart-Filled.43fd6a44c846c30c2989.png",
+    "static/media/Heart-Outline.png": "/Protocol-Playground/static/media/Heart-Outline.75a9cdc273b4167caf9d.png",
+    "static/media/Ethernet-Cable.jpg": "/Protocol-Playground/static/media/Ethernet-Cable.5fda33e1572bd3c91504.jpg",
+    "index.html": "/Protocol-Playground/index.html",
+    "main.f339092e.css.map": "/Protocol-Playground/static/css/main.f339092e.css.map",
+    "main.cb0113ea.js.map": "/Protocol-Playground/static/js/main.cb0113ea.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.1650af1f.js",
-    "static/js/2.53791e5d.chunk.js",
-    "static/css/main.3f68d4b0.chunk.css",
-    "static/js/main.d7a9fce0.chunk.js"
+    "static/css/main.f339092e.css",
+    "static/js/main.cb0113ea.js"
   ]
 }
